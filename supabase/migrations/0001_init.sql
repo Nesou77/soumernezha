@@ -63,6 +63,18 @@ create table if not exists public.admin_users (
 );
 
 -- ---------------------------------------------------------------------------
+-- Base grants
+-- ---------------------------------------------------------------------------
+-- RLS policies only decide which ROWS a role may touch; the role still needs
+-- an ordinary GRANT to touch the TABLE at all. Tables created via the SQL
+-- editor don't inherit the anon/authenticated grants the dashboard's table
+-- editor sets up automatically, so we grant them explicitly here.
+grant usage on schema public to anon, authenticated;
+grant select on public.projects to anon, authenticated;
+grant insert, update, delete on public.projects to authenticated;
+grant select on public.admin_users to authenticated;
+
+-- ---------------------------------------------------------------------------
 -- Row Level Security
 -- ---------------------------------------------------------------------------
 alter table public.projects enable row level security;
