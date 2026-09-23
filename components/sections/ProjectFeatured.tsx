@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRef } from "react";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { ProjectVisual } from "@/components/ui/ProjectVisual";
-import { categoryLabels } from "@/data/projects";
+import { categoryLabels } from "@/lib/project-constants";
 import { cn } from "@/lib/utils";
 import type { Project } from "@/types";
 

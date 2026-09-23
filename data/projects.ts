@@ -1,11 +1,11 @@
-import type { Project, ProjectCategory } from "@/types";
+import type { Project } from "@/types";
 
-export const categoryLabels: Record<ProjectCategory, string> = {
-  web: "Web Development",
-  cms: "CMS / Low-Code",
-  qa: "QA / Software Testing",
-};
-
+/**
+ * Legacy static project data. The live site now reads projects from Supabase
+ * (see lib/data/projects.ts) and manages them through /admin. This file is
+ * kept only as the source for `npm run seed`, which imports these projects
+ * into the database once. It is not imported anywhere else.
+ */
 export const projects: Project[] = [
   {
     slug: "fly-taghazout",
@@ -391,14 +391,3 @@ export const projects: Project[] = [
     hue: 158,
   },
 ];
-
-export function getProject(slug: string): Project | undefined {
-  return projects.find((p) => p.slug === slug);
-}
-
-export function getAdjacentProjects(slug: string): { prev: Project; next: Project } {
-  const i = projects.findIndex((p) => p.slug === slug);
-  const prev = projects[(i - 1 + projects.length) % projects.length];
-  const next = projects[(i + 1) % projects.length];
-  return { prev, next };
-}

@@ -1,6 +1,8 @@
 export type ProjectCategory = "web" | "cms" | "qa";
 
 export interface Project {
+  /** Database id. Absent for the (legacy) static seed entries. */
+  id?: string;
   slug: string;
   index: string;
   title: string;
@@ -17,13 +19,15 @@ export interface Project {
   features: string[];
   technologies: string[];
   url?: string;
-  /** Optional screenshot in /public/images/projects. Falls back to a generated visual. */
+  /** Cover image URL (Supabase Storage). Falls back to a generated visual. */
   image?: string;
   /** Extra screenshots shown on the case-study page. */
   gallery?: string[];
   /** Hue (0-360) used by the generated placeholder visual. */
   hue: number;
   featured?: boolean;
+  /** Whether the project is publicly visible. Always true for publicly-fetched projects. */
+  published?: boolean;
 }
 
 export interface NavItem {

@@ -33,6 +33,3 @@ export const testingTypes: string[] = [
 ];
 
 export const qaTools: string[] = ["Jira", "Cypress", "Selenium", "JMeter", "Power BI", "Excel"];
-
-/** Slugs of the QA case studies featured in the lab (see data/projects.ts). */
-export const qaProjectSlugs: string[] = ["remedia", "researchguide", "the-foodeshow"];

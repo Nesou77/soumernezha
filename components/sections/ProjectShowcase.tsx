@@ -15,10 +15,10 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { ProjectVisual } from "@/components/ui/ProjectVisual";
 import { content } from "@/data/content";
-import { categoryLabels, projects } from "@/data/projects";
+import { categoryLabels } from "@/lib/project-constants";
 import { useFinePointer } from "@/hooks/useMedia";
 import { cn } from "@/lib/utils";
-import type { ProjectCategory } from "@/types";
+import type { Project, ProjectCategory } from "@/types";
 import { ProjectFeatured } from "./ProjectFeatured";
 
 type Filter = "all" | ProjectCategory;
@@ -29,7 +29,7 @@ const filters: { id: Filter; label: string }[] = [
   { id: "qa", label: categoryLabels.qa },
 ];
 
-export function ProjectShowcase() {
+export function ProjectShowcase({ projects }: { projects: Project[] }) {
   const c = content.projects;
   const [filter, setFilter] = useState<Filter>("all");
   const [hovered, setHovered] = useState<string | null>(null);

@@ -1,9 +1,12 @@
 import type { MetadataRoute } from "next";
-import { projects } from "@/data/projects";
+import { getPublishedProjects } from "@/lib/data/projects";
 import { site } from "@/lib/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const revalidate = 60;
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
+  const projects = await getPublishedProjects();
   return [
     { url: site.url, lastModified: now, changeFrequency: "monthly", priority: 1 },
     ...projects.map((p) => ({

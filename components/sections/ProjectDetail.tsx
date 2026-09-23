@@ -4,7 +4,7 @@ import { MaskLines } from "@/components/animations/MaskLines";
 import { Reveal } from "@/components/animations/Reveal";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { ProjectVisual } from "@/components/ui/ProjectVisual";
-import { categoryLabels, getAdjacentProjects } from "@/data/projects";
+import { categoryLabels } from "@/lib/project-constants";
 import { hostname } from "@/lib/utils";
 import type { Project } from "@/types";
 
@@ -17,8 +17,13 @@ function Meta({ label, children }: { label: string; children: React.ReactNode })
   );
 }
 
-export function ProjectDetail({ project }: { project: Project }) {
-  const { prev, next } = getAdjacentProjects(project.slug);
+interface ProjectDetailProps {
+  project: Project;
+  prev?: Project;
+  next?: Project;
+}
+
+export function ProjectDetail({ project, prev, next }: ProjectDetailProps) {
   const isQA = project.category === "qa";
 
   return (
@@ -148,25 +153,27 @@ export function ProjectDetail({ project }: { project: Project }) {
         </Reveal>
       </section>
 
-      <nav aria-label="More projects" className="border-t border-line">
-        <div className="container-x grid md:grid-cols-2">
-          {[
-            { p: prev, dir: "Previous" },
-            { p: next, dir: "Next" },
-          ].map(({ p, dir }) => (
-            <Link
-              key={dir}
-              href={`/projects/${p.slug}`}
-              className={`group block py-12 md:py-16 ${dir === "Next" ? "md:border-l md:border-line md:pl-10 md:text-right" : "md:pr-10"}`}
-            >
-              <span className="eyebrow text-muted">{dir} project</span>
-              <span className="display-mixed mt-3 block text-[clamp(1.8rem,1rem+3vw,3.6rem)] transition-colors group-hover:text-accent">
-                {p.title}
-              </span>
-            </Link>
-          ))}
-        </div>
-      </nav>
+      {prev && next && (
+        <nav aria-label="More projects" className="border-t border-line">
+          <div className="container-x grid md:grid-cols-2">
+            {[
+              { p: prev, dir: "Previous" },
+              { p: next, dir: "Next" },
+            ].map(({ p, dir }) => (
+              <Link
+                key={dir}
+                href={`/projects/${p.slug}`}
+                className={`group block py-12 md:py-16 ${dir === "Next" ? "md:border-l md:border-line md:pl-10 md:text-right" : "md:pr-10"}`}
+              >
+                <span className="eyebrow text-muted">{dir} project</span>
+                <span className="display-mixed mt-3 block text-[clamp(1.8rem,1rem+3vw,3.6rem)] transition-colors group-hover:text-accent">
+                  {p.title}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </nav>
+      )}
     </article>
   );
 }

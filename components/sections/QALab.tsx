@@ -6,16 +6,11 @@ import { Reveal } from "@/components/animations/Reveal";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { content } from "@/data/content";
-import { qaProjectSlugs, qaTools, testingTypes } from "@/data/qa";
-import { getProject } from "@/data/projects";
+import { qaTools, testingTypes } from "@/data/qa";
 import type { Project } from "@/types";
 import { TestRunner } from "./TestRunner";
 
-const qaProjects = qaProjectSlugs
-  .map((slug) => getProject(slug))
-  .filter((p): p is Project => Boolean(p));
-
-export function QALab() {
+export function QALab({ qaProjects }: { qaProjects: Project[] }) {
   const c = content.qa;
   const reduce = useReducedMotion();
   return (
@@ -66,6 +61,7 @@ export function QALab() {
           </div>
         </div>
 
+        {qaProjects.length > 0 && (
         <div className="mt-24">
           <Reveal>
             <h3 className="eyebrow mb-6 text-muted">QA projects</h3>
@@ -100,6 +96,7 @@ export function QALab() {
             ))}
           </ul>
         </div>
+        )}
       </div>
     </section>
   );
