@@ -114,11 +114,19 @@ create policy "admins can delete projects"
   using (exists (select 1 from public.admin_users a where a.id = auth.uid()));
 
 -- Admins may see their own allowlist row (needed to check membership from the app).
-drop policy if exists "admins can read own membership" on public.admin_users;
+alter table public.admin_users enable row level security;
+
+grant usage on schema public to authenticated;
+grant select on public.admin_users to authenticated;
+
+drop policy if exists "admins can read own membership"
+on public.admin_users;
+
 create policy "admins can read own membership"
-  on public.admin_users for select
-  to authenticated
-  using (id = auth.uid());
+on public.admin_users
+for select
+to authenticated
+using ((select auth.uid()) = id);
 
 -- ---------------------------------------------------------------------------
 -- Storage bucket for project media
