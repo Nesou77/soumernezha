@@ -7,13 +7,31 @@ const supabaseHostname = process.env.NEXT_PUBLIC_SUPABASE_URL
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+
   images: {
     formats: ["image/avif", "image/webp"],
     remotePatterns: supabaseHostname
-      ? [{ protocol: "https", hostname: supabaseHostname, pathname: "/storage/v1/object/public/**" }]
+      ? [
+          {
+            protocol: "https",
+            hostname: supabaseHostname,
+            pathname: "/storage/v1/object/public/**",
+          },
+        ]
       : [],
   },
-  experimental: { optimizePackageImports: ["lucide-react", "framer-motion", "@react-three/drei"] },
+
+  experimental: {
+    optimizePackageImports: [
+      "lucide-react",
+      "framer-motion",
+      "@react-three/drei",
+    ],
+
+    serverActions: {
+      bodySizeLimit: "30mb",
+    },
+  },
 };
 
 export default nextConfig;

@@ -69,10 +69,16 @@ create table if not exists public.admin_users (
 -- an ordinary GRANT to touch the TABLE at all. Tables created via the SQL
 -- editor don't inherit the anon/authenticated grants the dashboard's table
 -- editor sets up automatically, so we grant them explicitly here.
-grant usage on schema public to anon, authenticated;
+grant usage on schema public to anon, authenticated, service_role;
+
+-- Public/authenticated application access
 grant select on public.projects to anon, authenticated;
 grant insert, update, delete on public.projects to authenticated;
 grant select on public.admin_users to authenticated;
+
+-- Server-side administrative scripts (seed, migrations, etc.)
+grant all privileges on public.projects to service_role;
+grant all privileges on public.admin_users to service_role;
 
 -- ---------------------------------------------------------------------------
 -- Row Level Security
@@ -113,11 +119,16 @@ create policy "admins can delete projects"
   to authenticated
   using (exists (select 1 from public.admin_users a where a.id = auth.uid()));
 
--- Admins may see their own allowlist row (needed to check membership from the app).
-alter table public.admin_users enable row level security;
+-- Admins may see their own allowlist row.
+-- This is required by the login flow to verify admin membership.
+drop policy if exists "admins can read own membership"
+  on public.admin_users;
 
-grant usage on schema public to authenticated;
-grant select on public.admin_users to authenticated;
+create policy "admins can read own membership"
+  on public.admin_users
+  for select
+  to authenticated
+  using ((select auth.uid()) = id);
 
 drop policy if exists "admins can read own membership"
 on public.admin_users;
