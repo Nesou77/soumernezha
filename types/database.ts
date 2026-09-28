@@ -1,5 +1,28 @@
+import type { TranslatedLocale } from "@/lib/i18n/config";
+
+/**
+ * Localized overrides for one non-default locale. Every field is optional:
+ * anything missing falls back to the default-locale (English) column.
+ */
+export type ProjectTranslation = {
+  title?: string;
+  sector?: string;
+  role?: string;
+  summary?: string;
+  description?: string;
+  challenge?: string;
+  contributions?: string[];
+  features?: string[];
+};
+
+/** Shape of the `projects.translations` jsonb column, e.g. `{ "fr": { "summary": "…" } }`. */
+export type ProjectTranslations = { [L in TranslatedLocale]?: ProjectTranslation };
+
 /**
  * Raw shape of a row in the Supabase `projects` table.
+ *
+ * The plain text columns hold the default-locale (English) content, which is
+ * also the fallback for every other locale; `translations` holds the rest.
  *
  * Deliberately a `type` (object literal), not an `interface`: only object
  * literal types get TypeScript's implicit string index signature, which the
@@ -28,11 +51,14 @@ export type ProjectRow = {
   featured: boolean;
   published: boolean;
   display_order: number;
+  translations: ProjectTranslations;
   created_at: string;
   updated_at: string;
 };
 
-export type ProjectInsert = Omit<ProjectRow, "id" | "created_at" | "updated_at">;
+export type ProjectInsert = Omit<ProjectRow, "id" | "created_at" | "updated_at" | "translations"> & {
+  translations?: ProjectTranslations;
+};
 export type ProjectUpdate = Partial<ProjectInsert>;
 
 export type AdminUserRow = {

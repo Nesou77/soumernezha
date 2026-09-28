@@ -1,11 +1,13 @@
 import { createClient } from "@/lib/supabase/server";
 import type { Project, ProjectCategory } from "@/types";
-import type { ProjectRow } from "@/types/database";
+import type { ProjectRow, ProjectTranslations } from "@/types/database";
 
 export interface AdminProject extends Project {
   id: string;
   published: boolean;
   updatedAt: string;
+  /** Raw per-locale overrides (English lives in the regular fields above). */
+  translations: ProjectTranslations;
 }
 
 function toAdminProject(row: ProjectRow, index: number): AdminProject {
@@ -31,6 +33,7 @@ function toAdminProject(row: ProjectRow, index: number): AdminProject {
     featured: row.featured,
     published: row.published,
     updatedAt: row.updated_at,
+    translations: row.translations ?? {},
   };
 }
 

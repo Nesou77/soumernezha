@@ -5,13 +5,12 @@ import { useEffect, useState } from "react";
 import { Logo } from "@/components/ui/Logo";
 
 const KEY = "ns-intro-seen";
-const words = ["BUILD", "TEST", "SHIP"] as const;
 
 /**
- * Short intro (~1.4s): NS monogram draws, then BUILD / TEST / SHIP.
+ * Short intro (~1.4s): NS monogram draws, then the three localized words (BUILD / TEST / SHIP).
  * Shown once per browser session so repeat visitors are not slowed down.
  */
-export function Loader() {
+export function Loader({ words, label }: { words: string[]; label: string }) {
   const [phase, setPhase] = useState<"pending" | "playing" | "done">("pending");
   const [step, setStep] = useState(-1);
   const [skip, setSkip] = useState(false);
@@ -57,7 +56,7 @@ export function Loader() {
         <motion.div
           key="loader"
           role="status"
-          aria-label="Loading portfolio"
+          aria-label={label}
           className="fixed inset-0 z-[110] grid place-items-center bg-[#050505]"
           exit={{ clipPath: "inset(0 0 100% 0)" }}
           transition={{ duration: skip ? 0 : 0.7, ease: [0.76, 0, 0.24, 1] }}

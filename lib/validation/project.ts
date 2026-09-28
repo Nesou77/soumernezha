@@ -38,6 +38,21 @@ export const projectSchema = z.object({
 
 export type ProjectFormValues = z.infer<typeof projectSchema>;
 
+/**
+ * Content for a non-default locale. Everything is optional: an empty field
+ * falls back to the English value on the public site.
+ */
+export const projectTranslationSchema = z.object({
+  title: z.string().trim().max(120).default(""),
+  sector: z.string().trim().max(140).default(""),
+  role: z.string().trim().max(140).default(""),
+  summary: z.string().trim().max(280, "Keep the short summary under 280 characters.").default(""),
+  description: z.string().trim().max(4000).default(""),
+  challenge: z.string().trim().max(4000).default(""),
+  contributions: z.array(z.string().trim().min(1)).default([]),
+  features: z.array(z.string().trim().min(1)).default([]),
+});
+
 export const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
 export const ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 

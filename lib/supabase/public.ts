@@ -12,5 +12,10 @@ export function createPublicClient() {
   const { url, anonKey } = getSupabaseEnv();
   return createSupabaseClient<Database>(url, anonKey, {
     auth: { persistSession: false },
+    // A stalled network must not hang `next build` or a page render forever:
+    // give up after 15s (callers already log the error and degrade gracefully).
+    global: {
+      fetch: (input, init) => fetch(input, { ...init, signal: init?.signal ?? AbortSignal.timeout(15_000) }),
+    },
   });
 }

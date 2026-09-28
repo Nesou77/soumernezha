@@ -12,6 +12,9 @@ import Link from "next/link";
 
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { ProjectVisual } from "@/components/ui/ProjectVisual";
+import type { Dictionary } from "@/lib/i18n";
+import { format, localizePath, type Locale } from "@/lib/i18n/config";
+import { fallbackLang } from "@/lib/i18n/projects";
 import type { Project } from "@/types";
 
 const ease = [
@@ -28,6 +31,9 @@ interface ActiveProjectStageProps {
   direction: number;
   onPrevious: () => void;
   onNext: () => void;
+  locale: Locale;
+  t: Dictionary["projects"];
+  projectT: Dictionary["project"];
 }
 
 export function ActiveProjectStage({
@@ -37,6 +43,9 @@ export function ActiveProjectStage({
   direction,
   onPrevious,
   onNext,
+  locale,
+  t,
+  projectT,
 }: ActiveProjectStageProps) {
   const number = String(
     activeIndex + 1,
@@ -179,6 +188,7 @@ export function ActiveProjectStage({
               >
                 <ProjectVisual
                   project={project}
+                  alt=""
                   priority
                   sizes="(min-width: 1024px) 75vw, 100vw"
                   className="
@@ -260,7 +270,7 @@ export function ActiveProjectStage({
         >
           <button
             type="button"
-            aria-label="Previous project"
+                aria-label={projectT.previousProject}
             disabled={isFirst}
             onClick={(event) => {
               event.preventDefault();
@@ -297,7 +307,7 @@ export function ActiveProjectStage({
 
           <button
             type="button"
-            aria-label="Next project"
+                aria-label={projectT.nextProject}
             disabled={isLast}
             onClick={(event) => {
               event.preventDefault();
@@ -385,7 +395,8 @@ export function ActiveProjectStage({
                 "
               >
                 <Link
-                  href={`/projects/${project.slug}`}
+                  href={localizePath(locale, `/projects/${project.slug}`)}
+                  aria-label={format(t.openCaseStudy, { title: project.title })}
                   className="
                     transition-colors
                     duration-300
@@ -423,6 +434,7 @@ export function ActiveProjectStage({
               }}
             >
               <p
+                lang={fallbackLang(project, "summary")}
                 className="
                   mt-2
                   max-w-2xl
@@ -492,7 +504,7 @@ export function ActiveProjectStage({
               whitespace-nowrap
             "
           >
-            View case study
+            {t.viewCaseStudy}
             <ArrowIcon />
           </Link>
         </div>

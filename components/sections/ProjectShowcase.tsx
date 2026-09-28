@@ -22,37 +22,31 @@ import {
 } from "@/components/projects/ProjectFilters";
 import { ProjectReel } from "@/components/projects/ProjectReel";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { content } from "@/data/content";
+import { ProjectVisual } from "@/components/ui/ProjectVisual";
+import { useFinePointer } from "@/hooks/useMedia";
+import type { Dictionary } from "@/lib/i18n";
+import { format, type Locale } from "@/lib/i18n/config";
 import type { Project } from "@/types";
 
 const SCROLL_PER_PROJECT_VH = 55;
 
-export function ProjectShowcase({
-  projects,
-}: {
+interface ProjectShowcaseProps {
   projects: Project[];
-}) {
-  const c = content.projects;
+  locale: Locale;
+  t: Dictionary["projects"];
+  projectT: Dictionary["project"];
+  categories: Dictionary["categories"];
+}
 
-  const [filter, setFilter] =
-    useState<ProjectFilter>("all");
-
-  const [activeIndex, setActiveIndex] =
-    useState(0);
-
-  const [direction, setDirection] =
-    useState(1);
-
-  const sectionRef =
-    useRef<HTMLElement>(null);
-
-  const scrollStageRef =
-    useRef<HTMLDivElement>(null);
-
-  const activeIndexRef =
-    useRef(0);
-
+export function ProjectShowcase({ projects, locale, t: c, projectT, categories }: ProjectShowcaseProps) {
+  const [filter, setFilter] = useState<ProjectFilter>("all");
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const fine = useFinePointer();
   const reduce = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const scrollStageRef = useRef<HTMLDivElement>(null);
+  const activeIndexRef = useRef(0);
 
   /* =========================================
      FILTER PROJECTS
@@ -68,8 +62,7 @@ export function ProjectShowcase({
     [projects, filter],
   );
 
-  const activeProject =
-    visibleProjects[activeIndex];
+  const activeProject = visibleProjects[activeIndex];
 
   /* =========================================
      RESET AFTER FILTER CHANGE
@@ -272,142 +265,35 @@ export function ProjectShowcase({
           opacity-[0.055]
         "
       >
-        Selected work — Selected work —
-        Selected work
+        {Array.from({ length: 3 }, () => c.marquee).join(" — ")}
       </motion.p>
 
-      {/* =====================================
-          SECTION HEADING
-         ===================================== */}
-
-      <div
-        className="
-          container-x
-          relative z-10
-          pt-[var(--section-y)]
-        "
-      >
-        <SectionHeading
-          id="projects-title"
-          index="02"
-          eyebrow={c.eyebrow}
-          lines={[c.headline]}
-          intro={c.intro}
-        />
-
-        <div
-          aria-live="polite"
-          className="sr-only"
-        >
-          Showing{" "}
-          {visibleProjects.length}{" "}
-          projects
+      <div className="container-x relative z-10 pt-[var(--section-y)]">
+        <SectionHeading id="projects-title" index="02" eyebrow={c.eyebrow} lines={[c.headline]} intro={c.intro} />
+        <div aria-live="polite" className="sr-only">
+          {format(c.showing, { count: visibleProjects.length })}
         </div>
       </div>
 
-      {/* =====================================
-          DESKTOP PROJECT STAGE
-         ===================================== */}
-
       {activeProject && (
-        <div
-          ref={scrollStageRef}
-          className="
-            relative
-            mt-4
-            hidden
-            lg:block
-          "
-          style={{
-            height: `${scrollHeight}vh`,
-          }}
-        >
-          <div
-            className="
-              sticky
-              top-0
-              h-screen
-              overflow-hidden
-            "
-          >
-            <div
-              className="
-                container-x
-                flex
-                h-full
-                flex-col
-                py-5
-                xl:py-6
-              "
-            >
-              {/* =================================
-                  FULL-WIDTH FILTER ROW
-                 ================================= */}
-
-              <div
-                className="
-                  shrink-0
-                  border-b
-                  border-line
-                  pb-3
-                "
-              >
-                <ProjectFilters
-                  value={filter}
-                  onChange={setFilter}
-                />
+        <div ref={scrollStageRef} className="relative mt-4 hidden lg:block" style={{ height: `${scrollHeight}vh` }}>
+          <div className="sticky top-0 h-screen overflow-hidden">
+            <div className="container-x flex h-full flex-col py-5 xl:py-6">
+              <div className="shrink-0 border-b border-line pb-3">
+                <ProjectFilters value={filter} onChange={setFilter} categories={categories} t={c} />
               </div>
-
-              {/* =================================
-                  TWO-COLUMN PROJECT AREA
-                 ================================= */}
-
-              <div
-                className="
-                  grid
-                  min-h-0
-                  flex-1
-                  grid-cols-[minmax(230px,0.62fr)_minmax(0,2.15fr)]
-                  gap-10
-                  pt-3
-                  xl:gap-14
-                "
-              >
-                {/* LEFT PROJECT LIST */}
-
-                <ProjectReel
-                  projects={
-                    visibleProjects
-                  }
-                  activeIndex={
-                    activeIndex
-                  }
-                  onChange={
-                    selectProject
-                  }
-                />
-
-                {/* RIGHT PROJECT */}
-
+              <div className="grid min-h-0 flex-1 grid-cols-[minmax(230px,0.62fr)_minmax(0,2.15fr)] gap-10 pt-3 xl:gap-14">
+                <ProjectReel projects={visibleProjects} activeIndex={activeIndex} onChange={goToProject} />
                 <ActiveProjectStage
-                  project={
-                    activeProject
-                  }
-                  activeIndex={
-                    activeIndex
-                  }
-                  total={
-                    visibleProjects.length
-                  }
-                  direction={
-                    direction
-                  }
-                  onPrevious={
-                    previous
-                  }
-                  onNext={
-                    next
-                  }
+                  project={activeProject}
+                  activeIndex={activeIndex}
+                  total={visibleProjects.length}
+                  direction={direction}
+                  onPrevious={previous}
+                  onNext={next}
+                  locale={locale}
+                  t={c}
+                  projectT={projectT}
                 />
               </div>
             </div>
@@ -415,37 +301,19 @@ export function ProjectShowcase({
         </div>
       )}
 
-      {/* =====================================
-          MOBILE
-         ===================================== */}
-
-      <div
-        className="
-          container-x
-          relative z-10
-        "
-      >
-        <div
-          className="
-            mt-8
-            pb-[var(--section-y)]
-            lg:hidden
-          "
-        >
-          <ProjectFilters
-            value={filter}
-            onChange={setFilter}
-          />
-
+      <div className="container-x relative z-10">
+        <div className="mt-8 pb-[var(--section-y)] lg:hidden">
+          <ProjectFilters value={filter} onChange={setFilter} categories={categories} t={c} />
           <div className="mt-6">
-            <MobileProjectCarousel
-              projects={
-                visibleProjects
-              }
-            />
+            {visibleProjects.length > 0 ? (
+              <MobileProjectCarousel projects={visibleProjects} locale={locale} categories={categories} t={c} />
+            ) : (
+              <p className="text-muted">{c.empty}</p>
+            )}
           </div>
         </div>
       </div>
+
     </section>
   );
 }

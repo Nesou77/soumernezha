@@ -3,8 +3,7 @@
 import { useMemo, useState } from "react";
 import { Reveal } from "@/components/animations/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { content } from "@/data/content";
-import { phases, skillGroups } from "@/data/skills";
+import type { Dictionary } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import type { SkillGroup, SkillItem } from "@/types";
 
@@ -24,18 +23,18 @@ function flatten(groups: SkillGroup[], phase: string): Active[] {
     .flatMap((g) => g.skills.map((s) => ({ ...s, group: g.label })));
 }
 
-export function Skills() {
-  const c = content.skills;
+export function Skills({ t: c }: { t: Dictionary["skills"] }) {
+  const skillGroups = c.groups;
   const [active, setActive] = useState<Active | null>(null);
   const rings = useMemo(
     () => RINGS.map((r) => ({ ...r, skills: flatten(skillGroups, r.phase) })),
-    [],
+    [skillGroups],
   );
   const lookup = useMemo(() => {
     const map = new Map<string, Active>();
     skillGroups.forEach((g) => g.skills.forEach((s) => map.set(s.name, { ...s, group: g.label })));
     return map;
-  }, []);
+  }, [skillGroups]);
 
   return (
     <section id="skills" aria-labelledby="skills-title" className="section-y relative overflow-x-clip">
@@ -85,13 +84,13 @@ export function Skills() {
                     })}
                   </div>
                   <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-[170%] font-mono text-[0.62rem] tracking-[0.3em] text-muted">
-                    {phases.find((p) => p.id === ring.phase)?.label}
+                    {c.phases[ring.phase]}
                   </span>
                 </div>
               ))}
               <div className="absolute inset-[40%] grid place-items-center rounded-full border border-accent/30 bg-[#080b10] px-2 text-center">
                 <span className="font-display text-[clamp(0.6rem,1.6vw,0.85rem)] leading-tight tracking-tight">
-                  {active ? active.name : "Build · Test · Ship"}
+                  {active ? active.name : c.center}
                 </span>
               </div>
             </div>
@@ -105,7 +104,7 @@ export function Skills() {
                     <div>
                       <h3 className="font-display text-base">{g.label}</h3>
                       <p className="mt-0.5 font-mono text-[0.68rem] uppercase tracking-[0.14em] text-muted">
-                        {g.phase}
+                        {c.phases[g.phase]}
                       </p>
                     </div>
                     <ul className="flex flex-wrap gap-x-1 gap-y-1">
@@ -149,7 +148,7 @@ export function Skills() {
                   <p className="text-sm text-muted">{active.description}</p>
                 </>
               ) : (
-                <p className="text-sm text-muted">Hover or focus a skill to read how I use it.</p>
+                <p className="text-sm text-muted">{c.hint}</p>
               )}
             </div>
           </div>

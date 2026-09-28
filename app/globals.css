@@ -97,6 +97,19 @@ section[id] {
   font-size: clamp(1.6rem, 1.1rem + 2.4vw, 3rem);
 }
 
+/*
+ * Display title that shrinks to keep its longest word on one line.
+ * Set --title-chars (longest word length) inline; --fit-max caps the size.
+ * 0.68em is a safe upper bound for an uppercase Space Grotesk glyph.
+ */
+.fit-title {
+  font-size: min(
+    var(--fit-max, clamp(3rem, 1rem + 8.6vw, 9.25rem)),
+    calc((100vw - 2 * var(--gutter)) / (var(--title-chars, 8) * 0.68))
+  );
+  overflow-wrap: anywhere;
+}
+
 /* ---------- Links & buttons ---------- */
 .link-underline {
   background-image: linear-gradient(currentColor, currentColor);

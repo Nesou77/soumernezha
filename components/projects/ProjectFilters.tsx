@@ -1,32 +1,37 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { categoryLabels } from "@/lib/project-constants";
+import type { Dictionary } from "@/lib/i18n";
+import { projectCategories } from "@/lib/project-constants";
 import { cn } from "@/lib/utils";
 import type { ProjectCategory } from "@/types";
 
 export type ProjectFilter = "all" | ProjectCategory;
 
-const filters: { id: ProjectFilter; label: string }[] = [
-  { id: "all", label: "All" },
-  { id: "web", label: categoryLabels.web },
-  { id: "cms", label: categoryLabels.cms },
-  { id: "qa", label: categoryLabels.qa },
-];
+const filters: { id: ProjectFilter; label: string }[] = [];
 
 interface ProjectFiltersProps {
   value: ProjectFilter;
   onChange: (filter: ProjectFilter) => void;
+  categories: Dictionary["categories"];
+  t: Dictionary["projects"];
 }
 
 export function ProjectFilters({
   value,
   onChange,
+  categories,
+  t,
 }: ProjectFiltersProps) {
+  const filters: { id: ProjectFilter; label: string }[] = [
+    { id: "all", label: t.all },
+    ...projectCategories.map((id) => ({ id, label: categories[id] })),
+  ];
+
   return (
     <div
       role="group"
-      aria-label="Filter projects by category"
+      aria-label={t.filterLabel}
       className="flex flex-wrap items-center gap-x-6 gap-y-3"
     >
       {filters.map((filter) => {

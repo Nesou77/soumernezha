@@ -3,13 +3,21 @@
 import Link from "next/link";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { ProjectVisual } from "@/components/ui/ProjectVisual";
-import { categoryLabels } from "@/lib/project-constants";
+import type { Dictionary } from "@/lib/i18n";
+import { format, localizePath, type Locale } from "@/lib/i18n/config";
+import { fallbackLang } from "@/lib/i18n/projects";
 import type { Project } from "@/types";
 
 export function MobileProjectCarousel({
   projects,
+  locale,
+  categories,
+  t,
 }: {
   projects: Project[];
+  locale: Locale;
+  categories: Dictionary["categories"];
+  t: Dictionary["projects"];
 }) {
   return (
     <div
@@ -22,11 +30,13 @@ export function MobileProjectCarousel({
           className="w-[86vw] max-w-[34rem] shrink-0 snap-center"
         >
           <Link
-            href={`/projects/${project.slug}`}
+            href={localizePath(locale, `/projects/${project.slug}`)}
+            aria-label={format(t.openCaseStudy, { title: project.title })}
             className="group block"
           >
             <ProjectVisual
               project={project}
+              alt=""
               sizes="86vw"
               className="aspect-video"
             />
@@ -38,14 +48,14 @@ export function MobileProjectCarousel({
                   {" / "}
                   {String(projects.length).padStart(2, "0")}
                   {" · "}
-                  {categoryLabels[project.category]}
+                  {categories[project.category]}
                 </p>
 
                 <h3 className="display-mixed text-3xl">
                   {project.title}
                 </h3>
 
-                <p className="mt-2 line-clamp-2 text-sm text-muted">
+                <p lang={fallbackLang(project, "summary")} className="mt-2 line-clamp-2 text-sm text-muted">
                   {project.summary}
                 </p>
               </div>

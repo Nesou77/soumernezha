@@ -28,7 +28,24 @@ export interface Project {
   featured?: boolean;
   /** Whether the project is publicly visible. Always true for publicly-fetched projects. */
   published?: boolean;
+  /**
+   * Text fields shown in the default language because the requested locale
+   * has no translation yet (rendered with `lang="en"` so assistive tech and
+   * search engines read them correctly). Empty for the default locale.
+   */
+  untranslated?: TranslatableField[];
 }
+
+/** Project fields that can differ per language (named after the database columns). */
+export type TranslatableField =
+  | "title"
+  | "sector"
+  | "role"
+  | "summary"
+  | "description"
+  | "challenge"
+  | "contributions"
+  | "features";
 
 export interface NavItem {
   label: string;

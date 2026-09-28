@@ -3,8 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowDown, ArrowUp, Pencil } from "lucide-react";
 import { DeleteProjectDialog } from "@/components/admin/DeleteProjectDialog";
-import { FeaturedBadge, ProjectStatusBadge } from "@/components/admin/ProjectStatusBadge";
+import { FeaturedBadge, ProjectStatusBadge, TranslationBadge } from "@/components/admin/ProjectStatusBadge";
 import { computeStats, getAllProjectsAdmin } from "@/lib/data/admin-projects";
+import { translationProgress } from "@/lib/i18n/projects";
 import { categoryLabels } from "@/lib/project-constants";
 import { moveProjectAction, toggleProjectFlagAction } from "@/lib/actions/projects";
 
@@ -90,6 +91,21 @@ export default async function AdminDashboardPage({
                       <div className="flex flex-wrap gap-1.5">
                         <ProjectStatusBadge published={Boolean(p.published)} />
                         {p.featured && <FeaturedBadge />}
+                        <TranslationBadge
+                          {...translationProgress(
+                            {
+                              title: p.title,
+                              sector: p.sector,
+                              role: p.role,
+                              summary: p.summary,
+                              description: p.description,
+                              challenge: p.challenge,
+                              contributions: p.contribution,
+                              features: p.features,
+                            },
+                            p.translations.fr,
+                          )}
+                        />
                       </div>
                     </td>
                     <td className="px-4 py-3 whitespace-nowrap text-white/50">

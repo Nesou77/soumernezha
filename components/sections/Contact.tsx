@@ -6,8 +6,9 @@ import { Magnetic } from "@/components/animations/Magnetic";
 import { Reveal } from "@/components/animations/Reveal";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { content } from "@/data/content";
 import { useCopy } from "@/hooks/useCopy";
+import type { Dictionary } from "@/lib/i18n";
+import { format } from "@/lib/i18n/config";
 import { site } from "@/lib/site";
 
 const field =
@@ -18,8 +19,13 @@ const field =
  * To send from the server instead, add an API route (e.g. with Resend) and
  * POST the form data there. See README.
  */
-export function Contact() {
-  const c = content.contact;
+interface ContactProps {
+  t: Dictionary["contact"];
+  location: string;
+  newTab: string;
+}
+
+export function Contact({ t: c, location, newTab }: ContactProps) {
   const { copied, copy } = useCopy();
   const [sent, setSent] = useState(false);
 
@@ -27,7 +33,7 @@ export function Contact() {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     const get = (k: string) => String(data.get(k) ?? "").trim();
-    const subject = `Portfolio enquiry from ${get("name")}${get("company") ? ` (${get("company")})` : ""}`;
+    const subject = `${format(c.subject, { name: get("name") })}${get("company") ? ` (${get("company")})` : ""}`;
     const body = `${get("message")}\n\n— ${get("name")}\n${get("email")}`;
     window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setSent(true);
@@ -42,7 +48,7 @@ export function Contact() {
           <div className="lg:col-span-6">
             <Reveal>
               <p className="font-display text-2xl">{site.name}</p>
-              <p className="text-muted">{site.location}</p>
+              <p className="text-muted">{location}</p>
               <a
                 href={`mailto:${site.email}`}
                 className="link-underline mt-8 block break-all font-display text-[clamp(1.4rem,0.8rem+2.6vw,2.8rem)] tracking-tight"
@@ -56,55 +62,55 @@ export function Contact() {
                 <Magnetic>
                   <button type="button" onClick={() => copy(site.email)} className="btn btn-primary">
                     {copied ? <Check size={16} aria-hidden /> : <Copy size={16} aria-hidden />}
-                    {copied ? "Copied!" : "Copy email"}
+                    {copied ? c.copied : c.copyEmail}
                   </button>
                 </Magnetic>
                 <Magnetic>
                   <a href={site.linkedin} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
                     <Link2 size={16} aria-hidden /> LinkedIn <ArrowIcon size={16} />
-                    <span className="sr-only">(opens in a new tab)</span>
+                    <span className="sr-only">{newTab}</span>
                   </a>
                 </Magnetic>
                 <Magnetic>
                   <a href={site.cv} download className="btn btn-ghost">
-                    <Download size={16} aria-hidden /> Download CV
+                    <Download size={16} aria-hidden /> {c.cv}
                   </a>
                 </Magnetic>
               </div>
               <p role="status" aria-live="polite" className="sr-only">
-                {copied ? "Email address copied to clipboard" : ""}
+                {copied ? c.copiedStatus : ""}
               </p>
             </Reveal>
           </div>
 
           <Reveal delay={0.1} className="lg:col-span-6">
-            <form onSubmit={onSubmit} className="space-y-6" aria-label="Contact form">
+            <form onSubmit={onSubmit} className="space-y-6" aria-label={c.form}>
               <div className="grid gap-6 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="c-name" className="eyebrow text-muted">Name</label>
-                  <input id="c-name" name="name" required autoComplete="name" className={field} placeholder="Your name" />
+                  <label htmlFor="c-name" className="eyebrow text-muted">{c.name}</label>
+                  <input id="c-name" name="name" required autoComplete="name" className={field} placeholder={c.namePlaceholder} />
                 </div>
                 <div>
-                  <label htmlFor="c-email" className="eyebrow text-muted">Email</label>
-                  <input id="c-email" name="email" type="email" required autoComplete="email" className={field} placeholder="you@company.com" />
+                  <label htmlFor="c-email" className="eyebrow text-muted">{c.email}</label>
+                  <input id="c-email" name="email" type="email" required autoComplete="email" className={field} placeholder={c.emailPlaceholder} />
                 </div>
               </div>
               <div>
-                <label htmlFor="c-company" className="eyebrow text-muted">Company <span className="normal-case tracking-normal">(optional)</span></label>
-                <input id="c-company" name="company" autoComplete="organization" className={field} placeholder="Company" />
+                <label htmlFor="c-company" className="eyebrow text-muted">{c.company} <span className="normal-case tracking-normal">{c.optional}</span></label>
+                <input id="c-company" name="company" autoComplete="organization" className={field} placeholder={c.companyPlaceholder} />
               </div>
               <div>
-                <label htmlFor="c-message" className="eyebrow text-muted">Message</label>
-                <textarea id="c-message" name="message" required rows={4} className={`${field} resize-none`} placeholder="Tell me about your project or role" />
+                <label htmlFor="c-message" className="eyebrow text-muted">{c.message}</label>
+                <textarea id="c-message" name="message" required rows={4} className={`${field} resize-none`} placeholder={c.messagePlaceholder} />
               </div>
               <div className="flex flex-wrap items-center gap-4">
                 <Magnetic>
                   <button type="submit" className="btn btn-primary">
-                    Send message <ArrowIcon />
+                    {c.send} <ArrowIcon />
                   </button>
                 </Magnetic>
                 <p role="status" aria-live="polite" className="text-sm text-muted">
-                  {sent ? "Opening your email app. If nothing happens, write to me directly." : "Opens your email app with the message ready to send."}
+                  {sent ? c.sent : c.hint}
                 </p>
               </div>
             </form>

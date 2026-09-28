@@ -1,23 +1,26 @@
 import { cache } from "react";
 import { createPublicClient } from "@/lib/supabase/public";
+import { resolveProjectContent } from "@/lib/i18n/projects";
+import type { Locale } from "@/lib/i18n/config";
 import type { Project, ProjectCategory } from "@/types";
 import type { ProjectRow } from "@/types/database";
 
-function toProject(row: ProjectRow, index: number): Project {
+function toProject(row: ProjectRow, index: number, locale: Locale): Project {
+  const { content, untranslated } = resolveProjectContent(row, locale);
   return {
     id: row.id,
     slug: row.slug,
     index: String(index + 1).padStart(2, "0"),
-    title: row.title,
+    title: content.title,
     category: row.category as ProjectCategory,
-    sector: row.sector,
-    role: row.role,
+    sector: content.sector,
+    role: content.role,
     year: row.year ?? undefined,
-    summary: row.summary,
-    description: row.description,
-    challenge: row.challenge,
-    contribution: row.contributions,
-    features: row.features,
+    summary: content.summary,
+    description: content.description,
+    challenge: content.challenge,
+    contribution: content.contributions,
+    features: content.features,
     technologies: row.technologies,
     url: row.project_url ?? undefined,
     image: row.cover_image_url ?? undefined,
@@ -25,15 +28,12 @@ function toProject(row: ProjectRow, index: number): Project {
     hue: row.hue,
     featured: row.featured,
     published: row.published,
+    untranslated,
   };
 }
 
-/**
- * All published projects, ordered for display. Cached per-request so the
- * homepage sections, the QA lab, project pages and the sitemap can each call
- * this without triggering duplicate database round-trips.
- */
-export const getPublishedProjects = cache(async (): Promise<Project[]> => {
+/** Raw published rows, fetched once per request whatever the number of locales rendered. */
+const getPublishedRows = cache(async (): Promise<ProjectRow[]> => {
   const supabase = createPublicClient();
   const { data, error } = await supabase
     .from("projects")
@@ -46,20 +46,25 @@ export const getPublishedProjects = cache(async (): Promise<Project[]> => {
     console.error("Failed to load published projects:", error.message);
     return [];
   }
-
-  return (data ?? []).map(toProject);
+  return data ?? [];
 });
 
-export async function getFeaturedProjects(): Promise<Project[]> {
-  const all = await getPublishedProjects();
-  return all.filter((p) => p.featured);
-}
+/**
+ * All published projects, ordered for display and localized (with per-field
+ * English fallback). Cached per request so the homepage sections, project
+ * pages, metadata and the sitemap don't trigger duplicate round-trips.
+ */
+export const getPublishedProjects = cache(async (locale: Locale): Promise<Project[]> => {
+  const rows = await getPublishedRows();
+  return rows.map((row, i) => toProject(row, i, locale));
+});
 
-export async function getProjectBySlug(slug: string): Promise<Project | null> {
-  const all = await getPublishedProjects();
+export async function getProjectBySlug(slug: string, locale: Locale): Promise<Project | null> {
+  const all = await getPublishedProjects(locale);
   return all.find((p) => p.slug === slug) ?? null;
 }
 
+/** Neighbours in display order, wrapping around so the last project leads back to the first. */
 export function getAdjacentProjects(all: Project[], slug: string): { prev: Project; next: Project } | null {
   const i = all.findIndex((p) => p.slug === slug);
   if (i === -1 || all.length < 2) return null;
