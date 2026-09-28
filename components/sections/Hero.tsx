@@ -22,12 +22,21 @@ export function Hero() {
           </p>
         </Reveal>
 
-        <h1 id="hero-title" className="display text-h1 -ml-[0.04em]">
+        <h1
+          id="hero-title"
+          className="display text-h1 -ml-[0.04em] w-fit max-w-full"
+        >
           <span className="sr-only">
             {site.name}, {site.role}. Build. Test. Perfect.
           </span>
-          <span aria-hidden>
-            <MaskLines immediate delay={0.9} lines={words} lineClassNames={wordStyle} />
+
+          <span aria-hidden className="block w-fit">
+            <MaskLines
+              immediate
+              delay={0.9}
+              lines={words}
+              lineClassNames={wordStyle}
+            />
           </span>
         </h1>
 
