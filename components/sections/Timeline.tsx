@@ -4,12 +4,11 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import { useRef } from "react";
 import { Reveal } from "@/components/animations/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { content } from "@/data/content";
-import { certification, education, experience } from "@/data/experience";
+import type { Dictionary } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
-export function Timeline() {
-  const c = content.experience;
+export function Timeline({ t: c }: { t: Dictionary["experience"] }) {
+  const { entries: experience, educationEntries: education, certification } = c;
   const listRef = useRef<HTMLOListElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: listRef, offset: ["start 70%", "end 60%"] });
@@ -64,7 +63,7 @@ export function Timeline() {
                     ))}
                   </ul>
                 )}
-                <span className="sr-only">{i === 0 ? "Current role" : ""}</span>
+                <span className="sr-only">{i === 0 ? c.currentRole : ""}</span>
               </Reveal>
             </li>
           ))}
@@ -73,8 +72,8 @@ export function Timeline() {
         {/* Education */}
         <div className="mt-28 grid gap-10 md:grid-cols-[30%_1fr]">
           <Reveal>
-            <h3 className="display-mixed text-[clamp(1.6rem,1rem+2vw,2.6rem)]">Education</h3>
-            <p className="mt-2 font-mono text-xs uppercase tracking-[0.14em] text-muted">& training</p>
+            <h3 className="display-mixed text-[clamp(1.6rem,1rem+2vw,2.6rem)]">{c.education}</h3>
+            <p className="mt-2 font-mono text-xs uppercase tracking-[0.14em] text-muted">{c.educationSub}</p>
           </Reveal>
           <div className="md:pl-12">
             <ul className="border-t border-line">
@@ -90,7 +89,7 @@ export function Timeline() {
             </ul>
 
             <Reveal delay={0.1} className="mt-10">
-              <p className="eyebrow mb-2">Certification / training</p>
+              <p className="eyebrow mb-2">{c.certificationLabel}</p>
               <p className="font-display text-lg">{certification.title}</p>
               <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs text-muted">
                 {certification.topics.map((t) => (

@@ -1,10 +1,9 @@
 import { Reveal } from "@/components/animations/Reveal";
 import { TiltCard } from "@/components/animations/TiltCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { content } from "@/data/content";
+import type { Dictionary } from "@/lib/i18n";
 
-export function About() {
-  const c = content.about;
+export function About({ t: c }: { t: Dictionary["about"] }) {
   return (
     <section id="about" aria-labelledby="about-title" className="section-y relative">
       <div className="container-x">
@@ -18,7 +17,7 @@ export function About() {
               </Reveal>
             ))}
             <Reveal delay={0.2}>
-              <h3 className="eyebrow mb-4 mt-10 text-muted">Expertise</h3>
+              <h3 className="eyebrow mb-4 mt-10 text-muted">{c.expertiseLabel}</h3>
               <ul className="flex flex-wrap gap-x-5 gap-y-2 font-display text-sm text-fg">
                 {c.expertise.map((e) => (
                   <li key={e} className="flex items-center gap-5">

@@ -8,11 +8,15 @@ interface TagListInputProps {
   label: string;
   placeholder?: string;
   initialValues?: string[];
+  /** Helper text under the label (e.g. the English version, on the French tab). */
+  hint?: React.ReactNode;
+  /** Text for the add button; defaults to "Add <label, singular>". */
+  addLabel?: string;
 }
 
 /** Dynamically add/remove plain-text rows (features, contributions...). Each
  * row is a real named input so it submits as part of the surrounding form. */
-export function TagListInput({ name, label, placeholder, initialValues }: TagListInputProps) {
+export function TagListInput({ name, label, placeholder, initialValues, hint, addLabel }: TagListInputProps) {
   const [values, setValues] = useState<string[]>(initialValues && initialValues.length > 0 ? initialValues : [""]);
 
   function updateAt(index: number, value: string) {
@@ -30,6 +34,7 @@ export function TagListInput({ name, label, placeholder, initialValues }: TagLis
   return (
     <div>
       <label className="mb-1.5 block text-sm font-medium text-white/80">{label}</label>
+      {hint && <div className="-mt-0.5 mb-2 text-[0.7rem] text-white/40">{hint}</div>}
       <div className="space-y-2">
         {values.map((value, i) => (
           <div key={i} className="flex items-center gap-2">
@@ -57,7 +62,7 @@ export function TagListInput({ name, label, placeholder, initialValues }: TagLis
         onClick={add}
         className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-accent hover:underline"
       >
-        <Plus size={14} /> Add {label.toLowerCase().replace(/s$/, "")}
+        <Plus size={14} /> {addLabel ?? `Add ${label.toLowerCase().replace(/s$/, "")}`}
       </button>
     </div>
   );

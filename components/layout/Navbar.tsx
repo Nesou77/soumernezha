@@ -6,28 +6,38 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Logo } from "@/components/ui/Logo";
-import { navItems } from "@/data/nav";
 import { useActiveSection } from "@/hooks/useActiveSection";
+import type { Dictionary } from "@/lib/i18n";
+import { localizePath, stripLocale, type Locale } from "@/lib/i18n/config";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
+import type { NavItem } from "@/types";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
-const ids = navItems.map((n) => n.id);
-
-function Status({ compact }: { compact: boolean }) {
-  if (!site.availability.available) return null;
+function Status({ compact, label }: { compact: boolean; label: string }) {
+  if (!site.available) return null;
   return (
     <span className="flex items-center gap-2 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted">
       <span aria-hidden className="h-2 w-2 rounded-full bg-accent" style={{ animation: "pulse-dot 2.4s infinite" }} />
-      <span className={cn(compact && "sr-only")}>{site.availability.label}</span>
+      <span className={cn(compact && "sr-only")}>{label}</span>
     </span>
   );
 }
 
-export function Navbar() {
-  const home = usePathname() === "/";
+interface NavbarProps {
+  locale: Locale;
+  items: NavItem[];
+  a11y: Dictionary["a11y"];
+  availability: Dictionary["availability"];
+}
+
+export function Navbar({ locale, items, a11y, availability }: NavbarProps) {
+  const path = stripLocale(usePathname());
+  const home = path === "/";
+  const inProject = path.startsWith("/projects/");
   const [compact, setCompact] = useState(false);
   const [open, setOpen] = useState(false);
-  const active = useActiveSection(ids);
+  const active = useActiveSection(items.map((n) => n.id));
   const { scrollY } = useScroll();
   useMotionValueEvent(scrollY, "change", (y) => setCompact(y > 80));
 
@@ -43,7 +53,8 @@ export function Navbar() {
     };
   }, [open]);
 
-  const href = (h: string) => (home ? h : `/${h}`);
+  // On the homepage, plain #anchors scroll smoothly; elsewhere, go back to the localized homepage section.
+  const href = (h: string) => (home ? h : localizePath(locale, `/${h}`));
 
   return (
     <>
@@ -51,24 +62,25 @@ export function Navbar() {
         href="#main"
         className="sr-only-focusable fixed left-4 top-4 z-[120] rounded bg-accent px-4 py-2 font-medium text-black"
       >
-        Skip to content
+        {a11y.skipToContent}
       </a>
       <header className="pointer-events-none fixed inset-x-0 top-0 z-[80] flex justify-center px-3 pt-3 sm:px-4 sm:pt-4">
         <motion.nav
-          aria-label="Main"
+          aria-label={a11y.mainNav}
           layout
           className={cn(
             "pointer-events-auto flex items-center gap-2 rounded-full border border-white/10 bg-[#0b0f14]/70 backdrop-blur-xl transition-[padding] duration-500",
             compact ? "py-1.5 pl-2 pr-2" : "py-2.5 pl-3 pr-3 sm:pl-4 sm:pr-4",
           )}
         >
-          <Link href={href("#home")} aria-label="Nezha Soumer, home" className="grid h-9 w-9 place-items-center rounded-full">
+          <Link href={href("#home")} aria-label={a11y.home} className="grid h-9 w-9 place-items-center rounded-full">
             <Logo className="h-8 w-8" />
           </Link>
 
           <ul className="mx-1 hidden items-center gap-0.5 lg:flex">
-            {navItems.map((item) => {
-              const isActive = home && active === item.id;
+            {items.map((item) => {
+              // On a case study, "Projects" stays highlighted so visitors know where they are.
+              const isActive = home ? active === item.id : inProject && item.id === "projects";
               return (
                 <li key={item.id}>
                   <Link
@@ -94,15 +106,21 @@ export function Navbar() {
           </ul>
 
           <div className={cn("mx-1 hidden pr-1 sm:block lg:pl-4", !compact && "lg:border-l lg:border-white/10")}>
-            <Status compact={compact} />
+            <Status compact={compact} label={availability.label} />
           </div>
+
+          <LanguageSwitcher
+            locale={locale}
+            label={a11y.language}
+            className="ml-auto border-l border-white/10 pl-2 lg:ml-0 lg:pr-1"
+          />
 
           <button
             type="button"
-            className="ml-auto grid h-10 w-10 place-items-center rounded-full border border-white/10 lg:hidden"
+            className="grid h-10 w-10 place-items-center rounded-full border border-white/10 lg:hidden"
             aria-expanded={open}
             aria-controls="mobile-menu"
-            aria-label={open ? "Close menu" : "Open menu"}
+            aria-label={open ? a11y.closeMenu : a11y.openMenu}
             onClick={() => setOpen((v) => !v)}
           >
             {open ? <X size={18} /> : <Menu size={18} />}
@@ -121,7 +139,7 @@ export function Navbar() {
             transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
           >
             <ul className="flex flex-col gap-1">
-              {navItems.map((item, i) => (
+              {items.map((item, i) => (
                 <motion.li
                   key={item.id}
                   initial={{ opacity: 0, y: 30 }}
@@ -140,7 +158,7 @@ export function Navbar() {
               ))}
             </ul>
             <div className="flex flex-col gap-4">
-              <Status compact={false} />
+              <Status compact={false} label={availability.label} />
               <a href={`mailto:${site.email}`} className="text-muted">
                 {site.email}
               </a>

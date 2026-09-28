@@ -31,6 +31,23 @@ Re-running the file is safe (it uses `create ... if not exists` / `drop policy
 if exists`), so you can paste it again after pulling a future update to this
 file.
 
+### 2b. Multilingual content (EN / FR)
+
+Still in the SQL editor, run these two files in order:
+
+1. [`supabase/migrations/0002_project_translations.sql`](supabase/migrations/0002_project_translations.sql):
+   adds a `translations` jsonb column (default `{}`). It only adds a column,
+   so no existing data is modified. The existing text columns remain the
+   **English** content, which is also the fallback for French.
+2. *(Optional)* [`supabase/migrations/0003_projects_french_content.sql`](supabase/migrations/0003_projects_french_content.sql):
+   French versions of the 11 original projects. Each statement only fills a
+   project that has no French content yet, so it never overwrites edits made
+   in `/admin`.
+
+Both are safe to re-run. Afterwards, French content is managed in `/admin`
+(**Français** tab of each project). Any French field left empty shows the
+English text on `/fr/...`.
+
 ## 3. Configure Authentication
 
 There is **no public sign-up** — `/admin` is a private area for you only.

@@ -4,7 +4,7 @@ import { useReducedMotion } from "framer-motion";
 import { Play, RotateCcw } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Magnetic } from "@/components/animations/Magnetic";
-import { runnerSteps, testSuite } from "@/data/qa";
+import type { Dictionary } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 type Phase = "idle" | "running" | "done";
@@ -12,7 +12,8 @@ type Phase = "idle" | "running" | "done";
 const STEP_MS = 340;
 const START_MS = 350;
 
-export function TestRunner() {
+export function TestRunner({ t }: { t: Dictionary["qa"]["runner"] }) {
+  const { tests: testSuite, steps: runnerSteps } = t;
   const reduce = useReducedMotion();
   const [phase, setPhase] = useState<Phase>("idle");
   const [progress, setProgress] = useState(0);
@@ -49,14 +50,14 @@ export function TestRunner() {
           <span aria-hidden className="h-2.5 w-2.5 rounded-full bg-accent/80" />
           <span aria-hidden className="h-2.5 w-2.5 rounded-full bg-white/20" />
           <span aria-hidden className="h-2.5 w-2.5 rounded-full bg-white/20" />
-          <span className="ml-3">qa-lab / regression</span>
+          <span className="ml-3">{t.window}</span>
         </div>
-        <span className="hidden sm:block">simulated run</span>
+        <span className="hidden sm:block">{t.simulated}</span>
       </div>
 
       <div className="p-5 sm:p-7">
         <div className="mb-1 flex items-end justify-between">
-          <h3 className="text-base font-medium tracking-[0.2em] text-fg">TEST SUITE</h3>
+          <h3 className="text-base font-medium tracking-[0.2em] text-fg">{t.suite}</h3>
           <span className="tabular-nums text-muted" aria-hidden>
             {passed}/{total}
           </span>
@@ -69,24 +70,24 @@ export function TestRunner() {
         </div>
 
         <ul className="divide-y divide-white/[0.06]">
-          {testSuite.map((t, i) => {
+          {testSuite.map((test, i) => {
             const s = rowStatus(i);
             return (
-              <li key={t.name} className="flex items-center gap-4 py-3">
+              <li key={test.name} className="flex items-center gap-4 py-3">
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-fg">{t.name}</span>
-                  <span className="block truncate text-[0.68rem] text-muted">{t.detail}</span>
+                  <span className="block truncate text-fg">{test.name}</span>
+                  <span className="block truncate text-[0.68rem] text-muted">{test.detail}</span>
                 </span>
                 <span aria-hidden className="hidden flex-1 border-b border-dotted border-white/10 sm:block" />
                 <span
                   className={cn(
-                    "w-[4.5rem] text-right text-[0.72rem] tracking-[0.16em] transition-colors",
+                    "w-[6.5rem] shrink-0 text-right text-[0.72rem] tracking-[0.16em] transition-colors",
                     s === "pass" && "text-accent",
                     s === "running" && "text-violet",
                     s === "queued" && "text-white/25",
                   )}
                 >
-                  {s === "pass" ? "PASS" : s === "running" ? "RUNNING" : "QUEUED"}
+                  {s === "pass" ? t.pass : s === "running" ? t.running : t.queued}
                 </span>
               </li>
             );
@@ -97,7 +98,7 @@ export function TestRunner() {
         <div
           role="log"
           aria-live="polite"
-          aria-label="Test run output"
+          aria-label={t.log}
           className="mt-6 min-h-[11.5rem] border-t border-white/10 pt-4 text-[0.78rem] leading-7"
         >
           {phase === "idle" && (
@@ -108,7 +109,7 @@ export function TestRunner() {
           {phase !== "idle" && (
             <>
               <p className="text-muted">
-                <span className="text-accent">$</span> Running regression suite…
+                <span className="text-accent">$</span> {t.runningSuite}
               </p>
               {runnerSteps.slice(0, progress).map((step) => (
                 <p key={step} className="text-fg">
@@ -116,7 +117,7 @@ export function TestRunner() {
                 </p>
               ))}
               {phase === "done" && (
-                <p className="mt-2 tracking-[0.2em] text-accent">ALL TESTS PASSED</p>
+                <p className="mt-2 tracking-[0.2em] text-accent">{t.allPassed}</p>
               )}
             </>
           )}
@@ -131,10 +132,10 @@ export function TestRunner() {
               className="btn btn-primary font-mono !text-[0.8rem] tracking-[0.18em] disabled:cursor-wait disabled:opacity-70"
             >
               {phase === "done" ? <RotateCcw size={15} aria-hidden /> : <Play size={15} aria-hidden fill="currentColor" />}
-              {phase === "running" ? "RUNNING…" : phase === "done" ? "RUN AGAIN" : "RUN TESTS"}
+              {phase === "running" ? t.runningButton : phase === "done" ? t.again : t.run}
             </button>
           </Magnetic>
-          <p className="hidden text-right text-[0.68rem] text-muted sm:block">Illustrative. Not a live run.</p>
+          <p className="hidden text-right text-[0.68rem] text-muted sm:block">{t.disclaimer}</p>
         </div>
       </div>
     </div>

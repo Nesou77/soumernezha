@@ -1,11 +1,18 @@
 import { ImageResponse } from "next/og";
+import { defaultLocale, getDictionary, isLocale } from "@/lib/i18n";
 import { site } from "@/lib/site";
 
-export const alt = site.title;
+// Lives under [lang] so it only applies to the public site (which sets
+// metadataBase) and can be rendered in the visitor's language.
+export const alt = site.name;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OpengraphImage() {
+export default async function OpengraphImage({ params }: { params: Promise<{ lang: string }> }) {
+  const { lang } = await params;
+  const dict = getDictionary(isLocale(lang) ? lang : defaultLocale);
+  const [first, second, third] = dict.hero.words;
+
   return new ImageResponse(
     (
       <div
@@ -21,14 +28,14 @@ export default function OpengraphImage() {
         }}
       >
         <div style={{ display: "flex", fontSize: 26, color: "#2DE2D0", letterSpacing: 6 }}>
-          NEZHA SOUMER — MARRAKECH
+          {`${site.name} — ${dict.meta.city}`.toUpperCase()}
         </div>
         <div style={{ display: "flex", flexDirection: "column", fontSize: 150, fontWeight: 700, lineHeight: 0.95 }}>
-          <span>BUILD.</span>
-          <span style={{ color: "#2DE2D0" }}>TEST.</span>
-          <span>PERFECT.</span>
+          <span>{first}</span>
+          <span style={{ color: "#2DE2D0" }}>{second}</span>
+          <span>{third}</span>
         </div>
-        <div style={{ display: "flex", fontSize: 30, color: "#8B95A5" }}>{site.role}</div>
+        <div style={{ display: "flex", fontSize: 30, color: "#8B95A5" }}>{dict.meta.role}</div>
       </div>
     ),
     size,

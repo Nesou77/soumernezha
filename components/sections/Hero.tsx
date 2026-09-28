@@ -3,14 +3,18 @@ import { MaskLines } from "@/components/animations/MaskLines";
 import { Magnetic } from "@/components/animations/Magnetic";
 import { Reveal } from "@/components/animations/Reveal";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
-import { content } from "@/data/content";
+import type { Dictionary } from "@/lib/i18n";
 import { site } from "@/lib/site";
 
-const words = ["BUILD.", "TEST.", "PERFECT."] as const;
 const wordStyle = ["", "outline-text", "text-accent"] as const;
 
-export function Hero() {
-  const c = content.hero;
+interface HeroProps {
+  t: Dictionary["hero"];
+  meta: Dictionary["meta"];
+  newTab: string;
+}
+
+export function Hero({ t: c, meta, newTab }: HeroProps) {
   return (
     <section id="home" aria-labelledby="hero-title" className="relative flex min-h-svh flex-col justify-end pb-24 pt-32 sm:pb-28">
       <div className="container-x">
@@ -18,16 +22,16 @@ export function Hero() {
           <p className="eyebrow mb-6 flex flex-wrap items-center gap-x-4 gap-y-1">
             <span>{c.eyebrow}</span>
             <span aria-hidden className="hidden h-px w-10 bg-accent/60 sm:block" />
-            <span className="text-muted">{site.location}</span>
+            <span className="text-muted">{meta.location}</span>
           </p>
         </Reveal>
 
         <h1 id="hero-title" className="display text-h1 -ml-[0.04em]">
           <span className="sr-only">
-            {site.name}, {site.role}. Build. Test. Perfect.
+            {site.name}, {meta.role}. {c.srTitle}
           </span>
           <span aria-hidden>
-            <MaskLines immediate delay={0.9} lines={words} lineClassNames={wordStyle} />
+            <MaskLines immediate delay={0.9} lines={c.words} lineClassNames={wordStyle} />
           </span>
         </h1>
 
@@ -76,17 +80,17 @@ export function Hero() {
                     className="link-underline inline-flex items-center gap-2 hover:text-fg"
                   >
                     <Link2 size={15} aria-hidden /> LinkedIn
-                    <span className="sr-only"> (opens in a new tab)</span>
+                    <span className="sr-only"> {newTab}</span>
                   </a>
                 </li>
                 <li>
                   <a href={`mailto:${site.email}`} className="link-underline inline-flex items-center gap-2 hover:text-fg">
-                    <Mail size={15} aria-hidden /> Email
+                    <Mail size={15} aria-hidden /> {c.email}
                   </a>
                 </li>
                 <li>
                   <a href={site.cv} download className="link-underline inline-flex items-center gap-2 hover:text-fg">
-                    <Download size={15} aria-hidden /> Download CV
+                    <Download size={15} aria-hidden /> {c.cv}
                   </a>
                 </li>
               </ul>
@@ -96,13 +100,12 @@ export function Hero() {
       </div>
 
       <p className="sr-only">
-        Decorative 3D illustration: translucent interface panels labelled build and test orbit a glass core, then
-        drift apart as you scroll.
+        {c.decorative}
       </p>
 
       <a
         href="#about"
-        aria-label="Scroll to the About section"
+        aria-label={c.scrollLabel}
         className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-3 font-mono text-[0.65rem] uppercase tracking-[0.3em] text-muted sm:flex"
       >
         {c.scroll}

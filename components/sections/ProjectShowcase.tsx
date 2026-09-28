@@ -14,23 +14,30 @@ import { useRef, useState } from "react";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { ProjectVisual } from "@/components/ui/ProjectVisual";
-import { content } from "@/data/content";
-import { categoryLabels } from "@/lib/project-constants";
 import { useFinePointer } from "@/hooks/useMedia";
+import type { Dictionary } from "@/lib/i18n";
+import { format, localizePath, type Locale } from "@/lib/i18n/config";
+import { fallbackLang } from "@/lib/i18n/projects";
+import { projectCategories } from "@/lib/project-constants";
 import { cn } from "@/lib/utils";
 import type { Project, ProjectCategory } from "@/types";
 import { ProjectFeatured } from "./ProjectFeatured";
 
 type Filter = "all" | ProjectCategory;
-const filters: { id: Filter; label: string }[] = [
-  { id: "all", label: "All" },
-  { id: "web", label: categoryLabels.web },
-  { id: "cms", label: categoryLabels.cms },
-  { id: "qa", label: categoryLabels.qa },
-];
 
-export function ProjectShowcase({ projects }: { projects: Project[] }) {
-  const c = content.projects;
+interface ProjectShowcaseProps {
+  projects: Project[];
+  locale: Locale;
+  t: Dictionary["projects"];
+  categories: Dictionary["categories"];
+  newTab: string;
+}
+
+export function ProjectShowcase({ projects, locale, t: c, categories, newTab }: ProjectShowcaseProps) {
+  const filters: { id: Filter; label: string }[] = [
+    { id: "all", label: c.all },
+    ...projectCategories.map((id) => ({ id, label: categories[id] })),
+  ];
   const [filter, setFilter] = useState<Filter>("all");
   const [hovered, setHovered] = useState<string | null>(null);
   const fine = useFinePointer();
@@ -57,14 +64,14 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
         style={{ x: marqueeX }}
         className="display outline-text pointer-events-none absolute top-16 z-0 whitespace-nowrap text-[clamp(6rem,20vw,20rem)] opacity-[0.09]"
       >
-        Selected work — Selected work — Selected work
+        {Array.from({ length: 3 }, () => c.marquee).join(" — ")}
       </motion.p>
 
       <div className="container-x relative z-10">
         <div className="flex flex-col justify-between gap-10 lg:flex-row lg:items-end">
           <SectionHeading id="projects-title" index="02" eyebrow={c.eyebrow} lines={[c.headline]} intro={c.intro} />
 
-          <div role="group" aria-label="Filter projects by category" className="flex flex-wrap gap-2">
+          <div role="group" aria-label={c.filterLabel} className="flex flex-wrap gap-2">
             {filters.map((f) => (
               <button
                 key={f.id}
@@ -85,13 +92,23 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
         </div>
 
         <div aria-live="polite" className="sr-only">
-          Showing {visible.length} projects
+          {format(c.showing, { count: visible.length })}
         </div>
+
+        {visible.length === 0 && <p className="mt-20 text-muted">{c.empty}</p>}
 
         {featured.length > 0 && (
           <div className="mt-24 space-y-28 sm:space-y-40">
             {featured.map((p, i) => (
-              <ProjectFeatured key={p.slug} project={p} flip={i % 2 === 1} />
+              <ProjectFeatured
+                key={p.slug}
+                project={p}
+                flip={i % 2 === 1}
+                locale={locale}
+                t={c}
+                categoryLabel={categories[p.category]}
+                newTab={newTab}
+              />
             ))}
           </div>
         )}
@@ -99,8 +116,8 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
         {rest.length > 0 && (
           <div className={cn(featured.length > 0 ? "mt-32" : "mt-20")}>
             <p className="eyebrow mb-6 flex items-center justify-between text-muted">
-              <span>Index</span>
-              <span>{String(rest.length).padStart(2, "0")} projects</span>
+              <span>{c.index}</span>
+              <span>{format(c.count, { count: String(rest.length).padStart(2, "0") })}</span>
             </p>
             <ul
               className="border-t border-line"
@@ -114,7 +131,7 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
               {rest.map((p) => (
                 <li key={p.slug} className="border-b border-line">
                   <Link
-                    href={`/projects/${p.slug}`}
+                    href={localizePath(locale, `/projects/${p.slug}`)}
                     onPointerEnter={(e) => e.pointerType === "mouse" && setHovered(p.slug)}
                     onFocus={() => setHovered(p.slug)}
                     onBlur={() => setHovered(null)}
@@ -125,14 +142,16 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
                       {p.title}
                     </span>
                     <span className="col-span-2 col-start-2 text-sm text-muted md:col-span-1 md:col-start-auto">
-                      <span className="block text-fg/80">{p.sector}</span>
+                      <span className="block text-fg/80" lang={fallbackLang(p, "sector")}>
+                        {p.sector}
+                      </span>
                       <span className="block font-mono text-[0.68rem] uppercase tracking-[0.14em]">
-                        {categoryLabels[p.category]}
+                        {categories[p.category]}
                       </span>
                     </span>
                     <span className="row-start-1 col-start-3 self-center md:row-start-auto md:col-start-auto">
                       <ArrowIcon size={22} />
-                      <span className="sr-only">View case study</span>
+                      <span className="sr-only">{c.viewCaseStudy}</span>
                     </span>
                   </Link>
                 </li>
@@ -158,7 +177,7 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
                 exit={{ clipPath: "inset(100% 0 0 0)", opacity: 0 }}
                 transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
               >
-                <ProjectVisual project={hoveredProject} sizes="22rem" />
+                <ProjectVisual project={hoveredProject} alt="" sizes="22rem" />
               </motion.div>
             )}
           </AnimatePresence>

@@ -5,9 +5,11 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getNextDisplayOrder, getProjectByIdAdmin, isSlugTaken } from "@/lib/data/admin-projects";
 import { removeProjectImage, uploadProjectImage } from "@/lib/data/storage";
-import { projectSchema, validateImageFile } from "@/lib/validation/project";
+import { compactTranslation } from "@/lib/i18n/projects";
+import { translatedLocales } from "@/lib/i18n/config";
+import { projectSchema, projectTranslationSchema, validateImageFile } from "@/lib/validation/project";
 import { slugify } from "@/lib/utils";
-import type { ProjectInsert } from "@/types/database";
+import type { ProjectInsert, ProjectTranslations } from "@/types/database";
 
 export interface ProjectActionState {
   error?: string;
@@ -27,12 +29,46 @@ function readFiles(formData: FormData, key: string): File[] {
     .filter((v): v is File => v instanceof File && v.size > 0);
 }
 
-function revalidatePublicPaths(slugs: string[]) {
-  revalidatePath("/");
+/**
+ * Every public page in every language: project lists, case studies (their
+ * previous/next links depend on the whole ordered list) and the sitemap.
+ * The site is small, so a full refresh is cheap and never leaves stale links.
+ */
+function revalidatePublicPaths() {
+  revalidatePath("/[lang]", "layout");
   revalidatePath("/sitemap.xml");
-  for (const slug of slugs) {
-    if (slug) revalidatePath(`/projects/${slug}`);
+}
+
+/**
+ * Reads the `fr.title`, `fr.summary`… inputs for each non-default locale.
+ * Returns only non-empty values; locales left completely empty are omitted.
+ */
+function parseTranslations(formData: FormData) {
+  const translations: ProjectTranslations = {};
+  const fieldErrors: Record<string, string> = {};
+  for (const locale of translatedLocales) {
+    const key = (field: string) => `${locale}.${field}`;
+    const parsed = projectTranslationSchema.safeParse({
+      title: String(formData.get(key("title")) ?? ""),
+      sector: String(formData.get(key("sector")) ?? ""),
+      role: String(formData.get(key("role")) ?? ""),
+      summary: String(formData.get(key("summary")) ?? ""),
+      description: String(formData.get(key("description")) ?? ""),
+      challenge: String(formData.get(key("challenge")) ?? ""),
+      contributions: readList(formData, key("contributions")),
+      features: readList(formData, key("features")),
+    });
+    if (!parsed.success) {
+      for (const issue of parsed.error.issues) {
+        const field = key(String(issue.path[0] ?? "form"));
+        if (!fieldErrors[field]) fieldErrors[field] = issue.message;
+      }
+      continue;
+    }
+    const compact = compactTranslation(parsed.data);
+    if (Object.keys(compact).length > 0) translations[locale] = compact;
   }
+  return { translations, fieldErrors };
 }
 
 async function parseAndValidate(formData: FormData, excludeId?: string) {
@@ -56,9 +92,11 @@ async function parseAndValidate(formData: FormData, excludeId?: string) {
     published: formData.get("published") === "on",
   });
 
-  if (!parsed.success) {
-    const fieldErrors: Record<string, string> = {};
-    for (const issue of parsed.error.issues) {
+  const { translations, fieldErrors: translationErrors } = parseTranslations(formData);
+
+  if (!parsed.success || Object.keys(translationErrors).length > 0) {
+    const fieldErrors: Record<string, string> = { ...translationErrors };
+    for (const issue of parsed.success ? [] : parsed.error.issues) {
       const key = String(issue.path[0] ?? "form");
       if (!fieldErrors[key]) fieldErrors[key] = issue.message;
     }
@@ -72,7 +110,7 @@ async function parseAndValidate(formData: FormData, excludeId?: string) {
     } as const;
   }
 
-  return { values: parsed.data } as const;
+  return { values: parsed.data, translations } as const;
 }
 
 export async function createProjectAction(
@@ -81,7 +119,7 @@ export async function createProjectAction(
 ): Promise<ProjectActionState> {
   const result = await parseAndValidate(formData);
   if ("error" in result) return result;
-  const { values } = result;
+  const { values, translations } = result;
 
   const coverFile = readFiles(formData, "coverImageNew")[0];
   if (!coverFile) {
@@ -133,6 +171,7 @@ export async function createProjectAction(
     featured: values.featured,
     published: values.published,
     display_order: displayOrder,
+    translations,
   };
 
   const { error: insertError } = await supabase.from("projects").insert(insert);
@@ -140,7 +179,7 @@ export async function createProjectAction(
     return { error: `Could not save the project: ${insertError.message}` };
   }
 
-  revalidatePublicPaths([values.slug]);
+  revalidatePublicPaths();
   revalidatePath("/admin");
   redirect("/admin?created=1");
 }
@@ -156,6 +195,13 @@ export async function updateProjectAction(
   const result = await parseAndValidate(formData, id);
   if ("error" in result) return result;
   const { values } = result;
+
+  // Replace the locales managed by the form, keep any other stored locale untouched.
+  const translations: ProjectTranslations = { ...(existing.rawRow.translations ?? {}) };
+  for (const locale of translatedLocales) {
+    if (result.translations[locale]) translations[locale] = result.translations[locale];
+    else delete translations[locale];
+  }
 
   const supabase = await createClient();
 
@@ -226,6 +272,7 @@ export async function updateProjectAction(
     gallery_urls: [...galleryKeep, ...galleryNewUrls],
     featured: values.featured,
     published: values.published,
+    translations,
   };
 
   const { error: updateError } = await supabase.from("projects").update(update).eq("id", id);
@@ -233,7 +280,7 @@ export async function updateProjectAction(
     return { error: `Could not save the project: ${updateError.message}` };
   }
 
-  revalidatePublicPaths([values.slug, existing.slug]);
+  revalidatePublicPaths();
   revalidatePath("/admin");
   redirect("/admin?updated=1");
 }
@@ -253,7 +300,7 @@ export async function deleteProjectAction(id: string): Promise<void> {
   const { error } = await supabase.from("projects").delete().eq("id", id);
   if (error) throw new Error(`Could not delete the project: ${error.message}`);
 
-  revalidatePublicPaths([existing.slug]);
+  revalidatePublicPaths();
   revalidatePath("/admin");
 }
 
@@ -268,7 +315,7 @@ export async function toggleProjectFlagAction(id: string, flag: "published" | "f
       : await supabase.from("projects").update({ featured: !existing.featured }).eq("id", id);
   if (error) throw new Error(`Could not update the project: ${error.message}`);
 
-  revalidatePublicPaths([existing.slug]);
+  revalidatePublicPaths();
   revalidatePath("/admin");
 }
 
@@ -300,6 +347,6 @@ export async function moveProjectAction(id: string, direction: "up" | "down"): P
     .eq("id", swapWith.id);
   if (e1 || e2) throw new Error("Could not reorder the projects.");
 
-  revalidatePublicPaths([]);
+  revalidatePublicPaths();
   revalidatePath("/admin");
 }

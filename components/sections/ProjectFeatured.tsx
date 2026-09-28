@@ -5,13 +5,25 @@ import Link from "next/link";
 import { useRef } from "react";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { ProjectVisual } from "@/components/ui/ProjectVisual";
-import { categoryLabels } from "@/lib/project-constants";
+import type { Dictionary } from "@/lib/i18n";
+import { format, localizePath, type Locale } from "@/lib/i18n/config";
+import { fallbackLang } from "@/lib/i18n/projects";
 import { cn } from "@/lib/utils";
 import type { Project } from "@/types";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-export function ProjectFeatured({ project, flip }: { project: Project; flip?: boolean }) {
+interface ProjectFeaturedProps {
+  project: Project;
+  flip?: boolean;
+  locale: Locale;
+  t: Dictionary["projects"];
+  categoryLabel: string;
+  newTab: string;
+}
+
+export function ProjectFeatured({ project, flip, locale, t, categoryLabel, newTab }: ProjectFeaturedProps) {
+  const href = localizePath(locale, `/projects/${project.slug}`);
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
@@ -37,13 +49,13 @@ export function ProjectFeatured({ project, flip }: { project: Project; flip?: bo
         style={{ transformOrigin: "50% 100%" }}
       >
         <Link
-          href={`/projects/${project.slug}`}
-          aria-label={`${project.title}: open case study`}
+          href={href}
+          aria-label={format(t.openCaseStudy, { title: project.title })}
           data-cursor
           className={cn("group relative block overflow-hidden lg:col-span-7", flip && "lg:order-2")}
         >
           <motion.div style={{ y: imgY, scale: 1.14 }} className="will-change-transform">
-            <ProjectVisual project={project} />
+            <ProjectVisual project={project} alt="" />
           </motion.div>
           <span
             aria-hidden
@@ -53,19 +65,23 @@ export function ProjectFeatured({ project, flip }: { project: Project; flip?: bo
             aria-hidden
             className="absolute bottom-4 right-4 flex items-center gap-2 rounded-full bg-accent px-4 py-2 font-display text-sm text-black opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 translate-y-2"
           >
-            Case study <ArrowIcon size={16} />
+            {t.caseStudy} <ArrowIcon size={16} />
           </span>
         </Link>
 
         <div className={cn("lg:col-span-5", flip && "lg:order-1")}>
-          <p className="eyebrow mb-4">{categoryLabels[project.category]}</p>
+          <p className="eyebrow mb-4">{categoryLabel}</p>
           <h3 className="display text-h2 mb-4">
-            <Link href={`/projects/${project.slug}`} className="link-underline">
+            <Link href={href} className="link-underline">
               {project.title}
             </Link>
           </h3>
-          <p className="mb-2 font-display text-lg text-fg">{project.sector}</p>
-          <p className="mb-6 max-w-md text-muted">{project.summary}</p>
+          <p className="mb-2 font-display text-lg text-fg" lang={fallbackLang(project, "sector")}>
+            {project.sector}
+          </p>
+          <p className="mb-6 max-w-md text-muted" lang={fallbackLang(project, "summary")}>
+            {project.summary}
+          </p>
 
           <ul className="mb-7 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs text-muted">
             {project.technologies.slice(0, 7).map((t, i) => (
@@ -77,8 +93,8 @@ export function ProjectFeatured({ project, flip }: { project: Project; flip?: bo
           </ul>
 
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-            <Link href={`/projects/${project.slug}`} className="btn btn-ghost">
-              Read case study <ArrowIcon />
+            <Link href={href} className="btn btn-ghost">
+              {t.readCaseStudy} <ArrowIcon />
             </Link>
             {project.url && (
               <a
@@ -87,8 +103,8 @@ export function ProjectFeatured({ project, flip }: { project: Project; flip?: bo
                 rel="noopener noreferrer"
                 className="link-underline inline-flex items-center gap-1.5 text-sm text-muted hover:text-fg"
               >
-                Visit website <ArrowIcon size={14} />
-                <span className="sr-only">(opens in a new tab)</span>
+                {t.visitWebsite} <ArrowIcon size={14} />
+                <span className="sr-only">{newTab}</span>
               </a>
             )}
           </div>
