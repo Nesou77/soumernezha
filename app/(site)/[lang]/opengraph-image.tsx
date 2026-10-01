@@ -28,7 +28,7 @@ export default async function OpengraphImage({ params }: { params: Promise<{ lan
         }}
       >
         <div style={{ display: "flex", fontSize: 26, color: "#2DE2D0", letterSpacing: 6 }}>
-          {`${site.name} — ${dict.meta.city}`.toUpperCase()}
+          {`${site.name} — Portfolio`.toUpperCase()}
         </div>
         <div style={{ display: "flex", flexDirection: "column", fontSize: 150, fontWeight: 700, lineHeight: 0.95 }}>
           <span>{first}</span>

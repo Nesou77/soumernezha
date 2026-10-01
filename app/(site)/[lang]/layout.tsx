@@ -66,9 +66,22 @@ export default async function SiteLayout({ children, params }: LayoutProps<"/[la
       url: site.url,
       jobTitle: dict.meta.role,
       email: `mailto:${site.email}`,
-      address: { "@type": "PostalAddress", addressLocality: "Marrakech", addressCountry: "MA" },
       sameAs: [site.linkedin],
-      knowsAbout: ["Next.js", "React", "TypeScript", "WordPress", "Elementor", "WooCommerce", "SEO", "Software testing"],
+      knowsAbout: [
+        "Web Development",
+        "Front-End Development",
+        "Next.js",
+        "React",
+        "TypeScript",
+        "WordPress",
+        "Elementor",
+        "WooCommerce",
+        "Responsive Design",
+        "Figma-to-Web",
+        "CMS Integration",
+        "SEO",
+        "Quality Assurance",
+      ],
     },
     {
       "@context": "https://schema.org",
@@ -97,7 +110,7 @@ export default async function SiteLayout({ children, params }: LayoutProps<"/[la
           availability={dict.availability}
         />
         {children}
-        <Footer t={dict.footer} city={dict.meta.city} />
+        <Footer t={dict.footer} />
         {/* After all content: restores the reading position after a language switch. */}
         <script dangerouslySetInnerHTML={{ __html: scrollRestoreScript }} />
       </body>

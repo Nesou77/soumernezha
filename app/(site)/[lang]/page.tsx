@@ -35,7 +35,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
         <QALab qaProjects={qaProjects} t={dict.qa} locale={lang} />
         <Skills t={dict.skills} />
         <Timeline t={dict.experience} />
-        <Contact t={dict.contact} location={dict.meta.location} newTab={dict.a11y.newTab} />
+        <Contact t={dict.contact} workMode={dict.meta.workMode} newTab={dict.a11y.newTab} />
       </main>
     </>
   );

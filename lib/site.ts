@@ -1,7 +1,7 @@
 /**
  * Single source of truth for language-independent site configuration.
  * Edit this file to change contact details, availability or the CV path.
- * Translated copy (role, description, location…) lives in data/locales/*.ts.
+ * Translated copy (role, description, work mode…) lives in data/locales/*.ts.
  */
 export const site = {
   name: "Nezha Soumer",

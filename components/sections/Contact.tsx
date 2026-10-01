@@ -21,11 +21,11 @@ const field =
  */
 interface ContactProps {
   t: Dictionary["contact"];
-  location: string;
+  workMode: string;
   newTab: string;
 }
 
-export function Contact({ t: c, location, newTab }: ContactProps) {
+export function Contact({ t: c, workMode, newTab }: ContactProps) {
   const { copied, copy } = useCopy();
   const [sent, setSent] = useState(false);
 
@@ -48,7 +48,7 @@ export function Contact({ t: c, location, newTab }: ContactProps) {
           <div className="lg:col-span-6">
             <Reveal>
               <p className="font-display text-2xl">{site.name}</p>
-              <p className="text-muted">{location}</p>
+              <p className="text-muted">{workMode}</p>
               <a
                 href={`mailto:${site.email}`}
                 className="link-underline mt-8 block break-all font-display text-[clamp(1.4rem,0.8rem+2.6vw,2.8rem)] tracking-tight"

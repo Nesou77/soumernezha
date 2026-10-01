@@ -22,7 +22,7 @@ export function Hero({ t: c, meta, newTab }: HeroProps) {
           <p className="eyebrow mb-6 flex flex-wrap items-center gap-x-4 gap-y-1">
             <span>{c.eyebrow}</span>
             <span aria-hidden className="hidden h-px w-10 bg-accent/60 sm:block" />
-            <span className="text-muted">{meta.location}</span>
+            <span className="text-muted">{meta.workMode}</span>
           </p>
         </Reveal>
 
