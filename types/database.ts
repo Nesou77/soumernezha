@@ -11,25 +11,17 @@ export type ProjectTranslation = {
   summary?: string;
   description?: string;
   challenge?: string;
+  challengePoints?: string[];
   contributions?: string[];
+  solution?: string;
+  solutionPoints?: string[];
   features?: string[];
 };
 
 /** Shape of the `projects.translations` jsonb column, e.g. `{ "fr": { "summary": "…" } }`. */
 export type ProjectTranslations = { [L in TranslatedLocale]?: ProjectTranslation };
 
-/**
- * Raw shape of a row in the Supabase `projects` table.
- *
- * The plain text columns hold the default-locale (English) content, which is
- * also the fallback for every other locale; `translations` holds the rest.
- *
- * Deliberately a `type` (object literal), not an `interface`: only object
- * literal types get TypeScript's implicit string index signature, which the
- * Supabase client's generic `Database` constraints (`Record<string, unknown>`)
- * require structurally. An `interface` here would make every `.from(...)`
- * call collapse to `never`.
- */
+/** Raw shape of a row in the Supabase `projects` table. */
 export type ProjectRow = {
   id: string;
   slug: string;
@@ -41,7 +33,10 @@ export type ProjectRow = {
   summary: string;
   description: string;
   challenge: string;
+  challenge_points: string[];
   contributions: string[];
+  solution: string;
+  solution_points: string[];
   features: string[];
   technologies: string[];
   project_url: string | null;

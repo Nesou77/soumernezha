@@ -19,35 +19,28 @@ export interface ProjectActionState {
 function readList(formData: FormData, key: string): string[] {
   return formData
     .getAll(key)
-    .map((v) => String(v).trim())
+    .map((value) => String(value).trim())
     .filter(Boolean);
 }
 
 function readFiles(formData: FormData, key: string): File[] {
   return formData
     .getAll(key)
-    .filter((v): v is File => v instanceof File && v.size > 0);
+    .filter((value): value is File => value instanceof File && value.size > 0);
 }
 
-/**
- * Every public page in every language: project lists, case studies (their
- * previous/next links depend on the whole ordered list) and the sitemap.
- * The site is small, so a full refresh is cheap and never leaves stale links.
- */
 function revalidatePublicPaths() {
   revalidatePath("/[lang]", "layout");
   revalidatePath("/sitemap.xml");
 }
 
-/**
- * Reads the `fr.title`, `fr.summary`… inputs for each non-default locale.
- * Returns only non-empty values; locales left completely empty are omitted.
- */
 function parseTranslations(formData: FormData) {
   const translations: ProjectTranslations = {};
   const fieldErrors: Record<string, string> = {};
+
   for (const locale of translatedLocales) {
     const key = (field: string) => `${locale}.${field}`;
+
     const parsed = projectTranslationSchema.safeParse({
       title: String(formData.get(key("title")) ?? ""),
       sector: String(formData.get(key("sector")) ?? ""),
@@ -55,9 +48,13 @@ function parseTranslations(formData: FormData) {
       summary: String(formData.get(key("summary")) ?? ""),
       description: String(formData.get(key("description")) ?? ""),
       challenge: String(formData.get(key("challenge")) ?? ""),
+      challengePoints: readList(formData, key("challengePoints")),
       contributions: readList(formData, key("contributions")),
+      solution: String(formData.get(key("solution")) ?? ""),
+      solutionPoints: readList(formData, key("solutionPoints")),
       features: readList(formData, key("features")),
     });
+
     if (!parsed.success) {
       for (const issue of parsed.error.issues) {
         const field = key(String(issue.path[0] ?? "form"));
@@ -65,9 +62,11 @@ function parseTranslations(formData: FormData) {
       }
       continue;
     }
+
     const compact = compactTranslation(parsed.data);
     if (Object.keys(compact).length > 0) translations[locale] = compact;
   }
+
   return { translations, fieldErrors };
 }
 
@@ -84,7 +83,10 @@ async function parseAndValidate(formData: FormData, excludeId?: string) {
     summary: String(formData.get("summary") ?? ""),
     description: String(formData.get("description") ?? ""),
     challenge: String(formData.get("challenge") ?? ""),
+    challengePoints: readList(formData, "challengePoints"),
     contributions: readList(formData, "contributions"),
+    solution: String(formData.get("solution") ?? ""),
+    solutionPoints: readList(formData, "solutionPoints"),
     features: readList(formData, "features"),
     technologies: readList(formData, "technologies"),
     projectUrl: String(formData.get("projectUrl") ?? ""),
@@ -123,8 +125,12 @@ export async function createProjectAction(
 
   const coverFile = readFiles(formData, "coverImageNew")[0];
   if (!coverFile) {
-    return { error: "Please fix the highlighted fields.", fieldErrors: { coverImage: "A cover image is required." } };
+    return {
+      error: "Please fix the highlighted fields.",
+      fieldErrors: { coverImage: "A cover image is required." },
+    };
   }
+
   const coverError = validateImageFile(coverFile);
   if (coverError) {
     return { error: "Please fix the highlighted fields.", fieldErrors: { coverImage: coverError } };
@@ -132,21 +138,19 @@ export async function createProjectAction(
 
   const galleryFiles = readFiles(formData, "galleryNew");
   for (const file of galleryFiles) {
-    const err = validateImageFile(file);
-    if (err) return { error: "Please fix the highlighted fields.", fieldErrors: { gallery: err } };
+    const error = validateImageFile(file);
+    if (error) return { error: "Please fix the highlighted fields.", fieldErrors: { gallery: error } };
   }
 
   const supabase = await createClient();
-
   let coverImageUrl: string;
   const galleryUrls: string[] = [];
+
   try {
     coverImageUrl = await uploadProjectImage(supabase, coverFile, values.slug);
-    for (const file of galleryFiles) {
-      galleryUrls.push(await uploadProjectImage(supabase, file, values.slug));
-    }
-  } catch (err) {
-    return { error: err instanceof Error ? err.message : "Image upload failed." };
+    for (const file of galleryFiles) galleryUrls.push(await uploadProjectImage(supabase, file, values.slug));
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : "Image upload failed." };
   }
 
   const displayOrder = await getNextDisplayOrder();
@@ -161,7 +165,10 @@ export async function createProjectAction(
     summary: values.summary,
     description: values.description,
     challenge: values.challenge,
+    challenge_points: values.challengePoints,
     contributions: values.contributions,
+    solution: values.solution,
+    solution_points: values.solutionPoints,
     features: values.features,
     technologies: values.technologies,
     project_url: values.projectUrl || null,
@@ -175,9 +182,7 @@ export async function createProjectAction(
   };
 
   const { error: insertError } = await supabase.from("projects").insert(insert);
-  if (insertError) {
-    return { error: `Could not save the project: ${insertError.message}` };
-  }
+  if (insertError) return { error: `Could not save the project: ${insertError.message}` };
 
   revalidatePublicPaths();
   revalidatePath("/admin");
@@ -196,7 +201,6 @@ export async function updateProjectAction(
   if ("error" in result) return result;
   const { values } = result;
 
-  // Replace the locales managed by the form, keep any other stored locale untouched.
   const translations: ProjectTranslations = { ...(existing.rawRow.translations ?? {}) };
   for (const locale of translatedLocales) {
     if (result.translations[locale]) translations[locale] = result.translations[locale];
@@ -204,11 +208,14 @@ export async function updateProjectAction(
   }
 
   const supabase = await createClient();
-
   const coverCurrent = String(formData.get("coverImageCurrent") ?? "");
   const coverFile = readFiles(formData, "coverImageNew")[0];
+
   if (!coverFile && !coverCurrent) {
-    return { error: "Please fix the highlighted fields.", fieldErrors: { coverImage: "A cover image is required." } };
+    return {
+      error: "Please fix the highlighted fields.",
+      fieldErrors: { coverImage: "A cover image is required." },
+    };
   }
 
   const coverError = coverFile ? validateImageFile(coverFile) : null;
@@ -216,18 +223,17 @@ export async function updateProjectAction(
 
   const galleryNewFiles = readFiles(formData, "galleryNew");
   for (const file of galleryNewFiles) {
-    const err = validateImageFile(file);
-    if (err) return { error: "Please fix the highlighted fields.", fieldErrors: { gallery: err } };
+    const error = validateImageFile(file);
+    if (error) return { error: "Please fix the highlighted fields.", fieldErrors: { gallery: error } };
   }
 
-  // All input is valid from here on — safe to start mutating storage.
   let coverImageUrl = coverCurrent || existing.rawRow.cover_image_url || "";
   if (coverFile) {
     try {
       coverImageUrl = await uploadProjectImage(supabase, coverFile, values.slug);
       if (existing.rawRow.cover_image_url) await removeProjectImage(supabase, existing.rawRow.cover_image_url);
-    } catch (err) {
-      return { error: err instanceof Error ? err.message : "Image upload failed." };
+    } catch (error) {
+      return { error: error instanceof Error ? error.message : "Image upload failed." };
     }
   }
 
@@ -235,24 +241,20 @@ export async function updateProjectAction(
   let galleryKeep: string[] = [];
   try {
     const parsed = JSON.parse(galleryKeepRaw);
-    if (Array.isArray(parsed)) galleryKeep = parsed.filter((v): v is string => typeof v === "string");
+    if (Array.isArray(parsed)) galleryKeep = parsed.filter((value): value is string => typeof value === "string");
   } catch {
     galleryKeep = [];
   }
 
   const galleryNewUrls: string[] = [];
   try {
-    for (const file of galleryNewFiles) {
-      galleryNewUrls.push(await uploadProjectImage(supabase, file, values.slug));
-    }
-  } catch (err) {
-    return { error: err instanceof Error ? err.message : "Image upload failed." };
+    for (const file of galleryNewFiles) galleryNewUrls.push(await uploadProjectImage(supabase, file, values.slug));
+  } catch (error) {
+    return { error: error instanceof Error ? error.message : "Image upload failed." };
   }
 
   const removedGalleryUrls = existing.rawRow.gallery_urls.filter((url) => !galleryKeep.includes(url));
-  for (const url of removedGalleryUrls) {
-    await removeProjectImage(supabase, url);
-  }
+  for (const url of removedGalleryUrls) await removeProjectImage(supabase, url);
 
   const update: Partial<ProjectInsert> = {
     slug: values.slug,
@@ -264,7 +266,10 @@ export async function updateProjectAction(
     summary: values.summary,
     description: values.description,
     challenge: values.challenge,
+    challenge_points: values.challengePoints,
     contributions: values.contributions,
+    solution: values.solution,
+    solution_points: values.solutionPoints,
     features: values.features,
     technologies: values.technologies,
     project_url: values.projectUrl || null,
@@ -276,9 +281,7 @@ export async function updateProjectAction(
   };
 
   const { error: updateError } = await supabase.from("projects").update(update).eq("id", id);
-  if (updateError) {
-    return { error: `Could not save the project: ${updateError.message}` };
-  }
+  if (updateError) return { error: `Could not save the project: ${updateError.message}` };
 
   revalidatePublicPaths();
   revalidatePath("/admin");
@@ -291,11 +294,9 @@ export async function deleteProjectAction(id: string): Promise<void> {
 
   const supabase = await createClient();
   const imagesToRemove = [existing.rawRow.cover_image_url, ...existing.rawRow.gallery_urls].filter(
-    (v): v is string => Boolean(v),
+    (value): value is string => Boolean(value),
   );
-  for (const url of imagesToRemove) {
-    await removeProjectImage(supabase, url);
-  }
+  for (const url of imagesToRemove) await removeProjectImage(supabase, url);
 
   const { error } = await supabase.from("projects").delete().eq("id", id);
   if (error) throw new Error(`Could not delete the project: ${error.message}`);
@@ -329,23 +330,25 @@ export async function moveProjectAction(id: string, direction: "up" | "down"): P
   if (listError) throw new Error(`Could not reorder the projects: ${listError.message}`);
 
   const ordered = rows ?? [];
-  const index = ordered.findIndex((p) => p.id === id);
+  const index = ordered.findIndex((project) => project.id === id);
   if (index === -1) return;
+
   const swapIndex = direction === "up" ? index - 1 : index + 1;
   if (swapIndex < 0 || swapIndex >= ordered.length) return;
 
   const current = ordered[index];
   const swapWith = ordered[swapIndex];
 
-  const { error: e1 } = await supabase
+  const { error: firstError } = await supabase
     .from("projects")
     .update({ display_order: swapWith.display_order })
     .eq("id", current.id);
-  const { error: e2 } = await supabase
+  const { error: secondError } = await supabase
     .from("projects")
     .update({ display_order: current.display_order })
     .eq("id", swapWith.id);
-  if (e1 || e2) throw new Error("Could not reorder the projects.");
+
+  if (firstError || secondError) throw new Error("Could not reorder the projects.");
 
   revalidatePublicPaths();
   revalidatePath("/admin");

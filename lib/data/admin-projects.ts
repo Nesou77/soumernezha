@@ -6,7 +6,6 @@ export interface AdminProject extends Project {
   id: string;
   published: boolean;
   updatedAt: string;
-  /** Raw per-locale overrides (English lives in the regular fields above). */
   translations: ProjectTranslations;
 }
 
@@ -23,7 +22,10 @@ function toAdminProject(row: ProjectRow, index: number): AdminProject {
     summary: row.summary,
     description: row.description,
     challenge: row.challenge,
+    challengePoints: row.challenge_points ?? [],
     contribution: row.contributions,
+    solution: row.solution ?? "",
+    solutionPoints: row.solution_points ?? [],
     features: row.features,
     technologies: row.technologies,
     url: row.project_url ?? undefined,
@@ -59,9 +61,9 @@ export async function getAllProjectsAdmin(): Promise<AdminProject[]> {
 export function computeStats(projects: AdminProject[]): AdminProjectStats {
   return {
     total: projects.length,
-    published: projects.filter((p) => p.published).length,
-    draft: projects.filter((p) => !p.published).length,
-    featured: projects.filter((p) => p.featured).length,
+    published: projects.filter((project) => project.published).length,
+    draft: projects.filter((project) => !project.published).length,
+    featured: projects.filter((project) => project.featured).length,
   };
 }
 

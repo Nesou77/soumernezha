@@ -19,6 +19,9 @@ export const projects: Project[] = [
       "A Next.js platform presenting activities and letting visitors book them through a guided, multi-step flow backed by live availability.",
     challenge:
       "Turn a browse-and-enquire tourism site into a real booking experience: clear activity pages, a booking flow that validates every step, availability that reflects reality, and confirmations that reach both the visitor and the team.",
+    challengePoints: [],
+    solution: "",
+    solutionPoints: [],
     contribution: [
       "Development of pages and activities",
       "Galleries and calls to action",
@@ -67,6 +70,9 @@ export const projects: Project[] = [
       "A Next.js corporate website for an insurance services company, built around clear quote and contact forms and strong technical SEO.",
     challenge:
       "Make a regulated, trust-based service easy to approach: forms that are simple to complete and strictly validated, and a technical SEO foundation so the site can be found and shared properly.",
+    challengePoints: [],
+    solution: "",
+    solutionPoints: [],
     contribution: [
       "Responsive website integration",
       "Quote and contact forms",
@@ -114,6 +120,9 @@ export const projects: Project[] = [
       "A WordPress and Elementor corporate site integrated from Figma designs, with custom CSS for a faithful, responsive result.",
     challenge:
       "Reproduce a Figma design faithfully inside a page builder, keep it responsive on every breakpoint, and leave the team with a site they can manage, including a blog.",
+    challengePoints: [],
+    solution: "",
+    solutionPoints: [],
     contribution: [
       "Figma-to-Elementor integration",
       "Responsive CSS",
@@ -145,6 +154,9 @@ export const projects: Project[] = [
       "A WooCommerce store presenting laboratory-grown diamond jewelry, with a structured catalogue and Elementor pages built from Figma.",
     challenge:
       "Present high-value products with clarity: a catalogue that is easy to navigate, product information that answers questions, and imagery that holds up on every screen size.",
+    challengePoints: [],
+    solution: "",
+    solutionPoints: [],
     contribution: [
       "WooCommerce catalogue",
       "Categories",
@@ -176,6 +188,9 @@ export const projects: Project[] = [
       "A corporate WordPress site created and integrated from Figma, with working forms and a responsive implementation.",
     challenge:
       "Build a clean, credible corporate presence from design files, with the SEO fundamentals in place from day one.",
+    challengePoints: [],
+    solution: "",
+    solutionPoints: [],
     contribution: [
       "Creation and integration from Figma",
       "Forms",
@@ -204,6 +219,9 @@ export const projects: Project[] = [
       "A Zoho Sites website reproduced from Figma with custom HTML and CSS, covering games, equipment, esports teams, reviews and reservations.",
     challenge:
       "Push a low-code builder beyond its defaults to match an expressive gaming design, while keeping reservation and contact journeys simple.",
+    challengePoints: [],
+    solution: "",
+    solutionPoints: [],
     contribution: [
       "Figma reproduction",
       "Custom HTML/CSS",
@@ -235,6 +253,9 @@ export const projects: Project[] = [
       "A Zoho Sites website presenting digital twin solutions, with content architecture, solution and industry pages, analytics and SEO.",
     challenge:
       "Explain a technical offer (BIM, CIM and FIM digital twins) through a clear content architecture, and make sure it can be measured and found.",
+    challengePoints: [],
+    solution: "",
+    solutionPoints: [],
     contribution: [
       "Content architecture",
       "BIM / CIM / FIM content",
@@ -274,6 +295,9 @@ export const projects: Project[] = [
       "A WordPress and Elementor website for a café, built from Figma with establishment pages, menus, galleries and Google Maps.",
     challenge:
       "Convey atmosphere while staying practical: menus that are easy to read on a phone, galleries that load well, and a contact page that gets people through the door.",
+    challengePoints: [],
+    solution: "",
+    solutionPoints: [],
     contribution: [
       "Figma-to-Elementor integration",
       "Establishment pages",
@@ -305,6 +329,9 @@ export const projects: Project[] = [
       "Quality assurance on an AI EdTech platform: assignment workflows, rubric-based grading, AI-assisted grading validation and Google Classroom integration.",
     challenge:
       "Validate a product where AI output is part of the user journey: scores and feedback have to stay consistent, roles have to be respected, and edge cases must fail gracefully.",
+    challengePoints: [],
+    solution: "",
+    solutionPoints: [],
     contribution: [
       "Functional scenarios",
       "Assignment workflows",
@@ -340,6 +367,9 @@ export const projects: Project[] = [
       "Quality assurance on a scientific journals platform: article management, author data, search, forms and API validation.",
     challenge:
       "Keep a data-heavy publishing platform trustworthy: articles and author records must be accurate, search must return the right results, and the build must match the design.",
+    challengePoints: [],
+    solution: "",
+    solutionPoints: [],
     contribution: [
       "Article management testing",
       "Author data validation",
@@ -370,6 +400,9 @@ export const projects: Project[] = [
       "Quality assurance on a B2B platform: registration, authentication, roles, networking and events, with responsive and data validation.",
     challenge:
       "Cover many user types and journeys: each role should see the right things, networking and event flows should hold together, and the interface should behave on every device.",
+    challengePoints: [],
+    solution: "",
+    solutionPoints: [],
     contribution: [
       "Workflows",
       "Registration",

@@ -10,33 +10,49 @@ export interface Project {
   sector: string;
   role: string;
   year?: string;
-  /** One-line pitch used in lists and metadata. */
+
+  /** Short description used in project cards, metadata and the case-study hero. */
   summary: string;
-  /** Short paragraph for the case-study header. */
+
+  /** Detailed project description shown near the beginning of the case study. */
   description: string;
+
+  /** Challenge introduction + scannable challenge points. */
   challenge: string;
+  challengePoints: string[];
+
+  /** What was personally delivered on the project. */
   contribution: string[];
+
+  /** Solution introduction + scannable solution points. */
+  solution: string;
+  solutionPoints: string[];
+
+  /** Main product / project capabilities. */
   features: string[];
+
+  /** Shared technical stack. Technology names are not translated. */
   technologies: string[];
+
   url?: string;
   /** Cover image URL (Supabase Storage). Falls back to a generated visual. */
   image?: string;
-  /** Extra screenshots shown on the case-study page. */
+  /** Extra screenshots shown in the case-study gallery. */
   gallery?: string[];
   /** Hue (0-360) used by the generated placeholder visual. */
   hue: number;
   featured?: boolean;
   /** Whether the project is publicly visible. Always true for publicly-fetched projects. */
   published?: boolean;
+
   /**
    * Text fields shown in the default language because the requested locale
-   * has no translation yet (rendered with `lang="en"` so assistive tech and
-   * search engines read them correctly). Empty for the default locale.
+   * has no translation yet.
    */
   untranslated?: TranslatableField[];
 }
 
-/** Project fields that can differ per language (named after the database columns). */
+/** Project fields that can differ per language (named after the localized content keys). */
 export type TranslatableField =
   | "title"
   | "sector"
@@ -44,7 +60,10 @@ export type TranslatableField =
   | "summary"
   | "description"
   | "challenge"
+  | "challengePoints"
   | "contributions"
+  | "solution"
+  | "solutionPoints"
   | "features";
 
 export interface NavItem {
@@ -86,4 +105,3 @@ export interface QATest {
   name: string;
   detail: string;
 }
-
