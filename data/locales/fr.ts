@@ -6,7 +6,7 @@ export const fr: Dictionary = {
     title: "Nezha Soumer | Développeuse web — Next.js, React & WordPress",
     role: "Développeuse web & front-end",
     description:
-      "Développeuse web : création de sites responsives et d'expériences web modernes avec Next.js, React, TypeScript, WordPress, Elementor et WooCommerce, de l'intégration Figma à la mise en ligne.",
+      "Développeuse web : sites responsives avec Next.js, React, WordPress et WooCommerce, de l'intégration Figma à la mise en ligne, testés avant le lancement.",
     keywords: [
       "Nezha Soumer",
       "développeuse web",
@@ -49,7 +49,7 @@ export const fr: Dictionary = {
     projects: {
       title: "Projets : sites web, plateformes et travaux QA",
       description:
-        "Une sélection de sites et plateformes web réalisés par Nezha Soumer avec Next.js, React, WordPress, Elementor et WooCommerce, ainsi que des travaux de QA et de tests. Filtrez par catégorie ou par technologie.",
+        "Sites et plateformes web réalisés par Nezha Soumer avec Next.js, React, WordPress et WooCommerce, et travaux de QA. Filtrez par catégorie ou technologie.",
     },
     about: {
       title: "À propos : développeuse web avec un profil QA",

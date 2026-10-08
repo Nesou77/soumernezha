@@ -13,7 +13,7 @@ export const en = {
     title: "Nezha Soumer | Web Developer — Next.js, React & WordPress",
     role: "Web & Front-End Developer",
     description:
-      "Web developer creating responsive websites and modern web experiences with Next.js, React, TypeScript, WordPress, Elementor and WooCommerce, from UI integration to deployment.",
+      "Web developer building responsive websites with Next.js, React, WordPress and WooCommerce, from Figma integration to deployment, tested before launch.",
     keywords: [
       "Nezha Soumer",
       "web developer",
@@ -59,7 +59,7 @@ export const en = {
     projects: {
       title: "Projects: websites, web platforms & QA work",
       description:
-        "Selected websites and web platforms built by Nezha Soumer with Next.js, React, WordPress, Elementor and WooCommerce, plus QA and testing work. Filter by category or technology.",
+        "Websites and web platforms built by Nezha Soumer with Next.js, React, WordPress and WooCommerce, plus QA work. Filter by category or technology.",
     },
     about: {
       title: "About: web developer with a QA background",

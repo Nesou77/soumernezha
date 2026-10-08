@@ -53,7 +53,7 @@ export function ProjectDetail({
 }: ProjectDetailProps) {
   const gallery = project.gallery ?? [];
   const projectsHref = localizePath(locale, "/projects");
-  const contactHref = localizePath(locale, "/#contact");
+  const contactHref = localizePath(locale, "/contact");
   const lang = (field: Parameters<typeof fallbackLang>[1]) => fallbackLang(project, field);
   const showFallbackNotice =
     locale !== defaultLocale && (project.untranslated?.length ?? 0) > 0 && t.fallbackNotice;
@@ -98,8 +98,11 @@ export function ProjectDetail({
               {[
                 [t.role, project.role, lang("role")],
                 [t.sector, project.sector, lang("sector")],
-                [t.year, project.year ?? "—", undefined],
-              ].map(([label, value, fieldLang]) => (
+                [t.year, project.year, undefined],
+              ]
+                // Rows without a value (e.g. no year yet) are hidden rather than shown as "—".
+                .filter(([, value]) => Boolean(value?.trim()))
+                .map(([label, value, fieldLang]) => (
                 <div key={String(label)} className="grid grid-cols-[5.5rem_1fr] gap-4 border-b border-line py-4">
                   <dt className="font-mono text-[0.62rem] uppercase tracking-[0.13em] text-muted">{label}</dt>
                   <dd lang={fieldLang} className="text-sm leading-relaxed text-fg/80">{value}</dd>

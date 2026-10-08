@@ -19,9 +19,6 @@ export const translatableListFields = [
   "features",
 ] as const;
 
-type TextField = (typeof translatableTextFields)[number];
-type ListField = (typeof translatableListFields)[number];
-
 export const expectedTranslationFields: TranslatableField[] = [
   "sector",
   "role",
