@@ -1,20 +1,26 @@
 import { Download, Link2, Mail } from "lucide-react";
+import Link from "next/link";
 import { MaskLines } from "@/components/animations/MaskLines";
 import { Magnetic } from "@/components/animations/Magnetic";
 import { Reveal } from "@/components/animations/Reveal";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import type { Dictionary } from "@/lib/i18n";
-import { site } from "@/lib/site";
+import { localizePath, type Locale } from "@/lib/i18n/config";
+import { cvFor, site } from "@/lib/site";
 
 const wordStyle = ["", "outline-text", "text-accent"] as const;
 
 interface HeroProps {
+  locale: Locale;
   t: Dictionary["hero"];
   meta: Dictionary["meta"];
   newTab: string;
+  /** Id of the section the scroll cue leads to. */
+  nextId: string;
 }
 
-export function Hero({ t: c, meta, newTab }: HeroProps) {
+export function Hero({ locale, t: c, meta, newTab, nextId }: HeroProps) {
+  const cv = cvFor(locale);
   return (
     <section id="home" aria-labelledby="hero-title" className="relative flex min-h-svh flex-col justify-end pb-24 pt-32 sm:pb-28">
       <div className="container-x">
@@ -61,15 +67,15 @@ export function Hero({ t: c, meta, newTab }: HeroProps) {
             <Reveal immediate delay={1.65}>
               <div className="flex flex-wrap items-center gap-3">
                 <Magnetic>
-                  <a href="#projects" className="btn btn-primary">
+                  <Link href={localizePath(locale, "/projects")} className="btn btn-primary">
                     {c.primaryCta}
                     <ArrowIcon />
-                  </a>
+                  </Link>
                 </Magnetic>
                 <Magnetic>
-                  <a href="#about" className="btn btn-ghost">
+                  <Link href={localizePath(locale, "/contact")} className="btn btn-ghost">
                     {c.secondaryCta}
-                  </a>
+                  </Link>
                 </Magnetic>
               </div>
             </Reveal>
@@ -92,7 +98,7 @@ export function Hero({ t: c, meta, newTab }: HeroProps) {
                   </a>
                 </li>
                 <li>
-                  <a href={site.cv} download className="link-underline inline-flex items-center gap-2 hover:text-fg">
+                  <a href={cv.href} download={cv.fileName} type="application/pdf" className="link-underline inline-flex items-center gap-2 hover:text-fg">
                     <Download size={15} aria-hidden /> {c.cv}
                   </a>
                 </li>
@@ -107,7 +113,7 @@ export function Hero({ t: c, meta, newTab }: HeroProps) {
       </p>
 
       <a
-        href="#about"
+        href={`#${nextId}`}
         aria-label={c.scrollLabel}
         className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-3 font-mono text-[0.65rem] uppercase tracking-[0.3em] text-muted sm:flex"
       >

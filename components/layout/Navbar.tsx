@@ -3,13 +3,12 @@
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Download, Link2, Mail, Menu, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Logo } from "@/components/ui/Logo";
-import { useActiveSection } from "@/hooks/useActiveSection";
 import type { Dictionary } from "@/lib/i18n";
 import { localizePath, stripLocale, type Locale } from "@/lib/i18n/config";
-import { site } from "@/lib/site";
+import { cvFor, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import type { NavItem } from "@/types";
 import { LanguageSwitcher } from "./LanguageSwitcher";
@@ -24,37 +23,47 @@ function Status({ compact, label }: { compact: boolean; label: string }) {
   );
 }
 
+/** A nav item is current on its own page and on the pages below it (/projects/x → Projects). */
+function isCurrent(path: string, href: string) {
+  if (href === "/") return path === "/";
+  return path === href || path.startsWith(`${href}/`);
+}
+
 interface NavbarProps {
   locale: Locale;
   items: NavItem[];
   a11y: Dictionary["a11y"];
   availability: Dictionary["availability"];
+  cvLabel: string;
 }
 
-export function Navbar({ locale, items, a11y, availability }: NavbarProps) {
+export function Navbar({ locale, items, a11y, availability, cvLabel }: NavbarProps) {
   const path = stripLocale(usePathname());
-  const home = path === "/";
-  const inProject = path.startsWith("/projects/");
   const [compact, setCompact] = useState(false);
   const [open, setOpen] = useState(false);
-  const active = useActiveSection(items.map((n) => n.id));
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
   useMotionValueEvent(scrollY, "change", (y) => setCompact(y > 80));
+  const cv = cvFor(locale);
 
-  // Lock scroll & close on Escape while the mobile menu is open.
+  // While the mobile menu is open: lock scroll, move focus into it, close on Escape.
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const toggle = toggleRef.current;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
     document.documentElement.style.overflow = "hidden";
     window.addEventListener("keydown", onKey);
+    const focusTimer = setTimeout(() => menuRef.current?.querySelector<HTMLElement>("a")?.focus(), 250);
     return () => {
+      clearTimeout(focusTimer);
       document.documentElement.style.overflow = "";
       window.removeEventListener("keydown", onKey);
+      toggle?.focus({ preventScroll: true });
     };
   }, [open]);
-
-  // On the homepage, plain #anchors scroll smoothly; elsewhere, go back to the localized homepage section.
-  const href = (h: string) => (home ? h : localizePath(locale, `/${h}`));
 
   return (
     <>
@@ -69,29 +78,33 @@ export function Navbar({ locale, items, a11y, availability }: NavbarProps) {
           aria-label={a11y.mainNav}
           layout
           className={cn(
-            "pointer-events-auto flex items-center gap-2 rounded-full border border-white/10 bg-[#0b0f14]/70 backdrop-blur-xl transition-[padding] duration-500",
+            "pointer-events-auto flex w-full max-w-fit items-center gap-2 rounded-full border border-white/10 bg-[#0b0f14]/75 backdrop-blur-xl transition-[padding] duration-500",
             compact ? "py-1.5 pl-2 pr-2" : "py-2.5 pl-3 pr-3 sm:pl-4 sm:pr-4",
           )}
         >
-          <Link href={href("#home")} aria-label={a11y.home} className="grid h-9 w-9 place-items-center rounded-full">
+          <Link
+            href={localizePath(locale, "/")}
+            aria-label={a11y.home}
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-full"
+            onClick={() => setOpen(false)}
+          >
             <Logo className="h-8 w-8" />
           </Link>
 
-          <ul className="mx-1 hidden items-center gap-0.5 lg:flex">
+          <ul className="mx-1 hidden items-center gap-0.5 md:flex">
             {items.map((item) => {
-              // On a case study, "Projects" stays highlighted so visitors know where they are.
-              const isActive = home ? active === item.id : inProject && item.id === "projects";
+              const current = isCurrent(path, item.href);
               return (
                 <li key={item.id}>
                   <Link
-                    href={href(item.href)}
-                    aria-current={isActive ? "true" : undefined}
+                    href={localizePath(locale, item.href)}
+                    aria-current={current ? "page" : undefined}
                     className={cn(
                       "relative block rounded-full px-3.5 py-2 text-sm transition-colors",
-                      isActive ? "text-black" : "text-muted hover:text-fg",
+                      current ? "text-black" : "text-muted hover:text-fg",
                     )}
                   >
-                    {isActive && (
+                    {current && (
                       <motion.span
                         layoutId="nav-pill"
                         className="absolute inset-0 rounded-full bg-accent"
@@ -105,25 +118,26 @@ export function Navbar({ locale, items, a11y, availability }: NavbarProps) {
             })}
           </ul>
 
-          <div className={cn("mx-1 hidden pr-1 sm:block lg:pl-4", !compact && "lg:border-l lg:border-white/10")}>
+          <div className={cn("mx-1 hidden pr-1 lg:block lg:pl-4", !compact && "lg:border-l lg:border-white/10")}>
             <Status compact={compact} label={availability.label} />
           </div>
 
           <LanguageSwitcher
             locale={locale}
             label={a11y.language}
-            className="ml-auto border-l border-white/10 pl-2 lg:ml-0 lg:pr-1"
+            className="ml-auto border-l border-white/10 pl-2 md:ml-0 md:pr-1"
           />
 
           <button
+            ref={toggleRef}
             type="button"
-            className="grid h-10 w-10 place-items-center rounded-full border border-white/10 lg:hidden"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 md:hidden"
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? a11y.closeMenu : a11y.openMenu}
             onClick={() => setOpen((v) => !v)}
           >
-            {open ? <X size={18} /> : <Menu size={18} />}
+            {open ? <X size={18} aria-hidden /> : <Menu size={18} aria-hidden />}
           </button>
         </motion.nav>
       </header>
@@ -131,36 +145,56 @@ export function Navbar({ locale, items, a11y, availability }: NavbarProps) {
       <AnimatePresence>
         {open && (
           <motion.div
+            ref={menuRef}
             id="mobile-menu"
-            className="fixed inset-0 z-[75] flex flex-col justify-between bg-[#050505]/97 px-[var(--gutter)] pb-10 pt-28 backdrop-blur-2xl lg:hidden"
-            initial={{ clipPath: "circle(0% at calc(100% - 2.5rem) 2.5rem)" }}
-            animate={{ clipPath: "circle(150% at calc(100% - 2.5rem) 2.5rem)" }}
-            exit={{ clipPath: "circle(0% at calc(100% - 2.5rem) 2.5rem)" }}
-            transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-0 z-[75] flex flex-col justify-between overflow-y-auto bg-[#050505]/97 px-[var(--gutter)] pb-10 pt-28 backdrop-blur-2xl md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
           >
-            <ul className="flex flex-col gap-1">
-              {items.map((item, i) => (
-                <motion.li
-                  key={item.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0, transition: { delay: 0.25 + i * 0.05, duration: 0.6 } }}
-                  exit={{ opacity: 0, transition: { duration: 0.15 } }}
-                >
-                  <Link
-                    href={href(item.href)}
-                    onClick={() => setOpen(false)}
-                    className="display-mixed flex items-baseline gap-4 py-1.5 text-[clamp(2rem,9vw,3.4rem)]"
-                  >
-                    <span className="font-mono text-xs text-accent">0{i + 1}</span>
-                    {item.label}
-                  </Link>
-                </motion.li>
-              ))}
-            </ul>
-            <div className="flex flex-col gap-4">
+            <div>
+              <ul className="flex flex-col gap-1">
+                {items.map((item, i) => {
+                  const current = isCurrent(path, item.href);
+                  return (
+                    <motion.li
+                      key={item.id}
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0, transition: { delay: 0.08 + i * 0.04, duration: 0.4 } }}
+                    >
+                      <Link
+                        href={localizePath(locale, item.href)}
+                        aria-current={current ? "page" : undefined}
+                        onClick={() => setOpen(false)}
+                        className={cn(
+                          "display-mixed flex items-baseline gap-4 py-2 text-[clamp(2.2rem,10vw,3.4rem)] transition-colors",
+                          current ? "text-accent" : "text-fg",
+                        )}
+                      >
+                        <span aria-hidden className="font-mono text-xs text-accent">
+                          0{i + 1}
+                        </span>
+                        {item.label}
+                      </Link>
+                    </motion.li>
+                  );
+                })}
+              </ul>
+            </div>
+            <div className="mt-10 flex flex-col gap-5">
               <Status compact={false} label={availability.label} />
-              <a href={`mailto:${site.email}`} className="text-muted">
-                {site.email}
+              <div className="flex flex-wrap gap-3">
+                <a href={cv.href} download={cv.fileName} type="application/pdf" className="btn btn-primary">
+                  <Download size={16} aria-hidden /> {cvLabel}
+                </a>
+                <a href={site.linkedin} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+                  <Link2 size={16} aria-hidden /> LinkedIn
+                  <span className="sr-only"> {a11y.newTab}</span>
+                </a>
+              </div>
+              <a href={`mailto:${site.email}`} className="inline-flex items-center gap-2 break-all text-muted hover:text-fg">
+                <Mail size={15} aria-hidden /> {site.email}
               </a>
             </div>
           </motion.div>
@@ -169,4 +203,3 @@ export function Navbar({ locale, items, a11y, availability }: NavbarProps) {
     </>
   );
 }
-

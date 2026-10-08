@@ -22,6 +22,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const projects = await getPublishedProjects(defaultLocale);
   return [
     ...entries("/", 1, "monthly", now),
+    ...entries("/projects", 0.9, "monthly", now),
+    ...entries("/about", 0.8, "monthly", now),
+    ...entries("/contact", 0.6, "yearly", now),
     ...projects.flatMap((p) => entries(`/projects/${p.slug}`, 0.7, "yearly", now)),
   ];
 }

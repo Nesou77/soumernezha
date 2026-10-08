@@ -52,7 +52,7 @@ export function ProjectDetail({
   newTab,
 }: ProjectDetailProps) {
   const gallery = project.gallery ?? [];
-  const projectsHref = localizePath(locale, "/#projects");
+  const projectsHref = localizePath(locale, "/projects");
   const contactHref = localizePath(locale, "/#contact");
   const lang = (field: Parameters<typeof fallbackLang>[1]) => fallbackLang(project, field);
   const showFallbackNotice =

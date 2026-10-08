@@ -8,10 +8,10 @@ import {
   useTransform,
 } from "framer-motion";
 import {
-  useEffect,
   useMemo,
   useRef,
   useState,
+  type ReactNode,
 } from "react";
 
 import { ActiveProjectStage } from "@/components/projects/ActiveProjectStage";
@@ -22,8 +22,6 @@ import {
 } from "@/components/projects/ProjectFilters";
 import { ProjectReel } from "@/components/projects/ProjectReel";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { ProjectVisual } from "@/components/ui/ProjectVisual";
-import { useFinePointer } from "@/hooks/useMedia";
 import type { Dictionary } from "@/lib/i18n";
 import { format, type Locale } from "@/lib/i18n/config";
 import type { Project } from "@/types";
@@ -36,13 +34,29 @@ interface ProjectShowcaseProps {
   t: Dictionary["projects"];
   projectT: Dictionary["project"];
   categories: Dictionary["categories"];
+  /** Category filters (off on the home page, which only shows a few featured projects). */
+  showFilters?: boolean;
+  /** Overrides the section heading copy. */
+  heading?: { eyebrow: string; headline: string; intro: string };
+  index?: string;
+  /** Rendered under the projects (e.g. a "View all projects" link). */
+  footer?: ReactNode;
 }
 
-export function ProjectShowcase({ projects, locale, t: c, projectT, categories }: ProjectShowcaseProps) {
+export function ProjectShowcase({
+  projects,
+  locale,
+  t: c,
+  projectT,
+  categories,
+  showFilters = true,
+  heading,
+  index = "02",
+  footer,
+}: ProjectShowcaseProps) {
   const [filter, setFilter] = useState<ProjectFilter>("all");
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(1);
-  const fine = useFinePointer();
   const reduce = useReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
   const scrollStageRef = useRef<HTMLDivElement>(null);
@@ -68,11 +82,12 @@ export function ProjectShowcase({ projects, locale, t: c, projectT, categories }
      RESET AFTER FILTER CHANGE
      ========================================= */
 
-  useEffect(() => {
+  function changeFilter(next: ProjectFilter) {
     activeIndexRef.current = 0;
     setActiveIndex(0);
     setDirection(1);
-  }, [filter]);
+    setFilter(next);
+  }
 
   /* =========================================
      DECORATIVE MARQUEE
@@ -192,10 +207,6 @@ export function ProjectShowcase({ projects, locale, t: c, projectT, categories }
     });
   }
 
-  function selectProject(index: number) {
-    goToProject(index);
-  }
-
   function previous() {
     const current =
       activeIndexRef.current;
@@ -269,7 +280,13 @@ export function ProjectShowcase({ projects, locale, t: c, projectT, categories }
       </motion.p>
 
       <div className="container-x relative z-10 pt-[var(--section-y)]">
-        <SectionHeading id="projects-title" index="02" eyebrow={c.eyebrow} lines={[c.headline]} intro={c.intro} />
+        <SectionHeading
+          id="projects-title"
+          index={index}
+          eyebrow={heading?.eyebrow ?? c.eyebrow}
+          lines={[heading?.headline ?? c.headline]}
+          intro={heading?.intro ?? c.intro}
+        />
         <div aria-live="polite" className="sr-only">
           {format(c.showing, { count: visibleProjects.length })}
         </div>
@@ -279,9 +296,11 @@ export function ProjectShowcase({ projects, locale, t: c, projectT, categories }
         <div ref={scrollStageRef} className="relative mt-4 hidden lg:block" style={{ height: `${scrollHeight}vh` }}>
           <div className="sticky top-0 h-screen overflow-hidden">
             <div className="container-x flex h-full flex-col py-5 xl:py-6">
-              <div className="shrink-0 border-b border-line pb-3">
-                <ProjectFilters value={filter} onChange={setFilter} categories={categories} t={c} />
-              </div>
+              {showFilters && (
+                <div className="shrink-0 border-b border-line pb-3">
+                  <ProjectFilters value={filter} onChange={changeFilter} categories={categories} t={c} />
+                </div>
+              )}
               <div className="grid min-h-0 flex-1 grid-cols-[minmax(230px,0.62fr)_minmax(0,2.15fr)] gap-10 pt-3 xl:gap-14">
                 <ProjectReel projects={visibleProjects} activeIndex={activeIndex} onChange={goToProject} />
                 <ActiveProjectStage
@@ -302,9 +321,9 @@ export function ProjectShowcase({ projects, locale, t: c, projectT, categories }
       )}
 
       <div className="container-x relative z-10">
-        <div className="mt-8 pb-[var(--section-y)] lg:hidden">
-          <ProjectFilters value={filter} onChange={setFilter} categories={categories} t={c} />
-          <div className="mt-6">
+        <div className="mt-8 lg:hidden">
+          {showFilters && <ProjectFilters value={filter} onChange={changeFilter} categories={categories} t={c} />}
+          <div className={showFilters ? "mt-6" : undefined}>
             {visibleProjects.length > 0 ? (
               <MobileProjectCarousel projects={visibleProjects} locale={locale} categories={categories} t={c} />
             ) : (
@@ -312,8 +331,8 @@ export function ProjectShowcase({ projects, locale, t: c, projectT, categories }
             )}
           </div>
         </div>
+        <div className="pb-[var(--section-y)] lg:pt-8">{footer}</div>
       </div>
-
     </section>
   );
 }

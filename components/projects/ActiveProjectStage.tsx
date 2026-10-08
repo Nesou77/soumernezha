@@ -162,8 +162,8 @@ export function ActiveProjectStage({
             "
           >
             <Link
-              href={`/projects/${project.slug}`}
-              aria-label={`${project.title}: open case study`}
+              href={localizePath(locale, `/projects/${project.slug}`)}
+              aria-label={format(t.openCaseStudy, { title: project.title })}
               data-cursor
               className="
                 group
@@ -189,7 +189,6 @@ export function ActiveProjectStage({
                 <ProjectVisual
                   project={project}
                   alt=""
-                  priority
                   sizes="(min-width: 1024px) 75vw, 100vw"
                   className="
                     h-full
@@ -224,27 +223,29 @@ export function ActiveProjectStage({
                   transition-all
                   duration-500
 
-                  group-hover:
-                  translate-y-0
-
-                  group-hover:
-                  opacity-100
+                  group-hover:translate-y-0
+                  group-hover:opacity-100
+                  group-focus-visible:translate-y-0
+                  group-focus-visible:opacity-100
                 "
               >
                 <span
+                  aria-hidden
                   className="
                     flex
-                    h-16 w-16
                     items-center
-                    justify-center
+                    gap-2
                     rounded-full
                     bg-accent
+                    px-4
+                    py-2
                     font-display
-                    text-xs
+                    text-sm
                     text-black
                   "
                 >
-                  View ↗
+                  {t.caseStudy}
+                  <ArrowIcon size={16} />
                 </span>
               </div>
             </Link>
@@ -497,7 +498,7 @@ export function ActiveProjectStage({
           "
         >
           <Link
-            href={`/projects/${project.slug}`}
+            href={localizePath(locale, `/projects/${project.slug}`)}
             className="
               btn
               btn-ghost

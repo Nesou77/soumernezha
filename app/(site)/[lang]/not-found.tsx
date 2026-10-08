@@ -12,9 +12,14 @@ export default async function NotFound() {
       <p className="eyebrow">{t.eyebrow}</p>
       <h1 className="display text-h2">{t.title}</h1>
       <p className="text-muted">{t.text}</p>
-      <Link href={localizePath(locale, "/")} className="btn btn-primary mx-auto">
-        {t.cta}
-      </Link>
+      <div className="flex flex-wrap justify-center gap-3">
+        <Link href={localizePath(locale, "/")} className="btn btn-primary">
+          {t.cta}
+        </Link>
+        <Link href={localizePath(locale, "/projects")} className="btn btn-ghost">
+          {t.projects}
+        </Link>
+      </div>
     </main>
   );
 }

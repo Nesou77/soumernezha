@@ -17,10 +17,10 @@ export async function proxy(request: NextRequest) {
     return updateSession(request);
   }
 
-  const [, first, second = ""] = pathname.split("/");
+  const [, first, ...rest] = pathname.split("/");
 
-  // Generated share images (/en/opengraph-image-…) are served as is.
-  if (isLocale(first) && second.startsWith("opengraph-image")) return NextResponse.next();
+  // Generated share images (/en/opengraph-image-…, /en/about/opengraph-image-…) are served as is.
+  if (isLocale(first) && rest.some((segment) => segment.startsWith("opengraph-image"))) return NextResponse.next();
 
   if (first === defaultLocale) {
     const url = request.nextUrl.clone();

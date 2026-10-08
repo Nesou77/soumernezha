@@ -7,7 +7,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import type { Dictionary } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
-export function Timeline({ t: c }: { t: Dictionary["experience"] }) {
+export function Timeline({ t: c, index = "05" }: { t: Dictionary["experience"]; index?: string }) {
   const { entries: experience, educationEntries: education, certification } = c;
   const listRef = useRef<HTMLOListElement>(null);
   const reduce = useReducedMotion();
@@ -17,7 +17,7 @@ export function Timeline({ t: c }: { t: Dictionary["experience"] }) {
   return (
     <section id="experience" aria-labelledby="experience-title" className="section-y relative">
       <div className="container-x">
-        <SectionHeading id="experience-title" index="05" eyebrow={c.eyebrow} lines={[c.headline]} />
+        <SectionHeading id="experience-title" index={index} eyebrow={c.eyebrow} lines={[c.headline]} />
 
         <ol ref={listRef} className="relative mt-16 ml-2 sm:ml-0">
           {/* rail + progress */}

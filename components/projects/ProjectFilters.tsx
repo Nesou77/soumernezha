@@ -8,7 +8,6 @@ import type { ProjectCategory } from "@/types";
 
 export type ProjectFilter = "all" | ProjectCategory;
 
-const filters: { id: ProjectFilter; label: string }[] = [];
 
 interface ProjectFiltersProps {
   value: ProjectFilter;

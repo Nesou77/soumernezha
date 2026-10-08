@@ -19,12 +19,14 @@ interface QALabProps {
   qaProjects: Project[];
   t: Dictionary["qa"];
   locale: Locale;
+  index?: string;
 }
 
 export function QALab({
   qaProjects,
   t: c,
   locale,
+  index = "03",
 }: QALabProps) {
   const reduce = useReducedMotion();
 
@@ -63,7 +65,7 @@ export function QALab({
       <div className="container-x section-y relative">
         <SectionHeading
           id="qa-title"
-          index="03"
+          index={index}
           eyebrow={c.eyebrow}
           lines={c.headline}
           intro={c.intro}

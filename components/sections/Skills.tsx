@@ -51,8 +51,10 @@ function flatten(
 
 export function Skills({
   t: c,
+  index = "04",
 }: {
   t: Dictionary["skills"];
+  index?: string;
 }) {
   const skillGroups = c.groups;
 
@@ -95,7 +97,7 @@ export function Skills({
       <div className="container-x">
         <SectionHeading
           id="skills-title"
-          index="04"
+          index={index}
           eyebrow={c.eyebrow}
           lines={c.headline}
           intro={c.intro}

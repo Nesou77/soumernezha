@@ -21,6 +21,11 @@ const nextConfig: NextConfig = {
       : [],
   },
 
+  // The CV used to live at a single path; keep old links (LinkedIn, emails) working.
+  async redirects() {
+    return [{ source: "/cv/Nezha-Soumer-CV.pdf", destination: "/cv/Nezha-Soumer-EN.pdf", permanent: false }];
+  },
+
   experimental: {
     optimizePackageImports: [
       "lucide-react",

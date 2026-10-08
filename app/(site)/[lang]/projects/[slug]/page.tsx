@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { ContactCTA } from "@/components/sections/ContactCTA";
 import { ProjectDetail } from "@/components/sections/ProjectDetail";
 import { getAdjacentProjects, getPublishedProjects } from "@/lib/data/projects";
 import { defaultLocale, getDictionary, isLocale, localizePath } from "@/lib/i18n";
@@ -85,6 +86,7 @@ export default async function ProjectPage({ params }: Props) {
         categoryLabel={dict.categories[project.category]}
         newTab={dict.a11y.newTab}
       />
+      <ContactCTA locale={lang} t={dict.cta} cvLabel={dict.cv.download} />
     </main>
   );
 }

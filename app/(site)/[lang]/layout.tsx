@@ -108,9 +108,17 @@ export default async function SiteLayout({ children, params }: LayoutProps<"/[la
           items={dict.nav}
           a11y={dict.a11y}
           availability={dict.availability}
+          cvLabel={dict.cv.download}
         />
         {children}
-        <Footer t={dict.footer} />
+        <Footer
+          locale={lang}
+          t={dict.footer}
+          nav={dict.nav}
+          role={dict.meta.role}
+          cvLabel={dict.cv.download}
+          newTab={dict.a11y.newTab}
+        />
         {/* After all content: restores the reading position after a language switch. */}
         <script dangerouslySetInnerHTML={{ __html: scrollRestoreScript }} />
       </body>
