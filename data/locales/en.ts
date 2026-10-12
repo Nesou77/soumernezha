@@ -13,7 +13,7 @@ export const en = {
     title: "Nezha Soumer | Web Developer — Next.js, React & WordPress",
     role: "Web & Front-End Developer",
     description:
-      "Web developer building responsive websites with Next.js, React, WordPress and WooCommerce, from Figma integration to deployment, tested before launch.",
+      "Nezha Soumer, web developer building responsive websites with Next.js, React and WordPress, from Figma designs to deployment, with QA testing.",
     keywords: [
       "Nezha Soumer",
       "web developer",
@@ -62,14 +62,14 @@ export const en = {
         "Websites and web platforms built by Nezha Soumer with Next.js, React, WordPress and WooCommerce, plus QA work. Filter by category or technology.",
     },
     about: {
-      title: "About: web developer with a QA background",
+      title: "About: web developer & QA background",
       description:
-        "Nezha Soumer's background, experience, technical skills, testing practice and education. Download the CV in English or French.",
+        "Meet Nezha Soumer, a web developer with a QA background. Explore her experience, development skills and testing approach, and download her CV.",
     },
     contact: {
       title: "Contact: website projects & roles",
       description:
-        "Get in touch with Nezha Soumer for website development, front-end implementation, CMS projects or web roles, freelance or in-house.",
+        "Contact Nezha Soumer for web development, front-end implementation, WordPress projects or a development role. Share your project or hiring needs.",
     },
   },
   loader: ["BUILD", "TEST", "SHIP"],
@@ -78,9 +78,9 @@ export const en = {
     words: ["BUILD.", "TEST.", "PERFECT."],
     srTitle: "Build. Test. Perfect.",
     roleLines: ["Web Developer", "·", "Front-End & CMS"],
-    statement: ["I build modern websites and web experiences.", "From design to deployment, tested at every step."],
+    statement: ["I build websites and custom web interfaces.", "From design to launch, with testing built in."],
     support:
-      "Responsive websites built with Next.js, React, WordPress and Elementor: Figma-to-web integration, CMS setup, forms and APIs, SEO and deployment, all checked with a QA eye before launch.",
+      "Custom development with Next.js and React, or WordPress sites your team can manage. I turn Figma designs into responsive pages, connect forms and APIs, and check key user journeys before launch.",
     primaryCta: "View my projects",
     secondaryCta: "Get in touch",
     scroll: "Scroll",
@@ -92,11 +92,11 @@ export const en = {
   },
   about: {
     eyebrow: "About",
-    headline: ["I build websites end to end,", "and I make sure they hold up."],
+    headline: ["From design to deployment,", "with a focus on quality."],
     paragraphs: [
-      "I'm a web developer with about two years of hands-on experience building and deploying responsive websites: corporate sites, landing pages, booking platforms, online stores and custom interfaces. I use Next.js, React and TypeScript for custom builds, and WordPress, Elementor, WooCommerce or Zoho Sites when a team needs a site it can manage on its own.",
-      "I cover the whole delivery: Figma-to-web integration, forms and interactive components, API integrations, SEO-friendly implementation, deployment to production, then maintenance and improvements.",
-      "My QA experience is a practical advantage. I test responsive behaviour, validate user journeys and catch issues before they reach production, so the websites I deliver are more reliable from day one.",
+      "I'm a web developer with about two years of hands-on experience building responsive websites, from business sites and landing pages to booking platforms and online stores. I work with Next.js, React and TypeScript for custom interfaces, and WordPress, Elementor, WooCommerce or Zoho Sites for sites teams can manage themselves.",
+      "I take projects from Figma designs to working websites: responsive pages, interactive components, forms and API integrations. I also handle technical SEO, deployment and ongoing maintenance.",
+      "My QA background shapes how I develop. I check layouts across screen sizes, test user journeys and investigate edge cases to catch issues before launch.",
     ],
     expertiseLabel: "Expertise",
     expertise: [
@@ -141,7 +141,7 @@ export const en = {
       eyebrow: "What I do",
       headline: ["Websites built end to end,", "checked before launch."],
       intro:
-        "Custom builds with Next.js and React, or CMS sites a team can run on its own, delivered with the habits of a QA tester.",
+        "Custom web development, CMS setup and quality assurance: from implementing your designs to launching and maintaining your site.",
       more: "More about me",
     },
     featured: {
@@ -155,7 +155,7 @@ export const en = {
   cta: {
     eyebrow: "Next step",
     headline: ["Have a website", "to build?"],
-    text: "Freelance or in-house, remote or on-site: tell me about the project or the role.",
+    text: "Tell me what you need to build or improve, or share the role you're hiring for.",
     primary: "Get in touch",
   },
   cv: {
@@ -245,7 +245,7 @@ export const en = {
     eyebrow: "QA Lab",
     headline: ["Development", "backed by QA."],
     intro:
-      "I don't just build interfaces: I check how they behave across devices, user journeys and edge cases. Here's what a validation pass looks like, and the testing work behind it.",
+      "I test interfaces across screen sizes, user journeys and edge cases. Explore my testing methods and an illustrative validation run.",
     practice: "Testing practice",
     tools: "Tools",
     projects: "QA projects",
@@ -290,7 +290,7 @@ export const en = {
   },
   skills: {
     eyebrow: "Skills",
-    headline: ["An ecosystem,", "not a logo wall."],
+    headline: ["Web development,", "from build to launch."],
     intro:
       "Web development at the core, with deployment and quality built around it. Hover or focus a skill to read more.",
     center: "Build · Test · Ship",
@@ -437,7 +437,7 @@ export const en = {
     eyebrow: "Contact",
     headline: ["Let's talk about", "your project."],
     intro:
-      "I'm available for website development, front-end implementation, CMS projects and web collaborations, freelance or in-house, remote or on-site. A company website, a landing page, a redesign or ongoing maintenance: tell me what you need.",
+      "Need a business website, landing page, redesign or ongoing maintenance? Tell me about your goals and what you need. I'm available for freelance projects and in-house web development roles, remote or on-site.",
     directTitle: "Direct contact",
     linksTitle: "Elsewhere",
     copyEmail: "Copy email",
@@ -455,7 +455,7 @@ export const en = {
     optional: "(optional)",
     companyPlaceholder: "Company",
     message: "Message",
-    messagePlaceholder: "Tell me about your website, project or role",
+    messagePlaceholder: "What do you need to build or improve? For a role, share the position and expectations.",
     honeypot: "Leave this field empty",
     send: "Send message",
     sending: "Sending…",

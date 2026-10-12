@@ -6,7 +6,7 @@ export const fr: Dictionary = {
     title: "Nezha Soumer | Développeuse web — Next.js, React & WordPress",
     role: "Développeuse web & front-end",
     description:
-      "Développeuse web : sites responsives avec Next.js, React, WordPress et WooCommerce, de l'intégration Figma à la mise en ligne, testés avant le lancement.",
+      "Nezha Soumer, développeuse web : sites responsives avec Next.js, React et WordPress, de la maquette Figma à la mise en ligne, avec tests QA.",
     keywords: [
       "Nezha Soumer",
       "développeuse web",
@@ -52,14 +52,14 @@ export const fr: Dictionary = {
         "Sites et plateformes web réalisés par Nezha Soumer avec Next.js, React, WordPress et WooCommerce, et travaux de QA. Filtrez par catégorie ou technologie.",
     },
     about: {
-      title: "À propos : développeuse web avec un profil QA",
+      title: "À propos : développeuse web et assurance qualité",
       description:
-        "Parcours, expérience, compétences techniques, pratique des tests et formation de Nezha Soumer. Téléchargez le CV en français ou en anglais.",
+        "Découvrez Nezha Soumer, développeuse web avec une expérience en assurance qualité : parcours, compétences, méthodes de test et CV à télécharger.",
     },
     contact: {
       title: "Contact : projets web et postes",
       description:
-        "Contactez Nezha Soumer pour du développement de sites web, de l'intégration front-end, des projets CMS ou des postes web, en freelance ou en entreprise.",
+        "Contactez Nezha Soumer pour un site web, une intégration front-end, un projet WordPress ou un poste en développement. Présentez votre besoin.",
     },
   },
   loader: ["CRÉER", "TESTER", "LIVRER"],
@@ -68,9 +68,9 @@ export const fr: Dictionary = {
     words: ["CRÉER.", "TESTER.", "PARFAIRE."],
     srTitle: "Créer. Tester. Parfaire.",
     roleLines: ["Développeuse web", "·", "Front-end & CMS"],
-    statement: ["Je crée des sites et des expériences web modernes.", "De la maquette à la mise en ligne, testés à chaque étape."],
+    statement: ["Je crée des sites web et des interfaces sur mesure.", "De la maquette à la mise en ligne, avec des tests à chaque étape."],
     support:
-      "Des sites responsives développés avec Next.js, React, WordPress et Elementor : intégration de maquettes Figma, configuration du CMS, formulaires et API, SEO et déploiement, le tout vérifié avec un regard QA avant le lancement.",
+      "Du développement sur mesure avec Next.js et React, ou des sites WordPress que votre équipe peut gérer. J'intègre vos maquettes Figma, connecte les formulaires et les API, puis vérifie les principaux parcours avant la mise en ligne.",
     primaryCta: "Voir mes projets",
     secondaryCta: "Me contacter",
     scroll: "Défiler",
@@ -82,11 +82,11 @@ export const fr: Dictionary = {
   },
   about: {
     eyebrow: "À propos",
-    headline: ["Je développe des sites de bout en bout,", "et je m'assure qu'ils tiennent la route."],
+    headline: ["De la maquette à la mise en ligne,", "avec le souci de la qualité."],
     paragraphs: [
-      "Développeuse web, j'ai environ deux ans d'expérience concrète dans la création et la mise en ligne de sites responsives : sites corporate, landing pages, plateformes de réservation, boutiques en ligne et interfaces sur mesure. J'utilise Next.js, React et TypeScript pour les projets sur mesure, et WordPress, Elementor, WooCommerce ou Zoho Sites quand une équipe a besoin d'un site qu'elle peut gérer elle-même.",
-      "Je prends en charge toute la réalisation : intégration de maquettes Figma, formulaires et composants interactifs, intégrations d'API, développement optimisé pour le SEO, mise en production, puis maintenance et améliorations.",
-      "Mon expérience en QA est un vrai atout : je teste le comportement responsive, je valide les parcours utilisateurs et je repère les problèmes avant la mise en production, pour livrer des sites fiables dès le premier jour.",
+      "Développeuse web, j'ai environ deux ans d'expérience dans la création de sites responsives : sites d'entreprise, pages de destination, plateformes de réservation et boutiques en ligne. J'utilise Next.js, React et TypeScript pour les interfaces sur mesure, et WordPress, Elementor, WooCommerce ou Zoho Sites pour les sites que les équipes souhaitent gérer en autonomie.",
+      "Je transforme les maquettes Figma en sites fonctionnels : pages responsives, composants interactifs, formulaires et intégrations d'API. Je prends aussi en charge le référencement technique, la mise en ligne et la maintenance.",
+      "Mon expérience en assurance qualité guide ma façon de développer. Je vérifie l'affichage sur différentes tailles d'écran, teste les parcours utilisateurs et examine les cas limites pour repérer les problèmes avant la mise en ligne.",
     ],
     expertiseLabel: "Expertise",
     expertise: [
@@ -131,7 +131,7 @@ export const fr: Dictionary = {
       eyebrow: "Ce que je fais",
       headline: ["Des sites développés de A à Z,", "vérifiés avant la mise en ligne."],
       intro:
-        "Des projets sur mesure avec Next.js et React, ou des sites CMS qu'une équipe peut gérer seule, livrés avec les réflexes d'une testeuse QA.",
+        "Développement web sur mesure, configuration de CMS et assurance qualité : de l'intégration de vos maquettes à la mise en ligne et à la maintenance.",
       more: "En savoir plus sur moi",
     },
     featured: {
@@ -145,7 +145,7 @@ export const fr: Dictionary = {
   cta: {
     eyebrow: "Prochaine étape",
     headline: ["Un site web", "à créer ?"],
-    text: "En freelance ou en poste, à distance ou sur site : parlez-moi du projet ou du poste.",
+    text: "Parlez-moi du site à créer ou à améliorer, ou du poste pour lequel vous recrutez.",
     primary: "Me contacter",
   },
   cv: {
@@ -236,7 +236,7 @@ export const fr: Dictionary = {
     eyebrow: "QA Lab",
     headline: ["Le développement,", "avec un regard QA."],
     intro:
-      "Je ne me contente pas de construire des interfaces : je vérifie leur comportement sur chaque appareil, chaque parcours et chaque cas limite. Voici à quoi ressemble une passe de validation, et le travail de test qui l'accompagne.",
+      "Je teste les interfaces sur différentes tailles d'écran, les parcours utilisateurs et les cas limites. Découvrez mes méthodes de test et une démonstration de validation.",
     practice: "Pratique des tests",
     tools: "Outils",
     projects: "Projets QA",
@@ -281,7 +281,7 @@ export const fr: Dictionary = {
   },
   skills: {
     eyebrow: "Compétences",
-    headline: ["Un écosystème,", "pas un mur de logos."],
+    headline: ["Le développement web,", "de la création à la mise en ligne."],
     intro:
       "Le développement web au centre, le déploiement et la qualité tout autour. Survolez ou sélectionnez une compétence pour en savoir plus.",
     center: "Créer · Tester · Livrer",
@@ -440,7 +440,7 @@ export const fr: Dictionary = {
     eyebrow: "Contact",
     headline: ["Parlons de", "votre projet."],
     intro:
-      "Je suis disponible pour du développement de sites web, de l'intégration front-end, des projets CMS et des collaborations web, en freelance ou en poste, à distance ou sur site. Site d'entreprise, landing page, refonte ou maintenance : dites-moi ce dont vous avez besoin.",
+      "Un site d'entreprise, une page de destination, une refonte ou de la maintenance ? Parlez-moi de vos objectifs et de vos besoins. Je suis disponible pour des projets freelance et des postes en développement web, à distance ou sur site.",
     directTitle: "Contact direct",
     linksTitle: "Ailleurs",
     copyEmail: "Copier l'e-mail",
@@ -458,7 +458,7 @@ export const fr: Dictionary = {
     optional: "(facultatif)",
     companyPlaceholder: "Entreprise",
     message: "Message",
-    messagePlaceholder: "Parlez-moi de votre site, de votre projet ou du poste",
+    messagePlaceholder: "Que souhaitez-vous créer ou améliorer ? Pour un poste, précisez la mission et vos attentes.",
     honeypot: "Laissez ce champ vide",
     send: "Envoyer le message",
     sending: "Envoi…",
