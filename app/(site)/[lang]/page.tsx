@@ -17,7 +17,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
   if (!isLocale(lang)) notFound();
   const dict = getDictionary(lang);
   const projects = await getPublishedProjects(lang);
-  const featured = pickFeatured(projects, 3);
+  const featured = pickFeatured(projects, 5);
 
   return (
     <>

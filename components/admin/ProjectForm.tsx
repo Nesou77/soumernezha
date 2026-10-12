@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useRef, useState } from "react";
+import { startTransition, useActionState, useEffect, useRef, useState } from "react";
 import { GalleryUploader } from "@/components/admin/GalleryUploader";
 import { ImageUploader } from "@/components/admin/ImageUploader";
 import { TagListInput } from "@/components/admin/TagListInput";
@@ -117,6 +117,7 @@ function ProgressBadge({ done, total }: { done: number; total: number }) {
 export function ProjectForm({ mode, action, project }: ProjectFormProps) {
   const [state, formAction, pending] = useActionState(action, initialState);
   const formRef = useRef<HTMLFormElement>(null);
+  const [dismissedError, setDismissedError] = useState<ProjectActionState | null>(null);
   const [title, setTitle] = useState(project?.title ?? "");
   const [slug, setSlug] = useState(project?.slug ?? "");
   const [slugTouched, setSlugTouched] = useState(Boolean(project));
@@ -148,6 +149,39 @@ export function ProjectForm({ mode, action, project }: ProjectFormProps) {
     else if (frHasErrors) setTab("fr");
   }
 
+  // Keep form controls and selected files intact after unsuccessful server actions.
+  // Native form action submissions reset uncontrolled controls; dispatching inside
+  // a transition without a native submission avoids that reset.
+  const submitWithoutReset = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    setDismissedError(null);
+    startTransition(() => formAction(data));
+  };
+
+  useEffect(() => {
+    if (!state.error) return;
+
+    const firstError = Object.keys(state.fieldErrors ?? {})[0];
+    if (!firstError) return;
+
+    const targetTab = firstError.startsWith("fr.") ? "fr" : "en";
+    const isTranslatedField = firstError.startsWith("fr.");
+    const englishField = contentKeys.includes(firstError);
+    if (isTranslatedField || englishField) setTab(targetTab);
+
+    const timer = window.setTimeout(() => {
+      const fieldName = firstError === "coverImage" ? "coverImageNew" : firstError === "gallery" ? "galleryNew" : firstError;
+      const field = Array.from(formRef.current?.elements ?? []).find(
+        (element) => element instanceof HTMLElement && element.getAttribute("name") === fieldName,
+      ) as HTMLElement | undefined;
+      if (!field) return;
+      field.scrollIntoView({ behavior: "smooth", block: "center" });
+      if (field.matches('input:not([type="file"]), textarea, select')) field.focus({ preventScroll: true });
+    }, 80);
+    return () => window.clearTimeout(timer);
+  }, [state]);
+
   const progress = translationProgress(snapshot.en, snapshot.fr);
   const refresh = () => {
     setTimeout(() => formRef.current && setSnapshot(readSnapshot(formRef.current)), 0);
@@ -173,11 +207,19 @@ export function ProjectForm({ mode, action, project }: ProjectFormProps) {
   ];
 
   return (
-    <form ref={formRef} action={formAction} onInput={refresh} onClick={refresh} className="space-y-10">
-      {state.error && (
-        <p role="alert" className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
-          {state.error}
-        </p>
+    <form ref={formRef} onSubmit={submitWithoutReset} onInput={refresh} onClick={refresh} className="space-y-10">
+      {state.error && dismissedError !== state && (
+        <div role="alert" aria-live="assertive" className="fixed bottom-5 left-4 right-4 z-[100] mx-auto max-w-lg rounded-xl border border-red-400/40 bg-[#331c22] p-4 text-sm text-white shadow-2xl sm:left-auto sm:right-6">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="font-semibold text-red-200">Project not saved</p>
+              <p className="mt-1 text-red-100">{state.error}</p>
+              {errorKeys.length > 0 && <p className="mt-1 text-xs text-red-200/80">{errorKeys.length} field(s) need attention. The first field has been brought into view.</p>}
+              <p className="mt-2 text-xs text-white/65">Your entered text and selected files are still here.</p>
+            </div>
+            <button type="button" onClick={() => setDismissedError(state)} aria-label="Dismiss error" className="shrink-0 rounded p-1 text-white/70 hover:bg-white/10 hover:text-white">✕</button>
+          </div>
+        </div>
       )}
 
       <section className={sectionClass}>
