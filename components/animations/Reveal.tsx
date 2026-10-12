@@ -1,6 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { usePrefersReducedMotion as useReducedMotion } from "@/hooks/useMedia";
+
+import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 
 interface RevealProps {
@@ -15,18 +17,18 @@ interface RevealProps {
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
-/** Fades, lifts and de-blurs content when it scrolls into view. */
-export function Reveal({ children, delay = 0, y = 28, className, as = "div", immediate }: RevealProps) {
+/** A short, one-time entrance; avoids animating expensive blur filters. */
+export function Reveal({ children, delay = 0, y = 18, className, as = "div", immediate }: RevealProps) {
   const reduce = useReducedMotion();
   const Comp = motion[as];
   return (
     <Comp
       className={className}
-      initial={reduce ? false : { opacity: 0, y, filter: "blur(8px)" }}
+      initial={reduce ? false : { opacity: 0, y }}
       {...(immediate
-        ? { animate: { opacity: 1, y: 0, filter: "blur(0px)" } }
-        : { whileInView: { opacity: 1, y: 0, filter: "blur(0px)" }, viewport: { once: true, margin: "-10% 0px" } })}
-      transition={{ duration: 0.9, delay, ease }}
+        ? { animate: { opacity: 1, y: 0 } }
+        : { whileInView: { opacity: 1, y: 0 }, viewport: { once: true, margin: "-10% 0px" } })}
+      transition={{ duration: reduce ? 0 : 0.6, delay: reduce ? 0 : delay, ease }}
     >
       {children}
     </Comp>

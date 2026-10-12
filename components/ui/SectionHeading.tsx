@@ -19,7 +19,6 @@ interface SectionHeadingProps {
 export function SectionHeading({
   id,
   eyebrow,
-  index,
   lines,
   intro,
   className,
@@ -32,8 +31,6 @@ export function SectionHeading({
     <header className={cn("max-w-5xl", className)}>
       <Reveal immediate={immediate}>
         <p className="eyebrow mb-6 flex items-center gap-4">
-          {index && <span className="text-muted">{index}</span>}
-          <span aria-hidden className="h-px w-10 bg-accent/60" />
           {eyebrow}
         </p>
       </Reveal>

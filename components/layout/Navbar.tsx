@@ -1,5 +1,7 @@
 "use client";
 
+import { usePrefersReducedMotion as useReducedMotion } from "@/hooks/useMedia";
+
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -39,6 +41,7 @@ interface NavbarProps {
 
 export function Navbar({ locale, items, a11y, availability, cvLabel }: NavbarProps) {
   const path = stripLocale(usePathname());
+  const reduce = useReducedMotion();
   const [compact, setCompact] = useState(false);
   const [open, setOpen] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -51,17 +54,39 @@ export function Navbar({ locale, items, a11y, availability, cvLabel }: NavbarPro
   useEffect(() => {
     if (!open) return;
     const toggle = toggleRef.current;
+    const desktop = window.matchMedia("(min-width: 768px)");
+    const onBreakpoint = () => { if (desktop.matches) setOpen(false); };
+    desktop.addEventListener("change", onBreakpoint);
+    const background = Array.from(document.querySelectorAll<HTMLElement>("main, footer")).map((element) => ({ element, inert: element.inert }));
+    background.forEach(({ element }) => { element.inert = true; });
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpen(false);
+      if (e.key !== "Tab" || !menuRef.current || !toggle) return;
+      const links = Array.from(menuRef.current.querySelectorAll<HTMLElement>("a[href], button"));
+      const first = links[0], last = links[links.length - 1];
+      if (!first || !last) return;
+      if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault(); toggle.focus();
+      } else if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault(); toggle.focus();
+      } else if (document.activeElement === toggle) {
+        e.preventDefault(); (e.shiftKey ? last : first).focus();
+      } else if (!menuRef.current.contains(document.activeElement)) {
+        e.preventDefault(); first.focus();
+      }
     };
+    const previousOverflow = document.documentElement.style.overflow;
     document.documentElement.style.overflow = "hidden";
     window.addEventListener("keydown", onKey);
     const focusTimer = setTimeout(() => menuRef.current?.querySelector<HTMLElement>("a")?.focus(), 250);
     return () => {
       clearTimeout(focusTimer);
-      document.documentElement.style.overflow = "";
+      document.documentElement.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKey);
-      toggle?.focus({ preventScroll: true });
+      desktop.removeEventListener("change", onBreakpoint);
+      background.forEach(({ element, inert }) => { element.inert = inert; });
+      if (desktop.matches) toggle?.closest("nav")?.querySelector<HTMLElement>('a[aria-current="page"]')?.focus({ preventScroll: true });
+      else toggle?.focus({ preventScroll: true });
     };
   }, [open]);
 
@@ -76,7 +101,7 @@ export function Navbar({ locale, items, a11y, availability, cvLabel }: NavbarPro
       <header className="pointer-events-none fixed inset-x-0 top-0 z-[80] flex justify-center px-3 pt-3 sm:px-4 sm:pt-4">
         <motion.nav
           aria-label={a11y.mainNav}
-          layout
+          layout={!reduce}
           className={cn(
             "pointer-events-auto flex w-full max-w-fit items-center gap-2 rounded-full border border-white/10 bg-[#0b0f14]/75 backdrop-blur-xl transition-[padding] duration-500",
             compact ? "py-1.5 pl-2 pr-2" : "py-2.5 pl-3 pr-3 sm:pl-4 sm:pr-4",
@@ -100,7 +125,7 @@ export function Navbar({ locale, items, a11y, availability, cvLabel }: NavbarPro
                     href={localizePath(locale, item.href)}
                     aria-current={current ? "page" : undefined}
                     className={cn(
-                      "relative block rounded-full px-3.5 py-2 text-sm transition-colors",
+                      "relative flex min-h-11 items-center rounded-full px-3.5 py-2 text-sm transition-colors",
                       current ? "text-black" : "text-muted hover:text-fg",
                     )}
                   >
@@ -108,7 +133,7 @@ export function Navbar({ locale, items, a11y, availability, cvLabel }: NavbarPro
                       <motion.span
                         layoutId="nav-pill"
                         className="absolute inset-0 rounded-full bg-accent"
-                        transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                        transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 32 }}
                       />
                     )}
                     <span className="relative">{item.label}</span>
@@ -131,7 +156,7 @@ export function Navbar({ locale, items, a11y, availability, cvLabel }: NavbarPro
           <button
             ref={toggleRef}
             type="button"
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 md:hidden"
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/10 md:hidden"
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label={open ? a11y.closeMenu : a11y.openMenu}
@@ -148,10 +173,10 @@ export function Navbar({ locale, items, a11y, availability, cvLabel }: NavbarPro
             ref={menuRef}
             id="mobile-menu"
             className="fixed inset-0 z-[75] flex flex-col justify-between overflow-y-auto bg-[#050505]/97 px-[var(--gutter)] pb-10 pt-28 backdrop-blur-2xl md:hidden"
-            initial={{ opacity: 0 }}
+            initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
+            transition={{ duration: reduce ? 0 : 0.25, ease: "easeOut" }}
           >
             <div>
               <ul className="flex flex-col gap-1">
@@ -160,21 +185,18 @@ export function Navbar({ locale, items, a11y, availability, cvLabel }: NavbarPro
                   return (
                     <motion.li
                       key={item.id}
-                      initial={{ opacity: 0, y: 16 }}
-                      animate={{ opacity: 1, y: 0, transition: { delay: 0.08 + i * 0.04, duration: 0.4 } }}
+                      initial={reduce ? false : { opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0, transition: { delay: reduce ? 0 : i * 0.04, duration: reduce ? 0 : 0.3 } }}
                     >
                       <Link
                         href={localizePath(locale, item.href)}
                         aria-current={current ? "page" : undefined}
                         onClick={() => setOpen(false)}
                         className={cn(
-                          "display-mixed flex items-baseline gap-4 py-2 text-[clamp(2.2rem,10vw,3.4rem)] transition-colors",
+                          "display-mixed flex items-baseline gap-4 border-b border-line py-4 text-[clamp(2.2rem,10vw,3.4rem)] transition-colors",
                           current ? "text-accent" : "text-fg",
                         )}
                       >
-                        <span aria-hidden className="font-mono text-xs text-accent">
-                          0{i + 1}
-                        </span>
                         {item.label}
                       </Link>
                     </motion.li>

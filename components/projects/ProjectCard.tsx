@@ -26,7 +26,6 @@ export function ProjectCard({
   t,
   highlight,
   priority,
-  position,
 }: ProjectCardProps) {
   const technologies = highlight
     ? [...project.technologies].sort(
@@ -41,17 +40,17 @@ export function ProjectCard({
       <Link
         href={localizePath(locale, `/projects/${project.slug}`)}
         aria-label={format(t.openCaseStudy, { title: project.title })}
-        className="flex h-full flex-col overflow-hidden rounded-[1.25rem] border border-white/10 bg-white/[0.025] transition-[border-color,background-color,transform,box-shadow] duration-500 hover:-translate-y-1 hover:border-white/25 hover:bg-white/[0.045] hover:shadow-[0_24px_80px_rgba(0,0,0,0.3)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
+        className="project-card flex h-full flex-col overflow-hidden rounded-[1.25rem] border border-white/10 bg-white/[0.025] transition-[border-color,background-color,transform,box-shadow] duration-500 motion-safe:hover:-translate-y-1 hover:border-white/25 hover:bg-white/[0.045] hover:shadow-[0_24px_80px_rgba(0,0,0,0.3)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent"
       >
         {/* Project image */}
-        <div className="relative overflow-hidden bg-[#0b0e12]">
+        <div className="relative overflow-hidden border-b border-line bg-bg-2">
           <ProjectVisual
             project={project}
             alt=""
             priority={priority}
             bordered={false}
-            sizes="(min-width: 1024px) 48vw, (min-width: 640px) 50vw, 100vw"
-            className="aspect-[16/11] w-full transition-transform duration-700 ease-out group-hover:scale-[1.045]"
+            sizes="(min-width: 1536px) 700px, (min-width: 640px) 46vw, 92vw"
+            className="aspect-[16/11] w-full transition-transform duration-700 ease-out motion-safe:group-hover:scale-[1.025]"
           />
 
           {/* Image gradient */}
@@ -82,14 +81,10 @@ export function ProjectCard({
               {project.sector || categoryLabel}
             </span>
 
-            <span className="tabular-nums">
-              {project.index ||
-                String((position ?? 0) + 1).padStart(2, "0")}
-            </span>
           </div>
 
           {/* Project title */}
-          <h3 className="font-display text-[clamp(1.65rem,2.6vw,2.45rem)] leading-[1.12] tracking-[-0.035em] text-fg transition-colors duration-300 group-hover:text-accent">
+          <h3 className="break-words font-display text-[clamp(1.65rem,2.6vw,2.45rem)] leading-[1.12] tracking-[-0.035em] text-fg transition-colors duration-300 group-hover:text-accent">
             {project.title}
           </h3>
 

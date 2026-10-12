@@ -85,15 +85,16 @@ export function ProjectReel({
                 active
                   ? 1
                   : distance === 1
-                    ? 0.68
+                    ? 0.85
                     : distance === 2
-                      ? 0.48
-                      : 0.3;
+                      ? 0.8
+                      : 0.8;
 
               return (
                 <motion.button
                   key={project.slug}
                   type="button"
+                  aria-pressed={active}
                   onClick={() =>
                     onChange(index)
                   }

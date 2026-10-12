@@ -1,6 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { usePrefersReducedMotion as useReducedMotion } from "@/hooks/useMedia";
+
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface MaskLinesProps {
@@ -28,7 +30,7 @@ export function MaskLines({ lines, className, lineClassNames, delay = 0, immedia
             {...(immediate
               ? { animate: { y: 0, rotate: 0 } }
               : { whileInView: { y: 0, rotate: 0 }, viewport: { once: true, margin: "-10% 0px" } })}
-            transition={{ duration: 1.05, delay: delay + i * 0.09, ease }}
+            transition={{ duration: reduce ? 0 : 0.75, delay: reduce ? 0 : delay + i * 0.07, ease }}
           >
             {line}
           </motion.span>

@@ -1,11 +1,11 @@
 
 "use client";
 
+import { usePrefersReducedMotion as useReducedMotion } from "@/hooks/useMedia";
+
 import {
   AnimatePresence,
-  motion,
-  useReducedMotion,
-} from "framer-motion";
+  motion } from "framer-motion";
 import { SearchX, X } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
@@ -43,7 +43,7 @@ interface ViewProps extends ExplorerProps {
 }
 
 const chip =
-  "inline-flex min-h-10 items-center gap-2 rounded-full border px-4 font-mono text-[0.7rem] uppercase tracking-[0.08em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
+  "inline-flex min-h-11 items-center gap-2 rounded-full border px-4 font-mono text-[0.7rem] uppercase tracking-[0.08em] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
 
 const chipOn = "border-accent bg-accent text-black";
 
@@ -125,7 +125,7 @@ function ExplorerView({
   return (
     <div>
       {/* Filter panel */}
-      <div className="space-y-5 rounded-2xl border border-white/10 bg-white/[0.025] p-5 sm:p-7">
+      <div className="public-surface space-y-5 p-5 sm:p-7">
 
         {/* Category filters */}
         <div className="grid gap-3 md:grid-cols-[8rem_1fr] md:items-start">
@@ -206,7 +206,7 @@ function ExplorerView({
                   }
                   className={cn(
                     chip,
-                    "min-h-9 px-3 normal-case tracking-normal",
+                    "min-h-11 px-3 normal-case tracking-normal",
                     tech === null ? chipOn : chipOff
                   )}
                 >
@@ -229,7 +229,7 @@ function ExplorerView({
                       }
                       className={cn(
                         chip,
-                        "min-h-9 px-3 normal-case tracking-normal",
+                        "min-h-11 px-3 normal-case tracking-normal",
                         on ? chipOn : chipOff
                       )}
                     >
@@ -272,7 +272,7 @@ function ExplorerView({
         )}
 
         {/* Results count and reset */}
-        <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex min-h-11 flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
           <p
             role="status"
             aria-live="polite"
@@ -293,7 +293,7 @@ function ExplorerView({
                   tech: null,
                 })
               }
-              className="inline-flex items-center gap-1.5 py-1 font-mono text-xs uppercase tracking-[0.14em] text-muted transition-colors hover:text-fg"
+              className="inline-flex min-h-11 items-center gap-1.5 py-1 font-mono text-xs uppercase tracking-[0.14em] text-muted transition-colors hover:text-fg"
             >
               <X size={14} aria-hidden />
               {t.reset}
@@ -342,7 +342,7 @@ function ExplorerView({
                       }
                 }
                 transition={{
-                  duration: 0.4,
+                  duration: reduce ? 0 : 0.3,
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
@@ -354,7 +354,7 @@ function ExplorerView({
                   }
                   t={t}
                   highlight={tech}
-                  priority={i < 2}
+                  priority={i === 0}
                   position={i}
                 />
               </motion.li>

@@ -47,9 +47,6 @@ export function ActiveProjectStage({
   t,
   projectT,
 }: ActiveProjectStageProps) {
-  const number = String(
-    activeIndex + 1,
-  ).padStart(2, "0");
 
   const isFirst =
     activeIndex === 0;
@@ -71,48 +68,6 @@ export function ActiveProjectStage({
           DECORATIVE NUMBER
          ================================= */}
 
-      <AnimatePresence initial={false}>
-        <motion.span
-          key={`number-${project.slug}`}
-          aria-hidden
-          initial={{
-            opacity: 0,
-            y:
-              direction >= 0
-                ? 30
-                : -30,
-          }}
-          animate={{
-            opacity: 0.07,
-            y: 0,
-          }}
-          exit={{
-            opacity: 0,
-            y:
-              direction >= 0
-                ? -30
-                : 30,
-          }}
-          transition={{
-            duration: 0.5,
-            ease,
-          }}
-          className="
-            display
-            outline-text
-            pointer-events-none
-            absolute
-            -right-2
-            -top-10
-            z-0
-            select-none
-            text-[clamp(8rem,16vw,16rem)]
-            leading-none
-          "
-        >
-          {number}
-        </motion.span>
-      </AnimatePresence>
 
       {/* =================================
           PROJECT IMAGE
@@ -122,8 +77,8 @@ export function ActiveProjectStage({
         className="
           relative
           z-10
-          h-[clamp(500px,68vh,760px)]
-          shrink-0
+          min-h-0
+          flex-1 rounded-2xl
           overflow-hidden
           bg-black
         "
@@ -170,7 +125,7 @@ export function ActiveProjectStage({
                 absolute
                 inset-0
                 block
-                overflow-hidden
+                overflow-hidden rounded-2xl
               "
             >
               <motion.div
@@ -283,7 +238,7 @@ export function ActiveProjectStage({
             }}
             className="
               flex
-              h-8 w-8
+              h-11 w-11
               items-center
               justify-center
               rounded-full
@@ -320,7 +275,7 @@ export function ActiveProjectStage({
             }}
             className="
               flex
-              h-8 w-8
+              h-11 w-11
               items-center
               justify-center
               rounded-full
@@ -353,7 +308,7 @@ export function ActiveProjectStage({
         className="
           relative
           z-10
-          mt-3
+          mt-5 shrink-0
           grid
           gap-3
           xl:grid-cols-[1fr_auto]
@@ -392,7 +347,7 @@ export function ActiveProjectStage({
                 className="
                   display-mixed
                   text-[clamp(1.9rem,3.3vw,3.8rem)]
-                  leading-[0.95]
+                  leading-[1.1]
                 "
               >
                 <Link
@@ -439,7 +394,7 @@ export function ActiveProjectStage({
                 className="
                   mt-2
                   max-w-2xl
-                  text-sm
+                  line-clamp-3 leading-relaxed text-sm
                   text-muted
                 "
               >
@@ -519,21 +474,12 @@ export function ActiveProjectStage({
         className="
           relative
           z-10
-          mt-2
+          mt-4 shrink-0
           flex
           items-center
           gap-3
         "
       >
-        <span
-          className="
-            font-mono
-            text-[0.58rem]
-            text-muted
-          "
-        >
-          {number}
-        </span>
 
         <div
           className="

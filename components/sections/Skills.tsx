@@ -103,7 +103,7 @@ export function Skills({
           intro={c.intro}
         />
 
-        <div className="mt-10 grid gap-8 lg:min-h-[100dvh] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:gap-12">
+        <div className="mt-10 grid gap-8 lg:min-h-[42rem] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:gap-12">
           {/* LEFT COLUMN */}
           <Reveal>
             <div className="flex flex-col items-center">
@@ -210,7 +210,7 @@ export function Skills({
               <div
                 id="skill-detail"
                 aria-live="off"
-                className="mt-6 w-full max-w-[34rem] min-h-[4.5rem] border border-line bg-[#0b0f14]/70 p-[clamp(0.75rem,1.5vh,1.25rem)]"
+                className="mt-6 w-full max-w-[34rem] min-h-[8.5rem] rounded-2xl border border-line bg-bg-3 p-[clamp(0.75rem,1.5vh,1.25rem)]"
               >
                 {active ? (
                   <>
@@ -246,13 +246,14 @@ export function Skills({
                     key={g.id}
                     delay={gi * 0.04}
                   >
-                    <div className="grid gap-x-6 gap-y-2 border-t border-line pt-[clamp(0.65rem,1.5vh,1.25rem)] sm:grid-cols-[9rem_1fr]">
+                    <div className="public-surface grid gap-x-6 gap-y-3 p-5 sm:grid-cols-[9rem_1fr]">
                       <div>
                         <h3 className="font-display text-base">
                           {g.label}
                         </h3>
 
-                        <p className="mt-0.5 font-mono text-[0.68rem] uppercase tracking-[0.14em] text-muted">
+                        <p className="mt-2 text-sm leading-relaxed text-muted">{g.blurb}</p>
+                        <p className="mt-2 font-mono text-[0.68rem] uppercase tracking-[0.14em] text-muted">
                           {
                             c.phases[
                               g.phase
@@ -304,7 +305,7 @@ export function Skills({
                                   }
                                   aria-describedby="skill-detail"
                                   className={cn(
-                                    "px-2.5 py-1 text-sm transition-colors",
+                                    "min-h-10 rounded-full px-3 py-2 text-sm transition-colors",
                                     on
                                       ? "bg-accent text-black"
                                       : "text-fg/85 hover:text-accent",

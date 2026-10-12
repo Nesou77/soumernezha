@@ -26,11 +26,13 @@ function SectionHeading({ children }: { children: ReactNode }) {
   return <h2 className="font-mono text-xs uppercase tracking-[0.16em] text-accent">{children}</h2>;
 }
 
-function DetailSection({ title, children, variant = "standard" }: { title: ReactNode; children: ReactNode; variant?: "standard" | "challenge" | "solution" }) {
+function DetailSection({ title, children, variant = "standard" }: { title: ReactNode; children: ReactNode; variant?: "standard" | "challenge" | "solution" | "contribution" | "feature" }) {
   const styles = {
     standard: "border-line",
-    challenge: "border-amber-400/20",
-    solution: "border-accent/25",
+    contribution: "rounded-3xl border border-violet/20 bg-violet/[0.025] p-6 sm:p-9",
+    feature: "rounded-3xl border border-white/15 bg-bg-2 p-6 sm:p-9",
+    challenge: "rounded-3xl border border-amber-400/20 bg-amber-400/[0.025] p-6 sm:p-9",
+    solution: "rounded-3xl border border-accent/25 bg-accent/[0.025] p-6 sm:p-9",
   };
   return (
     <section className="container-x">
@@ -50,14 +52,14 @@ function PointCards({ items, lang, variant }: { items: string[]; lang?: string; 
     challenge: { icon: AlertCircle, card: "border-amber-400/20 bg-amber-400/[0.045]", iconClass: "bg-amber-400/10 text-amber-300", dot: "bg-amber-400/30" },
     solution: { icon: Lightbulb, card: "border-accent/20 bg-accent/[0.045]", iconClass: "bg-accent/10 text-accent", dot: "bg-accent/30" },
     feature: { icon: Sparkles, card: "border-white/10 bg-white/[0.03]", iconClass: "bg-white/10 text-fg", dot: "bg-white/20" },
-    contribution: { icon: Check, card: "border-white/10 bg-bg-2/70", iconClass: "bg-accent/10 text-accent", dot: "bg-accent/30" },
+    contribution: { icon: Check, card: "border-violet/20 bg-bg-2/70", iconClass: "bg-violet/10 text-violet", dot: "bg-violet/30" },
   }[variant];
   const Icon = config.icon;
   // A single item uses the whole row instead of leaving an empty grid column.
   return (
     <ul lang={lang} className={`mt-7 grid gap-4 ${items.length > 1 ? "md:grid-cols-2" : "grid-cols-1"}`}>
       {items.map((item, i) => (
-        <li key={`${i}-${item}`} className={`group relative flex min-w-0 items-start gap-4 overflow-hidden rounded-2xl border p-5 transition-[transform,border-color,background-color,box-shadow] duration-500 ease-out motion-safe:hover:-translate-y-1.5 hover:border-white/30 hover:shadow-[0_18px_44px_rgba(0,0,0,0.18)] focus-within:border-accent/40 sm:p-6 ${config.card}`}>
+        <li key={`${i}-${item}`} className={`project-point group relative flex min-w-0 items-start gap-4 overflow-hidden rounded-2xl border p-5 transition-[transform,border-color,background-color,box-shadow] duration-500 ease-out motion-safe:hover:-translate-y-1 hover:border-white/30 hover:shadow-[0_18px_44px_rgba(0,0,0,0.18)] focus-within:border-accent/40 sm:p-6 ${config.card}`}>
           <span aria-hidden className={`grid size-10 shrink-0 place-items-center rounded-xl transition-transform duration-500 ease-out motion-safe:group-hover:-translate-y-0.5 motion-safe:group-hover:rotate-[-5deg] motion-safe:group-hover:scale-110 ${config.iconClass}`}><Icon size={19} strokeWidth={1.7} /></span>
           <p className="min-w-0 whitespace-pre-line break-words pt-1 text-[0.95rem] leading-[1.75] text-fg/85">{item}</p>
           <span aria-hidden className={`absolute bottom-0 left-0 h-0.5 w-16 origin-left transition-transform duration-500 ease-out motion-safe:group-hover:scale-x-[3] ${config.dot}`} />
@@ -159,7 +161,7 @@ export function ProjectDetail({ project, prev, next, locale, t, categoryLabel, n
           </DetailSection>
         )}
         {(project.contribution.length > 0 || project.technologies.length > 0) && (
-          <DetailSection title={t.contribution}>
+          <DetailSection title={t.contribution} variant="contribution">
             <PointCards items={project.contribution} lang={lang("contributions")} variant="contribution" />
             {project.technologies.length > 0 && (
               <div className="mt-9 border-t border-line pt-7">
@@ -181,7 +183,7 @@ export function ProjectDetail({ project, prev, next, locale, t, categoryLabel, n
           </section>
         )}
         {project.features.length > 0 && (
-          <DetailSection title={t.features}>
+          <DetailSection title={t.features} variant="feature">
             <PointCards items={project.features} lang={lang("features")} variant="feature" />
           </DetailSection>
         )}
@@ -226,7 +228,7 @@ export function ProjectDetail({ project, prev, next, locale, t, categoryLabel, n
             <div className="grid gap-5 md:grid-cols-2 lg:gap-8">
               {related.map((item) => (
                 <Link key={item.slug} href={localizePath(locale, `/projects/${item.slug}`)} className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.025] transition-all duration-300 hover:-translate-y-1 hover:border-white/25 hover:shadow-[0_20px_60px_rgba(0,0,0,0.18)]">
-                  <div className="overflow-hidden bg-bg-2"><ProjectVisual project={item} alt="" sizes="(min-width: 768px) 50vw, 100vw" className="aspect-[16/10] transition-transform duration-700 group-hover:scale-[1.04]" bordered={false} /></div>
+                  <div className="overflow-hidden bg-bg-2"><ProjectVisual project={item} alt="" sizes="(min-width: 768px) 50vw, 100vw" className="aspect-[16/10] transition-transform duration-700 motion-safe:group-hover:scale-[1.025]" bordered={false} /></div>
                   <div className="flex items-start justify-between gap-4 p-5 sm:p-7">
                     <div className="min-w-0"><p lang={fallbackLang(item, "sector")} className="mb-2 font-mono text-[0.68rem] uppercase tracking-[0.12em] text-muted">{item.sector}</p><h3 className="font-display text-2xl tracking-[-0.03em] transition-colors group-hover:text-accent sm:text-3xl">{item.title}</h3></div>
                     <ArrowUpRight size={20} className="mt-1 shrink-0 text-muted transition-colors group-hover:text-accent" />

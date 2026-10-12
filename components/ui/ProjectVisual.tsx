@@ -76,7 +76,6 @@ export function ProjectVisual({
                 </div>
               </div>
               <div className="relative border border-white/10" style={{ background: `linear-gradient(160deg, hsl(${hue} 70% 45% / 0.35), transparent 70%)` }}>
-                <span className="absolute bottom-2 left-2 font-mono text-[0.55rem] text-white/60">{project.index}</span>
               </div>
             </div>
           </div>

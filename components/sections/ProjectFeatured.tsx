@@ -28,17 +28,9 @@ export function ProjectFeatured({ project, flip, locale, t, categoryLabel, newTa
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const imgY = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["-7%", "7%"]);
-  const numX = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : [flip ? "-8%" : "8%", flip ? "8%" : "-8%"]);
 
   return (
     <article ref={ref} className="relative [perspective:1400px]">
-      <motion.span
-        aria-hidden
-        style={{ x: numX }}
-        className="display outline-text pointer-events-none absolute -top-[0.35em] z-0 select-none text-[clamp(8rem,26vw,24rem)] opacity-[0.16]"
-      >
-        {project.index}
-      </motion.span>
 
       <motion.div
         className="relative z-10 grid items-center gap-8 lg:grid-cols-12 lg:gap-14"

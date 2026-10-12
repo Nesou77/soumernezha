@@ -21,7 +21,7 @@ export function CvCard({ locale, t, newTab, className }: CvCardProps) {
   const otherCv = other ? cvFor(other) : null;
 
   return (
-    <article className={cn("flex flex-col gap-6 border border-line bg-bg-3/60 p-7 backdrop-blur-sm sm:p-8", className)}>
+    <article className={cn("public-surface flex flex-col gap-6 p-7 sm:p-8", className)}>
       <div className="flex items-start justify-between gap-4">
         <p className="eyebrow">{t.eyebrow}</p>
         <FileText size={22} aria-hidden className="text-muted" />

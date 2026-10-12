@@ -2,11 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { About } from "@/components/sections/About";
 import { ContactCTA } from "@/components/sections/ContactCTA";
-import { QALab } from "@/components/sections/QALab";
-import { Skills } from "@/components/sections/Skills";
 import { Timeline } from "@/components/sections/Timeline";
 import { CvCard } from "@/components/ui/CvCard";
-import { getPublishedProjects } from "@/lib/data/projects";
 import { getDictionary, isLocale, localizePath } from "@/lib/i18n";
 import { pageMetadata } from "@/lib/i18n/metadata";
 import { site } from "@/lib/site";
@@ -26,8 +23,6 @@ export default async function AboutPage({ params }: Props) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
   const dict = getDictionary(lang);
-  const projects = await getPublishedProjects(lang);
-  const qaProjects = projects.filter((p) => p.category === "qa").slice(0, 3);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -51,8 +46,6 @@ export default async function AboutPage({ params }: Props) {
         className="pb-[var(--section-y)] pt-32 sm:pt-40"
         aside={<CvCard locale={lang} t={dict.cv} newTab={dict.a11y.newTab} />}
       />
-      <QALab qaProjects={qaProjects} t={dict.qa} locale={lang} index="02" />
-      <Skills t={dict.skills} index="03" />
       <Timeline t={dict.experience} index="04" />
       <ContactCTA locale={lang} t={dict.cta} cvLabel={dict.cv.download} />
     </main>

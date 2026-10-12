@@ -1,5 +1,7 @@
 "use client";
 
+import { usePrefersReducedMotion as useReducedMotion } from "@/hooks/useMedia";
+
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import Image from "next/image";
@@ -17,6 +19,7 @@ interface ProjectGalleryProps {
 const pad = (n: number) => String(n).padStart(2, "0");
 
 export function ProjectGallery({ images, title, t }: ProjectGalleryProps) {
+  const reduce = useReducedMotion();
   const [active, setActive] = useState(0);
   const [open, setOpen] = useState<number | null>(null);
 
@@ -30,7 +33,7 @@ export function ProjectGallery({ images, title, t }: ProjectGalleryProps) {
   return (
     <>
       <div className="grid gap-4 lg:h-[min(72dvh,720px)] lg:grid-cols-[minmax(0,1fr)_9rem]">
-        <div className="relative min-h-[48dvh] overflow-hidden border border-white/10 bg-bg-3 lg:min-h-0">
+        <div className="relative min-h-[24rem] overflow-hidden rounded-2xl border border-white/10 bg-bg-3 lg:min-h-0">
           <AnimatePresence mode="wait" initial={false}>
             <motion.button
               key={images[active]}
@@ -38,10 +41,10 @@ export function ProjectGallery({ images, title, t }: ProjectGalleryProps) {
               onClick={() => setOpen(active)}
               aria-label={format(t.openImage, { index: active + 1 })}
               className="absolute inset-0 block h-full w-full"
-              initial={{ opacity: 0, y: 10 }}
+              initial={reduce ? false : { opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
+              exit={reduce ? { opacity: 0 } : { opacity: 0, y: -8 }}
+              transition={{ duration: reduce ? 0 : 0.25 }}
             >
               <Image
                 src={images[active]}
@@ -65,9 +68,10 @@ export function ProjectGallery({ images, title, t }: ProjectGalleryProps) {
               key={image}
               type="button"
               onClick={() => setActive(index)}
-              aria-label={format(t.openImage, { index: index + 1 })}
+              aria-label={format(t.galleryAlt, { title, index: index + 1 })}
+              aria-pressed={active === index}
               className={cn(
-                "relative aspect-[16/10] w-28 shrink-0 overflow-hidden border bg-bg-3 transition-colors lg:w-full",
+                "project-gallery-thumbnail relative aspect-[16/10] w-28 rounded-lg shrink-0 overflow-hidden border bg-bg-3 transition-colors lg:w-full",
                 active === index ? "border-accent" : "border-white/10 hover:border-white/30",
               )}
             >
@@ -89,10 +93,10 @@ export function ProjectGallery({ images, title, t }: ProjectGalleryProps) {
             {format(t.imageCounter, { index: pad(active + 1), count: pad(images.length) })}
           </span>
           <div className="flex gap-2">
-            <button type="button" onClick={() => go(-1)} aria-label={t.previousImage} className="grid h-9 w-9 place-items-center rounded-full border border-white/15 text-fg transition-colors hover:border-accent hover:text-accent">
+            <button type="button" onClick={() => go(-1)} aria-label={t.previousImage} className="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-fg transition-colors hover:border-accent hover:text-accent">
               <ArrowLeft size={16} aria-hidden />
             </button>
-            <button type="button" onClick={() => go(1)} aria-label={t.nextImage} className="grid h-9 w-9 place-items-center rounded-full border border-white/15 text-fg transition-colors hover:border-accent hover:text-accent">
+            <button type="button" onClick={() => go(1)} aria-label={t.nextImage} className="grid h-11 w-11 place-items-center rounded-full border border-white/15 text-fg transition-colors hover:border-accent hover:text-accent">
               <ArrowRight size={16} aria-hidden />
             </button>
           </div>
@@ -128,6 +132,7 @@ interface LightboxProps {
 }
 
 function Lightbox({ images, title, t, index, onChange, onClose }: LightboxProps) {
+  const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const many = images.length > 1;
@@ -179,10 +184,10 @@ function Lightbox({ images, title, t, index, onChange, onClose }: LightboxProps)
       aria-modal="true"
       aria-label={title}
       className="fixed inset-0 z-[95] flex flex-col bg-[#050505]/96 backdrop-blur-md"
-      initial={{ opacity: 0 }}
+      initial={reduce ? false : { opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.25 }}
+      transition={{ duration: reduce ? 0 : 0.25 }}
       onClick={(event) => event.target === event.currentTarget && onClose()}
     >
       <div className="container-x flex items-center justify-between py-4 font-mono text-xs uppercase tracking-[0.16em] text-muted">
@@ -197,10 +202,10 @@ function Lightbox({ images, title, t, index, onChange, onClose }: LightboxProps)
           <motion.div
             key={images[index]}
             className="pointer-events-none absolute inset-x-[var(--gutter)] inset-y-2"
-            initial={{ opacity: 0, x: 20 }}
+            initial={reduce ? false : { opacity: 0, x: 16 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
+            exit={reduce ? { opacity: 0 } : { opacity: 0, x: -16 }}
+            transition={{ duration: reduce ? 0 : 0.25 }}
           >
             <Image
               src={images[index]}

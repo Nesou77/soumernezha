@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
+import { usePrefersReducedMotion as useReducedMotion } from "@/hooks/useMedia";
 import Link from "next/link";
 
 import { Reveal } from "@/components/animations/Reveal";
@@ -82,7 +83,7 @@ export function QALab({
 
           Nothing uses overflow-hidden here.
         */}
-        <div className="mt-10 grid gap-10 lg:min-h-[100dvh] lg:grid-cols-12 lg:items-center lg:gap-12">
+        <div className="mt-10 grid gap-10 lg:min-h-[40rem] lg:grid-cols-12 lg:items-center lg:gap-12">
           {/* LEFT COLUMN */}
           <Reveal className="lg:col-span-7">
             <TestRunner t={c.runner} />
@@ -96,14 +97,11 @@ export function QALab({
               </h3>
 
               <ol className="divide-y divide-line border-y border-line">
-                {c.testingTypes.map((t, i) => (
+                {c.testingTypes.map((t) => (
                   <li
                     key={t}
                     className="group flex items-baseline gap-4 py-[clamp(0.5rem,1.2vh,0.75rem)] transition-colors hover:text-accent"
                   >
-                    <span className="font-mono text-xs text-muted">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
 
                     <span className="font-display text-lg tracking-tight transition-transform duration-500 group-hover:translate-x-2">
                       {t}
@@ -157,9 +155,6 @@ export function QALab({
                     className="group grid gap-x-10 gap-y-3 py-8 md:grid-cols-[1fr_1.2fr_auto] md:items-start"
                   >
                     <div>
-                      <span className="mb-2 block font-mono text-xs text-muted">
-                        {p.index}
-                      </span>
 
                       <span className="display-mixed block text-[clamp(1.8rem,1rem+2.6vw,3.2rem)] transition-colors group-hover:text-accent">
                         {p.title}

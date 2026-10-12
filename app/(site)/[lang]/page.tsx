@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { HeroCanvas } from "@/components/3d/HeroCanvas";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 import { Hero } from "@/components/sections/Hero";
+import { QALab } from "@/components/sections/QALab";
+import { Skills } from "@/components/sections/Skills";
 import { KeySkills } from "@/components/sections/KeySkills";
 import { ProjectShowcase } from "@/components/sections/ProjectShowcase";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
@@ -18,6 +20,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
   const dict = getDictionary(lang);
   const projects = await getPublishedProjects(lang);
   const featured = pickFeatured(projects, 5);
+  const qaProjects = projects.filter((p) => p.category === "qa").slice(0, 3);
 
   return (
     <>
@@ -42,6 +45,8 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
             )
           }
         />
+        <Skills t={dict.skills} />
+        <QALab qaProjects={qaProjects} t={dict.qa} locale={lang} />
         <ContactCTA locale={lang} t={dict.cta} cvLabel={dict.cv.download} />
       </main>
     </>

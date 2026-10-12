@@ -1,4 +1,4 @@
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { Logo } from "@/components/ui/Logo";
 import type { Dictionary } from "@/lib/i18n";
@@ -15,12 +15,12 @@ interface FooterProps {
   newTab: string;
 }
 
-const linkClass = "link-underline text-muted transition-colors hover:text-fg";
+const linkClass = "link-underline inline-flex text-muted transition-colors hover:text-accent";
 
 export function Footer({ locale, t, nav, role, cvLabel, newTab }: FooterProps) {
   const cv = cvFor(locale);
   return (
-    <footer className="border-t border-line">
+    <footer className="site-footer border-t border-line bg-bg-2">
       <div className="container-x grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-12">
         <div className="lg:col-span-6">
           <Link href={localizePath(locale, "/")} className="inline-flex items-center gap-3">
@@ -28,14 +28,17 @@ export function Footer({ locale, t, nav, role, cvLabel, newTab }: FooterProps) {
             <span className="font-display text-lg">{site.name}</span>
           </Link>
           <p className="mt-4 max-w-sm text-sm text-muted">{role}</p>
-          <p className="mt-1 font-mono text-xs uppercase tracking-[0.14em] text-muted">{t.motto}</p>
+          <p className="mt-2 font-mono text-xs uppercase tracking-[0.14em] text-muted">{t.motto}</p>
+          <Link href={localizePath(locale, "/contact")} className="link-underline mt-5 inline-flex gap-2 font-display text-sm text-accent">
+            {t.contact} <ArrowUpRight size={16} aria-hidden />
+          </Link>
         </div>
 
         <nav aria-labelledby="footer-pages" className="lg:col-span-3">
           <h2 id="footer-pages" className="eyebrow mb-4 text-muted">
             {t.pages}
           </h2>
-          <ul className="space-y-2 text-sm">
+          <ul className="space-y-0.5 text-sm">
             {nav.map((item) => (
               <li key={item.id}>
                 <Link href={localizePath(locale, item.href)} className={linkClass}>
@@ -48,7 +51,7 @@ export function Footer({ locale, t, nav, role, cvLabel, newTab }: FooterProps) {
 
         <div className="lg:col-span-3">
           <h2 className="eyebrow mb-4 text-muted">{t.contact}</h2>
-          <ul className="space-y-2 text-sm">
+          <ul className="space-y-0.5 text-sm">
             <li>
               <a href={`mailto:${site.email}`} className={`${linkClass} break-all`}>
                 {site.email}

@@ -41,7 +41,7 @@ export function Timeline({ t: c, index = "05" }: { t: Dictionary["experience"]; 
                 <p className="font-mono text-xs uppercase tracking-[0.14em] text-muted">{e.period}</p>
                 {e.location && <p className="mt-1 font-mono text-xs text-muted/70">{e.location}</p>}
               </Reveal>
-              <Reveal delay={0.08} className="md:pl-12">
+              <Reveal delay={0.08} className={cn("md:ml-8", e.highlight ? "public-surface p-6 sm:p-8" : "md:pl-4")}>
                 <h3
                   className={cn(
                     "display-mixed",
@@ -70,7 +70,7 @@ export function Timeline({ t: c, index = "05" }: { t: Dictionary["experience"]; 
         </ol>
 
         {/* Education */}
-        <div className="mt-28 grid gap-10 md:grid-cols-[30%_1fr]">
+        <div className="mt-20 grid gap-10 border-t border-line pt-10 md:grid-cols-[30%_1fr]">
           <Reveal>
             <h3 className="display-mixed text-[clamp(1.6rem,1rem+2vw,2.6rem)]">{c.education}</h3>
             <p className="mt-2 font-mono text-xs uppercase tracking-[0.14em] text-muted">{c.educationSub}</p>

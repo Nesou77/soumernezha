@@ -6,11 +6,11 @@ import type { Dictionary } from "@/lib/i18n";
 /** Comma-free list of expertise keywords separated by accent dots. */
 export function ExpertiseList({ items }: { items: string[] }) {
   return (
-    <ul className="flex flex-wrap gap-x-5 gap-y-2 font-display text-sm text-fg">
+    <ul className="flex flex-wrap gap-2 font-display text-sm text-fg">
       {items.map((e) => (
-        <li key={e} className="flex items-center gap-5">
+        <li key={e} className="expertise-chip">
           {e}
-          <span aria-hidden className="h-1 w-1 rounded-full bg-accent/70 last:hidden" />
+
         </li>
       ))}
     </ul>
@@ -35,12 +35,23 @@ export function About({ t: c, index = "01", as = "h2", aside, className = "secti
         <SectionHeading id="about-title" index={index} eyebrow={c.eyebrow} lines={c.headline} size="h3" variant="mixed" as={as} />
 
         <div className="mt-14 grid gap-14 lg:mt-16 lg:grid-cols-12">
-          <div className="space-y-6 text-muted lg:col-span-7 xl:col-span-6">
+          <div className="space-y-6 text-muted lg:col-span-7 xl:col-span-7">
             {c.paragraphs.map((p, i) => (
               <Reveal key={i} delay={i * 0.08} immediate={as === "h1"}>
                 <p className={i === 0 ? "text-lg text-fg" : undefined}>{p}</p>
               </Reveal>
             ))}
+            <Reveal delay={0.15}>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {c.cards.map((card) => (
+                  <article key={card.num} className="public-surface p-5">
+                    <p className="eyebrow mb-3">{card.tag}</p>
+                    <h3 className="font-display text-lg text-fg">{card.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed">{card.text}</p>
+                  </article>
+                ))}
+              </div>
+            </Reveal>
             <Reveal delay={0.2}>
               <h2 className="eyebrow mb-4 mt-10 text-muted">{c.expertiseLabel}</h2>
               <ExpertiseList items={c.expertise} />

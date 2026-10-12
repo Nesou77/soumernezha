@@ -1,12 +1,12 @@
 "use client";
 
+import { usePrefersReducedMotion as useReducedMotion } from "@/hooks/useMedia";
+
 import {
   motion,
   useMotionValueEvent,
-  useReducedMotion,
   useScroll,
-  useTransform,
-} from "framer-motion";
+  useTransform } from "framer-motion";
 import {
   useMemo,
   useRef,
@@ -20,6 +20,7 @@ import {
   ProjectFilters,
   type ProjectFilter,
 } from "@/components/projects/ProjectFilters";
+import { ProjectCard } from "@/components/projects/ProjectCard";
 import { ProjectReel } from "@/components/projects/ProjectReel";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import type { Dictionary } from "@/lib/i18n";
@@ -124,7 +125,7 @@ export function ProjectShowcase({
       const total =
         visibleProjects.length;
 
-      if (total <= 1) {
+      if (reduce || total <= 1) {
         return;
       }
 
@@ -203,7 +204,7 @@ export function ProjectShowcase({
         stageTop +
         scrollDistance *
           targetProgress,
-      behavior: "smooth",
+      behavior: reduce ? "auto" : "smooth",
     });
   }
 
@@ -256,7 +257,7 @@ export function ProjectShowcase({
       id="projects"
       aria-labelledby="projects-title"
       className="
-        relative
+        section-divider relative
         overflow-x-clip
       "
     >
@@ -293,8 +294,8 @@ export function ProjectShowcase({
       </div>
 
       {activeProject && (
-        <div ref={scrollStageRef} className="relative mt-4 hidden lg:block" style={{ height: `${scrollHeight}vh` }}>
-          <div className="sticky top-0 h-screen overflow-hidden">
+        <div ref={scrollStageRef} className={reduce ? "hidden" : "relative mt-4 hidden lg:block"} style={{ height: `${scrollHeight}vh` }}>
+          <div className="sticky top-20 h-[calc(100svh-5rem)] overflow-hidden">
             <div className="container-x flex h-full flex-col py-5 xl:py-6">
               {showFilters && (
                 <div className="shrink-0 border-b border-line pb-3">
@@ -321,11 +322,19 @@ export function ProjectShowcase({
       )}
 
       <div className="container-x relative z-10">
-        <div className="mt-8 lg:hidden">
+        <div className={reduce ? "mt-10" : "mt-8 lg:hidden"}>
           {showFilters && <ProjectFilters value={filter} onChange={changeFilter} categories={categories} t={c} />}
           <div className={showFilters ? "mt-6" : undefined}>
             {visibleProjects.length > 0 ? (
-              <MobileProjectCarousel projects={visibleProjects} locale={locale} categories={categories} t={c} />
+              reduce ? (
+                <ul className="grid gap-6 sm:grid-cols-2">
+                  {visibleProjects.map((project, i) => (
+                    <li key={project.slug} className={i === 0 ? "sm:col-span-2" : undefined}>
+                      <ProjectCard project={project} locale={locale} categoryLabel={categories[project.category]} t={c} position={i} />
+                    </li>
+                  ))}
+                </ul>
+              ) : <MobileProjectCarousel projects={visibleProjects} locale={locale} categories={categories} t={c} />
             ) : (
               <p className="text-muted">{c.empty}</p>
             )}

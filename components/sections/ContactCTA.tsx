@@ -19,12 +19,11 @@ export function ContactCTA({ locale, t, cvLabel }: ContactCTAProps) {
   const cv = cvFor(locale);
   return (
     <section aria-labelledby="cta-title" className="relative overflow-hidden border-t border-line">
-      <div aria-hidden className="grid-bg absolute inset-0 opacity-60 [mask-image:radial-gradient(70%_80%_at_50%_100%,black,transparent)]" />
-      <div className="container-x relative grid gap-10 py-24 sm:py-32 lg:grid-cols-12 lg:items-end">
+      <div aria-hidden className="grid-bg absolute inset-0 opacity-25 [mask-image:radial-gradient(70%_80%_at_50%_100%,black,transparent)]" />
+      <div className="container-x relative grid gap-10 py-20 sm:py-24 lg:grid-cols-12 lg:items-end">
         <div className="lg:col-span-8">
           <Reveal>
             <p className="eyebrow mb-6 flex items-center gap-4">
-              <span aria-hidden className="h-px w-10 bg-accent/60" />
               {t.eyebrow}
             </p>
           </Reveal>
@@ -39,7 +38,7 @@ export function ContactCTA({ locale, t, cvLabel }: ContactCTAProps) {
           </Reveal>
         </div>
         <Reveal delay={0.2} className="lg:col-span-4 lg:justify-self-end">
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-col items-stretch gap-3 sm:flex-row lg:flex-col">
             <Magnetic>
               <Link href={localizePath(locale, "/contact")} className="btn btn-primary">
                 {t.primary} <ArrowIcon />

@@ -23,7 +23,7 @@ export const fr: Dictionary = {
       "site responsive",
       "développement CMS",
     ],
-    workMode: "Projets à distance & à l'international",
+    workMode: "Développement web & assurance qualité",
   },
   a11y: {
     skipToContent: "Aller au contenu",
@@ -108,7 +108,7 @@ export const fr: Dictionary = {
         num: "01",
         tag: "CRÉER",
         title: "Développement web",
-        text: "Des sites et des interfaces responsives, prêts pour la production, de la maquette à la mise en ligne.",
+        text: "Un site adapté à vos besoins, fidèle à vos maquettes et facile à consulter sur mobile comme sur ordinateur.",
         points: [
           "Développement Next.js & React",
           "WordPress · Elementor · WooCommerce",
@@ -121,7 +121,7 @@ export const fr: Dictionary = {
         num: "02",
         tag: "VÉRIFIER",
         title: "La qualité intégrée",
-        text: "Un réflexe QA sur chaque projet : tests fonctionnels, responsives et de non-régression, validation d'API et rapports de bugs clairs.",
+        text: "Des parcours vérifiés avant la mise en ligne : navigation, formulaires et intégrations testés pour repérer les problèmes qui freinent vos utilisateurs.",
         points: ["Cypress · Selenium · JMeter · Jira", "Vérifications multi-appareils", "Non-régression et cas limites"],
       },
     ],
@@ -132,6 +132,7 @@ export const fr: Dictionary = {
       headline: ["Des sites développés de A à Z,", "vérifiés avant la mise en ligne."],
       intro:
         "Développement web sur mesure, configuration de CMS et assurance qualité : de l'intégration de vos maquettes à la mise en ligne et à la maintenance.",
+      bio: "Je suis Nezha, développeuse web avec une expérience en assurance qualité. J’associe développement front-end, intégration de CMS et tests des parcours utilisateurs.",
       more: "En savoir plus sur moi",
     },
     featured: {
@@ -236,7 +237,7 @@ export const fr: Dictionary = {
     eyebrow: "QA Lab",
     headline: ["Le développement,", "avec un regard QA."],
     intro:
-      "Je teste les interfaces sur différentes tailles d'écran, les parcours utilisateurs et les cas limites. Découvrez mes méthodes de test et une démonstration de validation.",
+      "Avant de mettre un site en ligne, je vérifie ce qui compte pour les visiteurs : se repérer, remplir un formulaire et consulter les pages sur leur téléphone. Voici ma façon de tester, avec une courte démonstration.",
     practice: "Pratique des tests",
     tools: "Outils",
     projects: "Projets QA",
@@ -283,7 +284,7 @@ export const fr: Dictionary = {
     eyebrow: "Compétences",
     headline: ["Le développement web,", "de la création à la mise en ligne."],
     intro:
-      "Le développement web au centre, le déploiement et la qualité tout autour. Survolez ou sélectionnez une compétence pour en savoir plus.",
+      "Voici les outils que j'utilise pour transformer une maquette en site fonctionnel et en assurer le suivi. Sélectionnez une compétence pour découvrir comment je l'utilise.",
     center: "Créer · Tester · Livrer",
     hint: "Survolez ou sélectionnez une compétence pour découvrir comment je l'utilise.",
     phases: { develop: "DÉVELOPPER", test: "TESTER", deploy: "DÉPLOYER" },
@@ -292,7 +293,7 @@ export const fr: Dictionary = {
         id: "develop",
         label: "Développement web",
         phase: "develop",
-        blurb: "Un front-end moderne et responsive.",
+        blurb: "Des interfaces adaptées aux usages et aux écrans.",
         skills: [
           { name: "Next.js", description: "App Router, routes API, génération statique et déploiement sur Vercel." },
           { name: "React", description: "Interfaces à base de composants et gestion d'état." },
@@ -320,7 +321,7 @@ export const fr: Dictionary = {
         id: "ui",
         label: "Intégration UI",
         phase: "develop",
-        blurb: "De la maquette au navigateur.",
+        blurb: "Des maquettes fidèlement intégrées, prêtes à être utilisées.",
         skills: [
           { name: "Figma", description: "Lire précisément les spécifications, espacements et composants." },
           { name: "Figma vers web", description: "Transformer des maquettes Figma en pages fidèles et fonctionnelles." },
@@ -344,7 +345,7 @@ export const fr: Dictionary = {
         id: "deploy",
         label: "Déploiement & performance web",
         phase: "deploy",
-        blurb: "Mettre en ligne et être trouvé.",
+        blurb: "Mettre votre site en ligne et faciliter son référencement.",
         skills: [
           { name: "GitHub", description: "Gestion de versions et collaboration." },
           { name: "Vercel", description: "Déploiement continu pour Next.js." },
@@ -440,7 +441,7 @@ export const fr: Dictionary = {
     eyebrow: "Contact",
     headline: ["Parlons de", "votre projet."],
     intro:
-      "Un site d'entreprise, une page de destination, une refonte ou de la maintenance ? Parlez-moi de vos objectifs et de vos besoins. Je suis disponible pour des projets freelance et des postes en développement web, à distance ou sur site.",
+      "Un site d'entreprise, une page de destination, une refonte ou de la maintenance ? Parlez-moi de vos objectifs et de vos besoins. Je suis disponible pour des projets freelance et des postes en développement web.",
     directTitle: "Contact direct",
     linksTitle: "Ailleurs",
     copyEmail: "Copier l'e-mail",

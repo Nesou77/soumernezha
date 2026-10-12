@@ -31,7 +31,7 @@ export const en = {
       "web integration",
     ],
     /** Location-neutral line shown in the hero and contact section. */
-    workMode: "Remote & international projects",
+    workMode: "Web development & quality assurance",
   },
   a11y: {
     skipToContent: "Skip to content",
@@ -118,7 +118,7 @@ export const en = {
         num: "01",
         tag: "BUILD",
         title: "Web Development",
-        text: "Responsive, production-ready websites and interfaces, from design to deployment.",
+        text: "A website shaped around your needs, faithful to your designs and easy to use on mobile and desktop.",
         points: [
           "Next.js & React development",
           "WordPress · Elementor · WooCommerce",
@@ -131,7 +131,7 @@ export const en = {
         num: "02",
         tag: "VERIFY",
         title: "Built-in Quality",
-        text: "A QA mindset on every build: functional, responsive and regression testing, API validation and clear bug reports.",
+        text: "User journeys checked before launch: navigation, forms and integrations tested to catch issues that get in your visitors' way.",
         points: ["Cypress · Selenium · JMeter · Jira", "Cross-device & responsive checks", "Regression & edge-case testing"],
       },
     ],
@@ -142,6 +142,7 @@ export const en = {
       headline: ["Websites built end to end,", "checked before launch."],
       intro:
         "Custom web development, CMS setup and quality assurance: from implementing your designs to launching and maintaining your site.",
+      bio: "I’m Nezha, a web developer with a QA background. I combine front-end development and CMS implementation with careful testing of the journeys people use.",
       more: "More about me",
     },
     featured: {
@@ -245,7 +246,7 @@ export const en = {
     eyebrow: "QA Lab",
     headline: ["Development", "backed by QA."],
     intro:
-      "I test interfaces across screen sizes, user journeys and edge cases. Explore my testing methods and an illustrative validation run.",
+      "Before a site goes live, I check the things people rely on: finding their way around, filling in a form and using it on their phone. Here's how I test, with a short demo of the process.",
     practice: "Testing practice",
     tools: "Tools",
     projects: "QA projects",
@@ -292,7 +293,7 @@ export const en = {
     eyebrow: "Skills",
     headline: ["Web development,", "from build to launch."],
     intro:
-      "Web development at the core, with deployment and quality built around it. Hover or focus a skill to read more.",
+      "These are the tools I use to turn a design into a working website and keep it running. Choose a skill to see how I use it.",
     center: "Build · Test · Ship",
     hint: "Hover or focus a skill to read how I use it.",
     phases: { develop: "DEVELOP", test: "TEST", deploy: "DEPLOY" },
@@ -301,7 +302,7 @@ export const en = {
         id: "develop",
         label: "Core Web Development",
         phase: "develop",
-        blurb: "Modern, responsive front-end.",
+        blurb: "Interfaces that adapt to how people browse.",
         skills: [
           { name: "Next.js", description: "App Router, API routes, static generation and Vercel deployment." },
           { name: "React", description: "Component-driven interfaces and state management." },
@@ -329,7 +330,7 @@ export const en = {
         id: "ui",
         label: "UI Implementation",
         phase: "develop",
-        blurb: "From design file to browser.",
+        blurb: "Designs faithfully implemented as usable interfaces.",
         skills: [
           { name: "Figma", description: "Reading specs, spacing and components accurately." },
           { name: "Figma-to-Web", description: "Turning Figma designs into faithful, working pages." },
@@ -353,7 +354,7 @@ export const en = {
         id: "deploy",
         label: "Deployment & Web Performance",
         phase: "deploy",
-        blurb: "Shipping and being found.",
+        blurb: "Launch your site and help search engines understand it.",
         skills: [
           { name: "GitHub", description: "Version control and collaboration." },
           { name: "Vercel", description: "Continuous deployment for Next.js." },
@@ -437,7 +438,7 @@ export const en = {
     eyebrow: "Contact",
     headline: ["Let's talk about", "your project."],
     intro:
-      "Need a business website, landing page, redesign or ongoing maintenance? Tell me about your goals and what you need. I'm available for freelance projects and in-house web development roles, remote or on-site.",
+      "Need a business website, landing page, redesign or ongoing maintenance? Tell me about your goals and what you need. I'm available for freelance projects and in-house web development roles.",
     directTitle: "Direct contact",
     linksTitle: "Elsewhere",
     copyEmail: "Copy email",

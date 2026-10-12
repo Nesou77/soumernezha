@@ -14,7 +14,7 @@ import { cvFor, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 const field =
-  "w-full border-b bg-transparent px-0 py-3 text-fg placeholder:text-muted/60 transition-colors focus:outline-none";
+  "contact-field w-full text-fg transition-colors";
 
 type Status = "idle" | "sending" | "sent" | "fallback" | "error";
 type Values = { name: string; email: string; company: string; message: string; website: string };
@@ -121,7 +121,7 @@ export function Contact({ locale, t: c, workMode, newTab, as = "h2", index = "01
         <SectionHeading id="contact-title" index={index} eyebrow={c.eyebrow} lines={c.headline} intro={c.intro} as={as} />
 
         <div className="mt-14 grid gap-16 lg:mt-16 lg:grid-cols-12">
-          <div className="lg:col-span-5">
+          <div className="lg:col-span-5 lg:sticky lg:top-28 lg:self-start">
             <Reveal immediate={immediate} delay={immediate ? 0.35 : 0}>
               <h2 className="eyebrow mb-5 text-muted">{c.directTitle}</h2>
               <p className="font-display text-2xl">{site.name}</p>
@@ -138,7 +138,7 @@ export function Contact({ locale, t: c, workMode, newTab, as = "h2", index = "01
             <Reveal immediate={immediate} delay={immediate ? 0.45 : 0.1} className="mt-8">
               <div className="flex flex-wrap gap-3">
                 <Magnetic>
-                  <button type="button" onClick={() => copy(site.email)} className="btn btn-primary">
+                  <button type="button" onClick={() => copy(site.email)} className="btn btn-ghost">
                     {copied ? <Check size={16} aria-hidden /> : <Copy size={16} aria-hidden />}
                     {copied ? c.copied : c.copyEmail}
                   </button>
@@ -174,9 +174,9 @@ export function Contact({ locale, t: c, workMode, newTab, as = "h2", index = "01
           </div>
 
           <Reveal immediate={immediate} delay={immediate ? 0.4 : 0.1} className="lg:col-span-7">
-            <div className="border border-line bg-bg-3/60 p-6 backdrop-blur-sm sm:p-10">
+            <div className="public-surface p-6 sm:p-10">
               {status === "sent" || status === "fallback" ? (
-                <div ref={resultRef} tabIndex={-1} role="status" className="flex flex-col items-start gap-5 py-6 focus:outline-none">
+                <div ref={resultRef} tabIndex={-1} role="status" className="flex min-h-[28rem] flex-col items-start justify-center gap-5 py-6">
                   <CheckCircle2 size={36} aria-hidden className="text-accent" />
                   <p className="display-mixed text-3xl">{status === "sent" ? c.successTitle : c.fallbackTitle}</p>
                   <p className="max-w-md text-muted">
@@ -187,7 +187,7 @@ export function Contact({ locale, t: c, workMode, newTab, as = "h2", index = "01
                   </button>
                 </div>
               ) : (
-                <form ref={formRef} onSubmit={onSubmit} noValidate className="space-y-7" aria-labelledby="contact-form-title">
+                <form ref={formRef} onSubmit={onSubmit} noValidate aria-busy={status === "sending"} className="space-y-6" aria-labelledby="contact-form-title">
                   <div className="flex flex-wrap items-baseline justify-between gap-3">
                     <h2 id="contact-form-title" className="display-mixed text-2xl">
                       {c.formTitle}
@@ -196,7 +196,7 @@ export function Contact({ locale, t: c, workMode, newTab, as = "h2", index = "01
                   </div>
 
                   {errorCount > 1 && (
-                    <p role="alert" className="flex items-center gap-2 text-sm text-red-300">
+                    <p role="alert" className="flex items-center gap-2 rounded-xl border border-red-400/25 bg-red-400/5 p-3 text-sm text-red-300">
                       <AlertCircle size={15} aria-hidden /> {c.errors.summary}
                     </p>
                   )}
@@ -283,7 +283,7 @@ export function Contact({ locale, t: c, workMode, newTab, as = "h2", index = "01
                   </div>
 
                   <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-                    <button type="submit" disabled={status === "sending"} className="btn btn-primary w-fit disabled:cursor-wait disabled:opacity-70">
+                    <button type="submit" disabled={status === "sending"} className="btn btn-primary w-full shrink-0 disabled:cursor-wait disabled:opacity-70 sm:w-fit">
                       {status === "sending" ? (
                         <>
                           <Loader2 size={16} aria-hidden className="animate-spin" /> {c.sending}
@@ -294,7 +294,7 @@ export function Contact({ locale, t: c, workMode, newTab, as = "h2", index = "01
                         </>
                       )}
                     </button>
-                    <p role="status" aria-live="polite" className="text-sm text-red-300">
+                    <p role="status" aria-live="polite" className={cn("text-sm text-red-300", status === "error" && "rounded-xl border border-red-400/25 bg-red-400/5 p-3")}>
                       {status === "error" ? format(c.errorText, { email: site.email }) : ""}
                     </p>
                   </div>

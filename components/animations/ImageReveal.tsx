@@ -1,6 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { usePrefersReducedMotion as useReducedMotion } from "@/hooks/useMedia";
+
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
@@ -39,14 +41,13 @@ export function ImageReveal({ children, className, parallax = false, immediate =
       {...trigger}
       variants={{
         hidden: { clipPath: "inset(6% 5% 6% 5%)" },
-        shown: { clipPath: "inset(0% 0% 0% 0%)", transition: { duration: 1.2, delay, ease } },
-      }}
+        shown: { clipPath: "inset(0% 0% 0% 0%)", transition: { duration: reduce ? 0 : 0.75, delay: reduce ? 0 : delay, ease } } }}
     >
-      <motion.div style={{ y }} className={cn(parallax && "scale-[1.08]", "will-change-transform")}>
+      <motion.div style={{ y }} className={cn(parallax && !reduce && "scale-[1.08]")}>
         <motion.div
           variants={{
             hidden: { scale: 1.14 },
-            shown: { scale: 1, transition: { duration: 1.6, delay, ease } },
+            shown: { scale: 1, transition: { duration: reduce ? 0 : 0.9, delay: reduce ? 0 : delay, ease } },
           }}
         >
           {children}

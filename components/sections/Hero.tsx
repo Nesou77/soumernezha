@@ -22,92 +22,92 @@ interface HeroProps {
 export function Hero({ locale, t: c, meta, newTab, nextId }: HeroProps) {
   const cv = cvFor(locale);
   return (
-    <section id="home" aria-labelledby="hero-title" className="relative flex min-h-svh flex-col justify-end pb-24 pt-32 sm:pb-28">
+    <section id="home" aria-labelledby="hero-title" className="hero-section relative flex flex-col">
       <div className="container-x">
         <Reveal immediate>
           <p className="eyebrow mb-6 flex flex-wrap items-center gap-x-4 gap-y-1">
             <span>{c.eyebrow}</span>
-            <span aria-hidden className="hidden h-px w-10 bg-accent/60 sm:block" />
             <span className="text-muted">{meta.workMode}</span>
           </p>
         </Reveal>
 
-        <h1
-          id="hero-title"
-          className="display text-h1 -ml-[0.04em] w-fit max-w-full"
-        >
-          <span className="sr-only">
-            {site.name}, {meta.role}. {c.srTitle}
-          </span>
-          <span aria-hidden>
-            <MaskLines immediate delay={0.9} lines={c.words} lineClassNames={wordStyle} />
-          </span>
-        </h1>
+        <div className="hero-content">
+          <h1
+            id="hero-title"
+            className="hero-title display -ml-[0.04em] w-fit max-w-full"
+          >
+            <span className="sr-only">
+              {site.name}, {meta.role}. {c.srTitle}
+            </span>
+            <span aria-hidden>
+              <MaskLines immediate delay={0.15} lines={c.words} lineClassNames={wordStyle} />
+            </span>
+          </h1>
 
-        <div className="mt-8 grid gap-8 md:mt-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
-          <div>
-            <Reveal immediate delay={1.3}>
-              <p className="display-mixed text-[clamp(1.35rem,0.9rem+1.8vw,2.3rem)]">
-                {c.statement[0]}
-                <br />
-                <span className="text-muted">{c.statement[1]}</span>
-              </p>
-            </Reveal>
-            <Reveal immediate delay={1.45}>
-              <p className="mt-6 max-w-lg text-muted">{c.support}</p>
-            </Reveal>
-          </div>
+          <div className="hero-copy grid gap-7">
+            <div>
+              <Reveal immediate delay={0.25}>
+                <p className="display-mixed text-[clamp(1.45rem,1rem+1.3vw,2.3rem)]">
+                  {c.statement[0]}
+                  <br />
+                  <span className="text-muted">{c.statement[1]}</span>
+                </p>
+              </Reveal>
+              <Reveal immediate delay={0.35}>
+                <p className="mt-5 max-w-lg text-base leading-relaxed text-muted">{c.support}</p>
+              </Reveal>
+            </div>
 
-          <div className="flex flex-col gap-8 lg:items-start lg:pt-1">
-            <Reveal immediate delay={1.55}>
-              <p className="font-display text-sm uppercase tracking-[0.18em] text-fg">
-                {c.roleLines[0]} <span className="text-accent">{c.roleLines[1]}</span> {c.roleLines[2]}
-              </p>
-            </Reveal>
-            <Reveal immediate delay={1.65}>
-              <div className="flex flex-wrap items-center gap-3">
-                <Magnetic>
-                  <Link href={localizePath(locale, "/projects")} className="btn btn-primary">
-                    {c.primaryCta}
-                    <ArrowIcon />
-                  </Link>
-                </Magnetic>
-                <Magnetic>
-                  <Link href={localizePath(locale, "/contact")} className="btn btn-ghost">
-                    {c.secondaryCta}
-                  </Link>
-                </Magnetic>
-              </div>
-            </Reveal>
-            <Reveal immediate delay={1.75}>
-              <ul className="flex flex-wrap gap-x-7 gap-y-3 text-sm text-muted">
-                <li>
-                  <a
-                    href={site.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="link-underline inline-flex items-center gap-2 hover:text-fg"
-                  >
-                    <Link2 size={15} aria-hidden /> LinkedIn
-                    <span className="sr-only"> {newTab}</span>
-                  </a>
-                </li>
-                <li>
-                  <a href={`mailto:${site.email}`} className="link-underline inline-flex items-center gap-2 hover:text-fg">
-                    <Mail size={15} aria-hidden /> {c.email}
-                  </a>
-                </li>
-                <li>
-                  <a href={cv.href} download={cv.fileName} type="application/pdf" className="link-underline inline-flex items-center gap-2 hover:text-fg">
-                    <Download size={15} aria-hidden /> {c.cv}
-                  </a>
-                </li>
-              </ul>
-            </Reveal>
+            <div className="flex flex-col gap-6 lg:items-start">
+              <Reveal immediate delay={0.4}>
+                <p className="font-display text-sm uppercase tracking-[0.18em] text-fg">
+                  {c.roleLines[0]} <span className="text-accent">{c.roleLines[1]}</span> {c.roleLines[2]}
+                </p>
+              </Reveal>
+              <Reveal immediate delay={0.45}>
+                <div className="flex flex-wrap items-center gap-3">
+                  <Magnetic>
+                    <Link href={localizePath(locale, "/projects")} className="btn btn-primary">
+                      {c.primaryCta}
+                      <ArrowIcon />
+                    </Link>
+                  </Magnetic>
+                  <Magnetic>
+                    <Link href={localizePath(locale, "/contact")} className="btn btn-ghost">
+                      {c.secondaryCta}
+                    </Link>
+                  </Magnetic>
+                </div>
+              </Reveal>
+              <Reveal immediate delay={0.5}>
+                <ul className="flex flex-wrap gap-x-7 gap-y-3 text-sm text-muted">
+                  <li>
+                    <a
+                      href={site.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="link-underline inline-flex items-center gap-2 hover:text-fg"
+                    >
+                      <Link2 size={15} aria-hidden /> LinkedIn
+                      <span className="sr-only"> {newTab}</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href={`mailto:${site.email}`} className="link-underline inline-flex items-center gap-2 hover:text-fg">
+                      <Mail size={15} aria-hidden /> {c.email}
+                    </a>
+                  </li>
+                  <li>
+                    <a href={cv.href} download={cv.fileName} type="application/pdf" className="link-underline inline-flex items-center gap-2 hover:text-fg">
+                      <Download size={15} aria-hidden /> {c.cv}
+                    </a>
+                  </li>
+                </ul>
+              </Reveal>
+            </div>
           </div>
         </div>
       </div>
-
       <p className="sr-only">
         {c.decorative}
       </p>

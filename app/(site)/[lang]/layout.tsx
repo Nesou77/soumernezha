@@ -11,6 +11,7 @@ import { localeAlternates, openGraphLocale } from "@/lib/i18n/metadata";
 import { scrollRestoreScript } from "@/lib/i18n/scroll-anchor";
 import { site } from "@/lib/site";
 import "../../globals.css";
+import "../../public.css";
 
 const display = Space_Grotesk({ subsets: ["latin"], variable: "--f-display", display: "swap" });
 const body = Inter({ subsets: ["latin"], variable: "--f-body", display: "swap" });
@@ -95,7 +96,7 @@ export default async function SiteLayout({ children, params }: LayoutProps<"/[la
 
   return (
     <html lang={lang} className={`${display.variable} ${body.variable} ${mono.variable}`}>
-      <body className="grain">
+      <body className="grain portfolio-site">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
