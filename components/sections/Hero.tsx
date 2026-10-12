@@ -1,128 +1,124 @@
-import { Download, Link2, Mail } from "lucide-react";
+"use client";
+
 import Link from "next/link";
+import { motion, useMotionValueEvent, useScroll, type MotionStyle } from "framer-motion";
+import { useCallback, useEffect, useRef } from "react";
+import { usePrefersReducedMotion } from "@/hooks/useMedia";
 import { MaskLines } from "@/components/animations/MaskLines";
-import { Magnetic } from "@/components/animations/Magnetic";
-import { Reveal } from "@/components/animations/Reveal";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import type { Dictionary } from "@/lib/i18n";
 import { localizePath, type Locale } from "@/lib/i18n/config";
-import { cvFor, site } from "@/lib/site";
-
-const wordStyle = ["", "outline-text", "text-accent"] as const;
+import { site } from "@/lib/site";
+import { HeroPortrait } from "./HeroPortrait";
 
 interface HeroProps {
   locale: Locale;
   t: Dictionary["hero"];
   meta: Dictionary["meta"];
+  about: Dictionary["about"];
+  introduction: Dictionary["home"]["skills"];
   newTab: string;
-  /** Id of the section the scroll cue leads to. */
   nextId: string;
 }
 
-export function Hero({ locale, t: c, meta, newTab, nextId }: HeroProps) {
-  const cv = cvFor(locale);
+/**
+ * One pinned scene, two semantic sections, and exactly one portrait.
+ * CSS computes the travel distance from its container, so resizing never
+ * requires measuring or swapping the image. Scroll only updates transforms.
+ */
+export function Hero({ locale, t: c, meta, about, introduction }: HeroProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = usePrefersReducedMotion();
+  const heroRef = useRef<HTMLElement>(null);
+  const aboutRef = useRef<HTMLElement>(null);
+  const expertiseRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] });
+
+  // Keep inactive links out of keyboard/screen-reader navigation without
+  // rerendering the motion tree during a scrub.
+  const syncAccessibility = useCallback((progress: number) => {
+    const heroActive = reduce ? progress < 0.5 : progress < 0.26;
+    const aboutActive = reduce ? progress >= 0.5 : progress >= 0.6;
+    if (heroRef.current) {
+      heroRef.current.inert = !heroActive;
+      heroRef.current.setAttribute("aria-hidden", String(!heroActive));
+    }
+    if (expertiseRef.current) {
+      const visible = reduce ? aboutActive : progress >= 0.8;
+      expertiseRef.current.inert = !visible;
+      expertiseRef.current.setAttribute("aria-hidden", String(!visible));
+    }
+    if (aboutRef.current) {
+      aboutRef.current.inert = !aboutActive;
+      aboutRef.current.setAttribute("aria-hidden", String(!aboutActive));
+    }
+  }, [reduce]);
+  useMotionValueEvent(scrollYProgress, "change", syncAccessibility);
+  useEffect(() => syncAccessibility(scrollYProgress.get()), [scrollYProgress, syncAccessibility]);
+
   return (
-    <section id="home" aria-labelledby="hero-title" className="hero-section relative flex flex-col">
-      <div className="container-x">
-        <Reveal immediate>
-          <p className="eyebrow mb-6 flex flex-wrap items-center gap-x-4 gap-y-1">
-            <span>{c.eyebrow}</span>
-            <span className="text-muted">{meta.workMode}</span>
-          </p>
-        </Reveal>
-
-        <div className="hero-content">
-          <h1
-            id="hero-title"
-            className="hero-title display -ml-[0.04em] w-fit max-w-full"
+    <div ref={ref} className="portrait-journey" data-reduced={reduce || undefined}>
+      <div className="journey-stage">
+        <motion.div className="journey-layout container-x" style={{ "--journey-progress": scrollYProgress } as MotionStyle}>
+          <motion.section
+            ref={heroRef}
+            id="home"
+            aria-labelledby="hero-title"
+            aria-hidden={false}
+            className="journey-panel journey-hero"
           >
-            <span className="sr-only">
-              {site.name}, {meta.role}. {c.srTitle}
-            </span>
-            <span aria-hidden>
-              <MaskLines immediate delay={0.15} lines={c.words} lineClassNames={wordStyle} />
-            </span>
-          </h1>
-
-          <div className="hero-copy grid gap-7">
-            <div>
-              <Reveal immediate delay={0.25}>
-                <p className="display-mixed text-[clamp(1.45rem,1rem+1.3vw,2.3rem)]">
-                  {c.statement[0]}
-                  <br />
-                  <span className="text-muted">{c.statement[1]}</span>
-                </p>
-              </Reveal>
-              <Reveal immediate delay={0.35}>
-                <p className="mt-5 max-w-lg text-base leading-relaxed text-muted">{c.support}</p>
-              </Reveal>
+            <div className="journey-hero-copy">
+              <p className="eyebrow">{site.name}</p>
+              <p className="journey-role">{meta.role}</p>
+              <h1 id="hero-title" className="journey-title display">
+                <span className="sr-only">{site.name}, {meta.role}. {c.srTitle}</span>
+                <span aria-hidden="true">
+                  <MaskLines immediate lines={c.words} lineClassNames={["", "outline-text", "text-accent"]} delay={0.12} />
+                </span>
+              </h1>
+              <Link href={localizePath(locale, "/projects")} className="btn btn-primary journey-cta">
+                {c.primaryCta}<ArrowIcon />
+              </Link>
             </div>
+          </motion.section>
 
-            <div className="flex flex-col gap-6 lg:items-start">
-              <Reveal immediate delay={0.4}>
-                <p className="font-display text-sm uppercase tracking-[0.18em] text-fg">
-                  {c.roleLines[0]} <span className="text-accent">{c.roleLines[1]}</span> {c.roleLines[2]}
-                </p>
-              </Reveal>
-              <Reveal immediate delay={0.45}>
-                <div className="flex flex-wrap items-center gap-3">
-                  <Magnetic>
-                    <Link href={localizePath(locale, "/projects")} className="btn btn-primary">
-                      {c.primaryCta}
-                      <ArrowIcon />
-                    </Link>
-                  </Magnetic>
-                  <Magnetic>
-                    <Link href={localizePath(locale, "/contact")} className="btn btn-ghost">
-                      {c.secondaryCta}
-                    </Link>
-                  </Magnetic>
-                </div>
-              </Reveal>
-              <Reveal immediate delay={0.5}>
-                <ul className="flex flex-wrap gap-x-7 gap-y-3 text-sm text-muted">
-                  <li>
-                    <a
-                      href={site.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="link-underline inline-flex items-center gap-2 hover:text-fg"
-                    >
-                      <Link2 size={15} aria-hidden /> LinkedIn
-                      <span className="sr-only"> {newTab}</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href={`mailto:${site.email}`} className="link-underline inline-flex items-center gap-2 hover:text-fg">
-                      <Mail size={15} aria-hidden /> {c.email}
-                    </a>
-                  </li>
-                  <li>
-                    <a href={cv.href} download={cv.fileName} type="application/pdf" className="link-underline inline-flex items-center gap-2 hover:text-fg">
-                      <Download size={15} aria-hidden /> {c.cv}
-                    </a>
-                  </li>
+          <motion.section
+            ref={aboutRef}
+            id="home-about"
+            aria-labelledby="home-about-title"
+            aria-hidden={true}
+            inert
+            className="journey-panel journey-about"
+          >
+            <div className="journey-about-copy">
+              <div className="journey-heading-reveal">
+                <p className="eyebrow">{about.eyebrow}</p>
+                <h2 id="home-about-title" className="journey-about-title display-mixed">
+                  {introduction.journeyHeadline[0]}
+                  <span className="block text-accent">{introduction.journeyHeadline[1]}</span>
+                </h2>
+              </div>
+              <p className="journey-introduction">
+                {introduction.bio}
+              </p>
+              <div ref={expertiseRef} className="journey-expertise-reveal" inert aria-hidden={true}>
+                <p className="journey-expertise-copy">{introduction.intro}</p>
+                <ul aria-label={about.expertiseLabel} className="journey-expertise">
+                  {about.expertise.slice(0, 4).map((skill) => <li key={skill}>{skill}</li>)}
                 </ul>
-              </Reveal>
+                <Link href={localizePath(locale, "/about")} className="link-underline journey-about-link">
+                  {introduction.more}<ArrowIcon size={16} />
+                </Link>
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <p className="sr-only">
-        {c.decorative}
-      </p>
+          </motion.section>
 
-      <a
-        href={`#${nextId}`}
-        aria-label={c.scrollLabel}
-        className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-3 font-mono text-[0.65rem] uppercase tracking-[0.3em] text-muted sm:flex"
-      >
-        {c.scroll}
-        <span aria-hidden className="relative block h-12 w-px overflow-hidden bg-white/15">
-          <span className="absolute inset-0 bg-accent" style={{ animation: "scroll-cue 2.2s var(--ease-out) infinite" }} />
-        </span>
-      </a>
-    </section>
+          <div className="journey-portrait">
+            <HeroPortrait alt={c.portraitAlt} />
+          </div>
+          <p aria-hidden="true" className="journey-scroll eyebrow">{c.scroll}</p>
+        </motion.div>
+      </div>
+    </div>
   );
 }
-

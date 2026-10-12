@@ -26,7 +26,7 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
     <>
       <HeroCanvas />
       <main id="main" className="relative z-10">
-        <Hero locale={lang} t={dict.hero} meta={dict.meta} newTab={dict.a11y.newTab} nextId="expertise" />
+        <Hero locale={lang} t={dict.hero} meta={dict.meta} about={dict.about} introduction={dict.home.skills} newTab={dict.a11y.newTab} nextId="expertise" />
         <KeySkills locale={lang} t={dict.home.skills} about={dict.about} index="01" />
         <ProjectShowcase
           projects={featured}

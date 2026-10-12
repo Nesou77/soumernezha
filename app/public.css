@@ -14,23 +14,8 @@
   background: var(--color-bg-3);
 }
 .portfolio-site .section-divider { border-top: 1px solid var(--color-line); }
-.portfolio-site .hero-section {
-  isolation: isolate;
-  min-height: min(56rem, 100svh);
-  padding-block: clamp(8rem, 12vh, 10rem) 6rem;
-  justify-content: center;
-}
-.portfolio-site .hero-section::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background: linear-gradient(90deg, rgb(5 5 5 / 0.9), rgb(5 5 5 / 0.65)), linear-gradient(0deg, #050505, transparent 65%);
-}
-.portfolio-site .hero-title { font-size: clamp(3rem, 9vw, 8.5rem); }
-.portfolio-site .hero-copy { max-width: 38rem; }
-.portfolio-site .hero-copy p { text-wrap: pretty; }
+
+
 .portfolio-site .expertise-chip {
   border: 1px solid var(--color-line);
   border-radius: 999px;
@@ -53,19 +38,103 @@
 .portfolio-site .project-card:focus-visible h3 { color: var(--color-accent); }
 .portfolio-site .project-gallery-thumbnail[aria-pressed="true"] { box-shadow: inset 0 0 0 1px var(--color-accent); }
 .portfolio-site .site-footer a { min-height: 2.75rem; align-items: center; }
-@media (min-width: 1024px) {
-  .portfolio-site .hero-content { display: grid; grid-template-columns: 1.05fr 1fr; align-items: center; gap: clamp(2rem, 5vw, 6rem); }
-  .portfolio-site .hero-title { font-size: clamp(4rem, 7.8vw, 7.5rem); }
-  .portfolio-site .hero-copy { padding-top: 2rem; }
-}
-@media (max-width: 639px) {
-  .portfolio-site .hero-section { min-height: 100svh; padding-bottom: 3.5rem; }
-  .portfolio-site .hero-copy { margin-top: 2rem; }
-  .portfolio-site .hero-title { font-size: clamp(3rem, 13vw, 5rem); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .portfolio-site .motion-safe-hover { transform: none !important; }
-}
+
 
 .portfolio-site .public-surface:focus-within { border-color: rgb(45 226 208 / 0.3); }
 .portfolio-site .service-card:hover { border-color: rgb(45 226 208 / 0.3); }
+
+
+/* Shared portrait decorations: no card, no duplicate image. */
+.portfolio-site .hero-portrait { position: relative; isolation: isolate; width: 100%; aspect-ratio: 4 / 5; }
+.portfolio-site .portrait-entrance, .portfolio-site .portrait-image { position: absolute; inset: 0; }
+.portfolio-site .portrait-image { z-index: 2; mask-image: linear-gradient(to bottom, black 82%, transparent 100%); }
+.portfolio-site .portrait-glow {
+  position: absolute; inset: 12% -3% 4%; z-index: -1;
+  background: radial-gradient(ellipse at 28% 45%, rgb(45 226 208 / 0.13), transparent 62%), radial-gradient(ellipse at 80% 38%, rgb(139 155 255 / 0.09), transparent 57%);
+}
+.portfolio-site .portrait-frame {
+  position: absolute; inset: 18% 8% 11% 9%; z-index: -1;
+  border: 1px solid rgb(45 226 208 / 0.2); transform: rotate(-9deg);
+  mask-image: linear-gradient(140deg, black, transparent 70%);
+}
+.portfolio-site .portrait-marker {
+  position: absolute; right: 6%; top: 24%; width: 2rem; height: 2rem;
+  border-top: 1px solid rgb(139 155 255 / 0.55); border-right: 1px solid rgb(139 155 255 / 0.55);
+}
+/* Transform-only right-to-left travel inside one pinned viewport. */
+.portfolio-site .portrait-journey { position: relative; height: 280svh; }
+.portfolio-site .journey-stage {
+  position: sticky; top: 0; height: 100svh; overflow: clip; isolation: isolate;
+  background: linear-gradient(90deg, rgb(5 5 5 / 0.85), rgb(5 5 5 / 0.45));
+}
+.portfolio-site .journey-layout {
+  position: relative; height: 100%; container-type: inline-size;
+  --portrait-width: min(43cqw, calc((100svh - 10rem) * 0.8), 600px);
+}
+.portfolio-site .journey-panel { position: absolute; inset: 0; z-index: 2; }
+.portfolio-site .journey-hero-copy {
+  position: absolute; left: var(--gutter); top: 50%; transform: translateY(-50%);
+  width: calc(52% - var(--gutter)); padding-block: 1rem;
+}
+.portfolio-site .journey-role { margin-top: 0.75rem; font-family: var(--f-display); color: var(--color-muted); font-size: clamp(0.8rem, 1.3vw, 1.15rem); }
+.portfolio-site .journey-title { margin-top: 2rem; font-size: clamp(3rem, 7.8vw, 8rem); }
+.portfolio-site .journey-cta { margin-top: 2.5rem; }
+.portfolio-site .journey-portrait {
+  position: absolute; left: var(--gutter); top: 50%; width: var(--portrait-width); z-index: 3;
+  transform-origin: left center;
+  transform: translate3d(calc((100cqw - var(--portrait-width)) * (1 - var(--portrait-progress, 0))), -50%, 0) scale(calc(1 - var(--portrait-progress, 0) * 0.2));
+}
+.portfolio-site .journey-about-copy {
+  position: absolute; right: var(--gutter); top: 50%; transform: translateY(-50%);
+  width: calc(45% - var(--gutter)); max-height: calc(100svh - 9rem); overflow-y: auto; scrollbar-width: thin;
+}
+.portfolio-site .journey-about-title { margin-top: 1.25rem; font-size: clamp(2rem, 4.3vw, 4.5rem); }
+.portfolio-site .journey-introduction { margin-top: 1.5rem; font-size: clamp(0.95rem, 1.2vw, 1.2rem); line-height: 1.7; }
+.portfolio-site .journey-expertise-copy { margin-top: 1.25rem; color: var(--color-muted); line-height: 1.7; }
+.portfolio-site .journey-expertise { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.25rem; }
+.portfolio-site .journey-expertise li { border: 1px solid var(--color-line); border-radius: 999px; padding: 0.4rem 0.75rem; font-size: 0.75rem; }
+.portfolio-site .journey-about-link { display: inline-flex; align-items: center; gap: 0.75rem; min-height: 2.75rem; margin-top: 1rem; font-size: 0.9rem; color: var(--color-accent); }
+.portfolio-site .journey-scroll { position: absolute; bottom: 1.5rem; left: var(--gutter); z-index: 1; color: var(--color-muted); font-size: 0.65rem; }
+.portfolio-site #qa-lab .grid > * { min-width: 0; }
+@media (max-width: 767px) {
+  .portfolio-site .journey-layout { --portrait-width: min(45cqw, calc((100svh - 8rem) * 0.8)); }
+  .portfolio-site .journey-hero-copy { width: calc(50% - var(--gutter) - 0.75rem); }
+  .portfolio-site .journey-title { font-size: clamp(1.5rem, 7.3vw, 3.5rem); margin-top: 1.5rem; }
+  .portfolio-site .journey-hero-copy .eyebrow { letter-spacing: 0.08em; font-size: 0.65rem; }
+  .portfolio-site .journey-cta { padding: 0.85rem 1rem; font-size: 0.8rem; gap: 0.5rem; margin-top: 1.5rem; }
+  .portfolio-site .journey-about-copy { width: calc(55% - var(--gutter) - 0.75rem); max-height: calc(100svh - 8rem); }
+  .portfolio-site .journey-about-title { font-size: clamp(1.35rem, 5.8vw, 2.5rem); margin-top: 0.75rem; }
+  .portfolio-site .journey-introduction, .portfolio-site .journey-expertise-copy { font-size: 0.8rem; line-height: 1.6; margin-top: 1rem; }
+  .portfolio-site .journey-expertise li { font-size: 0.65rem; padding: 0.3rem 0.5rem; }
+  .portfolio-site .journey-about-link { font-size: 0.8rem; }
+}
+.portfolio-site .portrait-journey[data-reduced] { height: 200svh; }
+.portfolio-site .portrait-journey[data-reduced] .journey-about-copy { left: var(--gutter); right: auto; }
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-site .journey-portrait { --portrait-progress: 0 !important; }
+}
+
+/* One scroll value drives every visual layer, including text reveals. */
+.portfolio-site .journey-portrait { --portrait-progress: clamp(0, calc((var(--journey-progress, 0) - 0.16) / 0.66), 1); }
+.portfolio-site .journey-hero {
+  opacity: clamp(0, calc((0.26 - var(--journey-progress, 0)) / 0.2), 1);
+  transform: translateY(calc(clamp(0, calc((var(--journey-progress, 0) - 0.06) / 0.2), 1) * -32px));
+}
+.portfolio-site .journey-heading-reveal {
+  opacity: clamp(0, calc((var(--journey-progress, 0) - 0.6) / 0.18), 1);
+  transform: translateY(calc((1 - clamp(0, calc((var(--journey-progress, 0) - 0.6) / 0.18), 1)) * 24px));
+}
+.portfolio-site .journey-introduction { opacity: clamp(0, calc((var(--journey-progress, 0) - 0.66) / 0.18), 1); }
+.portfolio-site .journey-expertise-reveal { opacity: clamp(0, calc((var(--journey-progress, 0) - 0.72) / 0.2), 1); }
+.portfolio-site .portrait-journey[data-reduced] .journey-portrait { --portrait-progress: 0; }
+.portfolio-site .portrait-journey[data-reduced] .journey-hero { opacity: clamp(0, calc((0.5 - var(--journey-progress, 0)) * 1000), 1); transform: none; }
+.portfolio-site .portrait-journey[data-reduced] :is(.journey-heading-reveal, .journey-introduction, .journey-expertise-reveal) { opacity: clamp(0, calc((var(--journey-progress, 0) - 0.499) * 1000), 1); transform: none; }
+
+@media (max-height: 580px) {
+  .portfolio-site .journey-hero-copy { top: calc(50% + 2rem); padding-block: 0; }
+  .portfolio-site .journey-title { font-size: min(7.3vw, 11svh); margin-top: 1rem; }
+  .portfolio-site .journey-role { margin-top: 0.35rem; font-size: 0.8rem; }
+  .portfolio-site .journey-cta { min-height: 2.75rem; margin-top: 1rem; padding-block: 0.6rem; }
+  .portfolio-site .journey-about-copy { top: calc(50% + 2rem); max-height: calc(100svh - 8rem); }
+  .portfolio-site .journey-portrait { top: calc(50% + 2rem); }
+}

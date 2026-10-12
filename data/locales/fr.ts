@@ -65,18 +65,19 @@ export const fr: Dictionary = {
   loader: ["CRÉER", "TESTER", "LIVRER"],
   hero: {
     eyebrow: "Nezha Soumer",
-    words: ["CRÉER.", "TESTER.", "PARFAIRE."],
-    srTitle: "Créer. Tester. Parfaire.",
+    words: ["CRÉER.", "TESTER.", "DÉPLOYER."],
+    srTitle: "Créer. Tester. Déployer.",
     roleLines: ["Développeuse web", "·", "Front-end & CMS"],
     statement: ["Je crée des sites web et des interfaces sur mesure.", "De la maquette à la mise en ligne, avec des tests à chaque étape."],
     support:
       "Du développement sur mesure avec Next.js et React, ou des sites WordPress que votre équipe peut gérer. J'intègre vos maquettes Figma, connecte les formulaires et les API, puis vérifie les principaux parcours avant la mise en ligne.",
-    primaryCta: "Voir mes projets",
+    primaryCta: "Découvrir mes projets",
     secondaryCta: "Me contacter",
     scroll: "Défiler",
     scrollLabel: "Aller à la section suivante",
     email: "E-mail",
     cv: "Télécharger le CV",
+    portraitAlt: "Nezha Soumer, développeuse web",
     decorative:
       "Illustration 3D décorative : des panneaux d'interface translucides, étiquetés « build » et « test », gravitent autour d'un noyau de verre puis s'écartent au défilement.",
   },
@@ -132,6 +133,7 @@ export const fr: Dictionary = {
       headline: ["Des sites développés de A à Z,", "vérifiés avant la mise en ligne."],
       intro:
         "Développement web sur mesure, configuration de CMS et assurance qualité : de l'intégration de vos maquettes à la mise en ligne et à la maintenance.",
+      journeyHeadline: ["Le soin du détail.", "Le sens de l’usage."],
       bio: "Je suis Nezha, développeuse web avec une expérience en assurance qualité. J’associe développement front-end, intégration de CMS et tests des parcours utilisateurs.",
       more: "En savoir plus sur moi",
     },

@@ -1,8 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
-import { useRef } from "react";
 import { ArrowIcon } from "@/components/ui/ArrowIcon";
 import { ProjectVisual } from "@/components/ui/ProjectVisual";
 import type { Dictionary } from "@/lib/i18n";
@@ -24,13 +23,10 @@ interface ProjectFeaturedProps {
 
 export function ProjectFeatured({ project, flip, locale, t, categoryLabel, newTab }: ProjectFeaturedProps) {
   const href = localizePath(locale, `/projects/${project.slug}`);
-  const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const imgY = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["-7%", "7%"]);
 
   return (
-    <article ref={ref} className="relative [perspective:1400px]">
+    <article className="relative [perspective:1400px]">
 
       <motion.div
         className="relative z-10 grid items-center gap-8 lg:grid-cols-12 lg:gap-14"
@@ -46,9 +42,9 @@ export function ProjectFeatured({ project, flip, locale, t, categoryLabel, newTa
           data-cursor
           className={cn("group relative block overflow-hidden lg:col-span-7", flip && "lg:order-2")}
         >
-          <motion.div style={{ y: imgY, scale: 1.14 }} className="will-change-transform">
+          <div>
             <ProjectVisual project={project} alt="" />
-          </motion.div>
+          </div>
           <span
             aria-hidden
             className="pointer-events-none absolute inset-0 border border-accent/0 transition-colors duration-500 group-hover:border-accent/60"

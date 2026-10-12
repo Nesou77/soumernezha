@@ -137,7 +137,7 @@ export function ProjectDetail({ project, prev, next, locale, t, categoryLabel, n
       <section className="container-x" aria-label={project.title}>
         <div className="overflow-hidden rounded-2xl border border-white/10 bg-bg-2 shadow-[0_30px_90px_rgba(0,0,0,0.18)] sm:rounded-[2rem]">
           <ImageReveal immediate delay={0.18}>
-            <ProjectVisual project={project} priority sizes="(min-width: 1536px) 1440px, 100vw" className="aspect-[16/10] sm:aspect-[16/9]" bordered={false} alt={format(project.image ? t.coverAlt : t.placeholderAlt, { title: project.title })} />
+            <ProjectVisual project={project} priority sizes="(min-width: 1536px) 1440px, 100vw" className="aspect-[16/10]" bordered={false} alt={format(project.image ? t.coverAlt : t.placeholderAlt, { title: project.title })} />
           </ImageReveal>
         </div>
       </section>

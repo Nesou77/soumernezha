@@ -75,18 +75,19 @@ export const en = {
   loader: ["BUILD", "TEST", "SHIP"],
   hero: {
     eyebrow: "Nezha Soumer",
-    words: ["BUILD.", "TEST.", "PERFECT."],
-    srTitle: "Build. Test. Perfect.",
+    words: ["BUILD.", "TEST.", "DEPLOY."],
+    srTitle: "Build. Test. Deploy.",
     roleLines: ["Web Developer", "·", "Front-End & CMS"],
     statement: ["I build websites and custom web interfaces.", "From design to launch, with testing built in."],
     support:
       "Custom development with Next.js and React, or WordPress sites your team can manage. I turn Figma designs into responsive pages, connect forms and APIs, and check key user journeys before launch.",
-    primaryCta: "View my projects",
+    primaryCta: "Explore My Work",
     secondaryCta: "Get in touch",
     scroll: "Scroll",
     scrollLabel: "Scroll to the next section",
     email: "Email",
     cv: "Download CV",
+    portraitAlt: "Nezha Soumer, web developer",
     decorative:
       "Decorative 3D illustration: translucent interface panels labelled build and test orbit a glass core, then drift apart as you scroll.",
   },
@@ -142,6 +143,7 @@ export const en = {
       headline: ["Websites built end to end,", "checked before launch."],
       intro:
         "Custom web development, CMS setup and quality assurance: from implementing your designs to launching and maintaining your site.",
+      journeyHeadline: ["Built with care.", "Made to be used."],
       bio: "I’m Nezha, a web developer with a QA background. I combine front-end development and CMS implementation with careful testing of the journeys people use.",
       more: "More about me",
     },

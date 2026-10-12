@@ -21,10 +21,9 @@ export function KeySkills({ locale, t, about, index = "01" }: KeySkillsProps) {
       <div className="container-x">
         <SectionHeading id="expertise-title" index={index} eyebrow={t.eyebrow} lines={t.headline} intro={t.intro} size="h3" variant="mixed" />
 
-        <div className="mt-14 grid gap-14 lg:mt-16 lg:grid-cols-12">
+        <div className="mt-14 grid gap-14 lg:mt-16 lg:grid-cols-12 lg:gap-x-8">
           <div className="flex flex-col justify-between gap-10 lg:col-span-5">
             <Reveal>
-              <p className="mb-8 max-w-md text-lg leading-relaxed text-fg/85">{t.bio}</p>
               <h3 className="eyebrow mb-4 text-muted">{about.expertiseLabel}</h3>
               <ExpertiseList items={about.expertise} />
             </Reveal>

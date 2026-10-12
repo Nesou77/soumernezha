@@ -80,7 +80,7 @@ export function ProjectGallery({ images, title, t }: ProjectGalleryProps) {
                 alt=""
                 fill
                 sizes="144px"
-                className="object-cover object-top"
+                className="object-contain"
               />
             </button>
           ))}
