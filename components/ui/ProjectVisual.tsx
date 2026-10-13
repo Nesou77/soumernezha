@@ -49,7 +49,7 @@ export function ProjectVisual({
           fill
           sizes={sizes}
           priority={priority}
-          className="object-contain"
+          className="object-cover object-center"
         />
       ) : (
         <div {...(alt ? { role: "img", "aria-label": alt } : { "aria-hidden": true })} className="absolute inset-0 p-[6%]">

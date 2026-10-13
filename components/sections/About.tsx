@@ -34,7 +34,7 @@ export function About({ t: c, index = "01", as = "h2", aside, className = "secti
       <div className="container-x">
         <SectionHeading id="about-title" index={index} eyebrow={c.eyebrow} lines={c.headline} size="h3" variant="mixed" as={as} />
 
-        <div className="mt-14 grid gap-14 lg:mt-16 lg:grid-cols-12">
+        <div className="mt-14 grid gap-8 lg:mt-16 lg:grid-cols-12 lg:gap-6 xl:gap-8">
           <div className="space-y-6 text-muted lg:col-span-7 xl:col-span-7">
             {c.paragraphs.map((p, i) => (
               <Reveal key={i} delay={i * 0.08} immediate={as === "h1"}>
