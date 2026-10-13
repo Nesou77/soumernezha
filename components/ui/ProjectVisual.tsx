@@ -12,6 +12,8 @@ interface ProjectVisualProps {
   className?: string;
   /** Hairline frame around the visual (off for full-bleed covers). */
   bordered?: boolean;
+  /** Fill the parent frame: no default aspect ratio, no border. */
+  cover?: boolean;
   priority?: boolean;
   sizes?: string;
 }
@@ -26,6 +28,7 @@ export function ProjectVisual({
   src,
   className,
   bordered = true,
+  cover = false,
   priority,
   sizes = "(min-width: 1024px) 50vw, 100vw",
 }: ProjectVisualProps) {
@@ -36,8 +39,8 @@ export function ProjectVisual({
     <div
       className={cn(
         "relative w-full overflow-hidden bg-[#080b10]",
-        !className?.includes("aspect-") && "aspect-[16/10]",
-        bordered && "border border-line",
+        !cover && !className?.includes("aspect-") && "aspect-[16/10]",
+        bordered && !cover && "border border-line",
         className,
       )}
       style={{ backgroundImage: `radial-gradient(80% 90% at 85% 0%, hsl(${hue} 70% 40% / 0.28), transparent 60%)` }}
