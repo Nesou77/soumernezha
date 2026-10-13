@@ -20,14 +20,12 @@ interface QALabProps {
   qaProjects: Project[];
   t: Dictionary["qa"];
   locale: Locale;
-  index?: string;
 }
 
 export function QALab({
   qaProjects,
   t: c,
   locale,
-  index = "03",
 }: QALabProps) {
   const reduce = useReducedMotion();
 
@@ -35,7 +33,7 @@ export function QALab({
     <section
       id="qa-lab"
       aria-labelledby="qa-title"
-      className="relative py-6 sm:py-10"
+      className="relative"
     >
       {/* Background grid */}
       <motion.div
@@ -66,31 +64,19 @@ export function QALab({
       <div className="container-x section-y relative">
         <SectionHeading
           id="qa-title"
-          index={index}
           eyebrow={c.eyebrow}
           lines={c.headline}
           intro={c.intro}
         />
 
-        {/*
-          Main 2-column area.
-
-          min-h-[100dvh]:
-          - fills the device viewport on desktop
-          - does NOT clip content
-          - if content ever needs more than 100dvh,
-            the block grows naturally
-
-          Nothing uses overflow-hidden here.
-        */}
-        <div className="mt-10 grid gap-10 lg:min-h-[40rem] lg:grid-cols-12 lg:items-center lg:gap-12">
+        <div className="mt-10 grid gap-10 lg:grid-cols-12 lg:items-center">
           {/* LEFT COLUMN */}
           <Reveal className="lg:col-span-7">
             <TestRunner t={c.runner} />
           </Reveal>
 
           {/* RIGHT COLUMN */}
-          <div className="space-y-[clamp(2rem,4vh,3rem)] lg:col-span-5">
+          <div className="space-y-8 lg:col-span-5">
             <Reveal delay={0.1}>
               <h3 className="eyebrow mb-4 text-muted">
                 {c.practice}
@@ -102,7 +88,6 @@ export function QALab({
                     key={t}
                     className="group flex items-baseline gap-4 py-[clamp(0.5rem,1.2vh,0.75rem)] transition-colors hover:text-accent"
                   >
-
                     <span className="font-display text-lg tracking-tight transition-transform duration-500 group-hover:translate-x-2">
                       {t}
                     </span>
@@ -130,11 +115,10 @@ export function QALab({
           </div>
         </div>
 
-        {/* QA projects remain OUTSIDE the 100dvh 2-column area */}
         {qaProjects.length > 0 && (
-          <div className="mt-16 lg:mt-20">
+          <div className="mt-12 lg:mt-14">
             <Reveal>
-              <h3 className="eyebrow mb-6 text-muted">
+              <h3 className="eyebrow mb-4 text-muted">
                 {c.projects}
               </h3>
             </Reveal>
@@ -152,10 +136,9 @@ export function QALab({
                       locale,
                       `/projects/${p.slug}`,
                     )}
-                    className="group grid gap-x-10 gap-y-3 py-8 md:grid-cols-[1fr_1.2fr_auto] md:items-start"
+                    className="group grid gap-x-8 gap-y-3 py-6 md:grid-cols-[1fr_1.2fr_auto] md:items-start"
                   >
                     <div>
-
                       <span className="display-mixed block text-[clamp(1.8rem,1rem+2.6vw,3.2rem)] transition-colors group-hover:text-accent">
                         {p.title}
                       </span>

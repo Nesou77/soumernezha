@@ -26,8 +26,8 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
     <>
       <HeroCanvas />
       <main id="main" className="relative z-10">
-        <Hero locale={lang} t={dict.hero} meta={dict.meta} about={dict.about} introduction={dict.home.skills} newTab={dict.a11y.newTab} nextId="expertise" />
-        <KeySkills locale={lang} t={dict.home.skills} about={dict.about} index="01" />
+        <Hero locale={lang} t={dict.hero} meta={dict.meta} about={dict.about} introduction={dict.home.skills} />
+        <KeySkills locale={lang} t={dict.home.skills} about={dict.about} />
         <ProjectShowcase
           projects={featured}
           locale={lang}
@@ -36,7 +36,6 @@ export default async function HomePage({ params }: PageProps<"/[lang]">) {
           categories={dict.categories}
           showFilters={false}
           heading={dict.home.featured}
-          index="02"
           footer={
             projects.length > 0 && (
               <Link href={localizePath(lang, "/projects")} className="btn btn-ghost">

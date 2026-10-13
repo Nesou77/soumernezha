@@ -21,7 +21,7 @@ export function Footer({ locale, t, nav, role, cvLabel, newTab }: FooterProps) {
   const cv = cvFor(locale);
   return (
     <footer className="site-footer border-t border-line bg-bg-2">
-      <div className="container-x grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-12">
+      <div className="container-x grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-12">
         <div className="lg:col-span-6">
           <Link href={localizePath(locale, "/")} className="inline-flex items-center gap-3">
             <Logo className="h-9 w-9" />

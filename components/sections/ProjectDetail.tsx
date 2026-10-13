@@ -86,7 +86,7 @@ export function ProjectDetail({ project, prev, next, locale, t, categoryLabel, n
     <article className="overflow-hidden">
       <header className="container-x pb-10 pt-28 sm:pb-14 sm:pt-36">
         <Reveal immediate>
-          <div className="mb-12 flex flex-wrap items-center justify-between gap-4 border-b border-line pb-6 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted">
+          <div className="mb-10 flex flex-wrap items-center justify-between gap-4 border-b border-line pb-6 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-muted">
             <Link href={projectsHref} className="group inline-flex items-center gap-2 transition-colors hover:text-accent">
               <ArrowLeft size={15} className="transition-transform group-hover:-translate-x-1" />{t.allProjects}
             </Link>
@@ -108,7 +108,7 @@ export function ProjectDetail({ project, prev, next, locale, t, categoryLabel, n
 
           {/* Short introduction and project facts share one responsive row. */}
           {(project.summary || metadata.length > 0) && (
-            <div className={`mt-10 grid gap-9 border-t border-line pt-8 sm:mt-12 sm:pt-10 ${project.summary && metadata.length > 0 ? "lg:grid-cols-[minmax(0,1fr)_minmax(250px,320px)] lg:gap-14 xl:gap-20" : "grid-cols-1"}`}>
+            <div className={`mt-8 grid gap-8 border-t border-line pt-8 sm:mt-10 ${project.summary && metadata.length > 0 ? "lg:grid-cols-[minmax(0,1fr)_minmax(250px,320px)] lg:gap-12 xl:gap-14" : "grid-cols-1"}`}>
               {project.summary && (
                 <Reveal immediate delay={0.15}>
                   <p lang={lang("summary")} className="max-w-3xl text-[clamp(1.1rem,1rem+0.5vw,1.5rem)] leading-[1.75] text-fg/75">
@@ -142,7 +142,7 @@ export function ProjectDetail({ project, prev, next, locale, t, categoryLabel, n
         </div>
       </section>
 
-      <div className="space-y-20 py-20 sm:space-y-28 sm:py-28">
+      <div className="space-y-16 py-16 sm:space-y-20 sm:py-20">
         {project.description && (
           <DetailSection title={t.overview}>
             <p lang={lang("description")} className="w-full whitespace-pre-line text-[clamp(1.2rem,1.04rem+0.65vw,1.75rem)] leading-[1.7] tracking-[-0.02em] text-fg/85">{project.description}</p>
@@ -201,7 +201,7 @@ export function ProjectDetail({ project, prev, next, locale, t, categoryLabel, n
         )}
         <section className="container-x">
           <Reveal>
-            <div className="relative overflow-hidden rounded-[1.5rem] border border-accent/20 bg-white/[0.035] p-7 sm:p-12 lg:p-16">
+            <div className="relative overflow-hidden rounded-[1.5rem] border border-accent/20 bg-white/[0.035] p-7 sm:p-10 lg:p-12">
               <div aria-hidden className="pointer-events-none absolute -right-24 -top-32 size-80 rounded-full bg-accent/10 blur-[100px]" />
               <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
                 <div>
@@ -219,13 +219,13 @@ export function ProjectDetail({ project, prev, next, locale, t, categoryLabel, n
       </div>
 
       {related.length > 0 && (
-        <nav aria-label={t.moreProjects} className="border-t border-line py-16 sm:py-24">
+        <nav aria-label={t.moreProjects} className="border-t border-line py-14 sm:py-20">
           <div className="container-x">
             <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
               <h2 className="font-display text-[clamp(1.8rem,1.25rem+1.5vw,2.7rem)] tracking-[-0.035em]">{t.otherProjects}</h2>
               <Link href={projectsHref} className="group inline-flex items-center gap-2 text-sm text-muted hover:text-accent">{t.allProjects}<ArrowRight size={16} className="transition-transform group-hover:translate-x-1" /></Link>
             </div>
-            <div className="grid gap-5 md:grid-cols-2 lg:gap-8">
+            <div className="grid gap-5 md:grid-cols-2 lg:gap-6">
               {related.map((item) => (
                 <Link key={item.slug} href={localizePath(locale, `/projects/${item.slug}`)} className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.025] transition-all duration-300 hover:-translate-y-1 hover:border-white/25 hover:shadow-[0_20px_60px_rgba(0,0,0,0.18)]">
                   <div className="overflow-hidden bg-bg-2"><ProjectVisual project={item} alt="" sizes="(min-width: 768px) 50vw, 100vw" className="aspect-[16/10] transition-transform duration-700 motion-safe:group-hover:scale-[1.025]" bordered={false} /></div>

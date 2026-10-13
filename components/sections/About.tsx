@@ -10,7 +10,6 @@ export function ExpertiseList({ items }: { items: string[] }) {
       {items.map((e) => (
         <li key={e} className="expertise-chip">
           {e}
-
         </li>
       ))}
     </ul>
@@ -19,7 +18,6 @@ export function ExpertiseList({ items }: { items: string[] }) {
 
 interface AboutProps {
   t: Dictionary["about"];
-  index?: string;
   /** `h1` when the section opens the About page. */
   as?: "h1" | "h2";
   /** Right-hand column (the CV card on the About page). */
@@ -28,14 +26,14 @@ interface AboutProps {
 }
 
 /** Biography: who I am, what I cover, and why the QA background matters. */
-export function About({ t: c, index = "01", as = "h2", aside, className = "section-y" }: AboutProps) {
+export function About({ t: c, as = "h2", aside, className = "section-y" }: AboutProps) {
   return (
     <section id="about" aria-labelledby="about-title" className={`relative ${className}`}>
       <div className="container-x">
-        <SectionHeading id="about-title" index={index} eyebrow={c.eyebrow} lines={c.headline} size="h3" variant="mixed" as={as} />
+        <SectionHeading id="about-title" eyebrow={c.eyebrow} lines={c.headline} size="h3" variant="mixed" as={as} />
 
-        <div className="mt-14 grid gap-8 lg:mt-16 lg:grid-cols-12 lg:gap-6 xl:gap-8">
-          <div className="space-y-6 text-muted lg:col-span-7 xl:col-span-7">
+        <div className="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-12 lg:gap-8 xl:gap-10">
+          <div className="space-y-6 text-muted lg:col-span-7">
             {c.paragraphs.map((p, i) => (
               <Reveal key={i} delay={i * 0.08} immediate={as === "h1"}>
                 <p className={i === 0 ? "text-lg text-fg" : undefined}>{p}</p>
@@ -53,13 +51,13 @@ export function About({ t: c, index = "01", as = "h2", aside, className = "secti
               </div>
             </Reveal>
             <Reveal delay={0.2}>
-              <h2 className="eyebrow mb-4 mt-10 text-muted">{c.expertiseLabel}</h2>
+              <h2 className="eyebrow mb-4 mt-8 text-muted">{c.expertiseLabel}</h2>
               <ExpertiseList items={c.expertise} />
             </Reveal>
           </div>
 
           {aside && (
-            <Reveal delay={0.25} immediate={as === "h1"} className="lg:col-span-5 xl:col-span-5 xl:col-start-8">
+            <Reveal delay={0.25} immediate={as === "h1"} className="lg:col-span-5">
               <div className="lg:sticky lg:top-28">{aside}</div>
             </Reveal>
           )}

@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 interface SectionHeadingProps {
   id: string;
   eyebrow: string;
-  index?: string;
   lines: readonly string[];
   intro?: string;
   className?: string;
@@ -30,7 +29,7 @@ export function SectionHeading({
   return (
     <header className={cn("max-w-5xl", className)}>
       <Reveal immediate={immediate}>
-        <p className="eyebrow mb-6 flex items-center gap-4">
+        <p className="eyebrow mb-4">
           {eyebrow}
         </p>
       </Reveal>
@@ -41,7 +40,7 @@ export function SectionHeading({
         </span>
       </Heading>
       {intro && (
-        <Reveal immediate={immediate} delay={immediate ? 0.3 : 0.15} className="mt-8 max-w-xl text-muted">
+        <Reveal immediate={immediate} delay={immediate ? 0.3 : 0.15} className="mt-5 max-w-xl text-muted">
           <p>{intro}</p>
         </Reveal>
       )}

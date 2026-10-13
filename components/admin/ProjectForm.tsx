@@ -114,6 +114,20 @@ function ProgressBadge({ done, total }: { done: number; total: number }) {
   );
 }
 
+const CONTENT_KEYS = [
+  "title",
+  "sector",
+  "role",
+  "summary",
+  "description",
+  "challenge",
+  "challengePoints",
+  "contributions",
+  "solution",
+  "solutionPoints",
+  "features",
+];
+
 export function ProjectForm({ mode, action, project }: ProjectFormProps) {
   const [state, formAction, pending] = useActionState(action, initialState);
   const formRef = useRef<HTMLFormElement>(null);
@@ -127,26 +141,15 @@ export function ProjectForm({ mode, action, project }: ProjectFormProps) {
   const errors = state.fieldErrors ?? {};
   const errorKeys = Object.keys(errors);
   const frHasErrors = errorKeys.some((key) => key.startsWith("fr."));
-  const contentKeys = [
-    "title",
-    "sector",
-    "role",
-    "summary",
-    "description",
-    "challenge",
-    "challengePoints",
-    "contributions",
-    "solution",
-    "solutionPoints",
-    "features",
-  ];
-  const enHasErrors = errorKeys.some((key) => contentKeys.includes(key));
+  const enHasErrors = errorKeys.some((key) => CONTENT_KEYS.includes(key));
 
+  // Open the tab that holds the first invalid field (the effect below scrolls to it).
   const [handledState, setHandledState] = useState(state);
   if (state !== handledState) {
     setHandledState(state);
-    if (enHasErrors) setTab("en");
-    else if (frHasErrors) setTab("fr");
+    const firstError = errorKeys[0];
+    if (firstError?.startsWith("fr.")) setTab("fr");
+    else if (firstError && CONTENT_KEYS.includes(firstError)) setTab("en");
   }
 
   // Keep form controls and selected files intact after unsuccessful server actions.
@@ -164,11 +167,6 @@ export function ProjectForm({ mode, action, project }: ProjectFormProps) {
 
     const firstError = Object.keys(state.fieldErrors ?? {})[0];
     if (!firstError) return;
-
-    const targetTab = firstError.startsWith("fr.") ? "fr" : "en";
-    const isTranslatedField = firstError.startsWith("fr.");
-    const englishField = contentKeys.includes(firstError);
-    if (isTranslatedField || englishField) setTab(targetTab);
 
     const timer = window.setTimeout(() => {
       const fieldName = firstError === "coverImage" ? "coverImageNew" : firstError === "gallery" ? "galleryNew" : firstError;

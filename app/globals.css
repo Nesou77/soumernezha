@@ -88,27 +88,11 @@ section[id] {
   -webkit-text-stroke: 1.5px rgb(245 247 250 / 0.85);
 }
 
-.text-h1 {
-  font-size: clamp(3rem, 1rem + 8.6vw, 9.25rem);
-}
 .text-h2 {
   font-size: clamp(2.2rem, 1rem + 5.4vw, 6rem);
 }
 .text-h3 {
   font-size: clamp(1.6rem, 1.1rem + 2.4vw, 3rem);
-}
-
-/*
- * Display title that shrinks to keep its longest word on one line.
- * Set --title-chars (longest word length) inline; --fit-max caps the size.
- * 0.68em is a safe upper bound for an uppercase Space Grotesk glyph.
- */
-.fit-title {
-  font-size: min(
-    var(--fit-max, clamp(3rem, 1rem + 8.6vw, 9.25rem)),
-    calc((100vw - 2 * var(--gutter)) / (var(--title-chars, 8) * 0.68))
-  );
-  overflow-wrap: anywhere;
 }
 
 /* ---------- Links & buttons ---------- */
@@ -179,10 +163,6 @@ section[id] {
 }
 
 /* ---------- Surfaces ---------- */
-.hairline {
-  border: 1px solid var(--color-line);
-}
-
 .grid-bg {
   background-image:
     linear-gradient(rgb(255 255 255 / 0.045) 1px, transparent 1px),
@@ -226,20 +206,6 @@ section[id] {
     transform: rotate(360deg);
   }
 }
-@keyframes counter-orbit {
-  to {
-    transform: rotate(-360deg);
-  }
-}
-@keyframes scroll-cue {
-  0% {
-    transform: translateY(-100%);
-  }
-  60%,
-  100% {
-    transform: translateY(100%);
-  }
-}
 @keyframes blink {
   50% {
     opacity: 0;
@@ -258,11 +224,7 @@ section[id] {
 .orbit {
   animation: orbit var(--orbit-speed, 60s) linear infinite;
 }
-.orbit-counter {
-  animation: counter-orbit var(--orbit-speed, 60s) linear infinite;
-}
-.orbit-paused .orbit,
-.orbit-paused .orbit-counter {
+.orbit-paused .orbit {
   animation-play-state: paused;
 }
 
@@ -288,12 +250,10 @@ section[id] {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
-  .orbit,
-  .orbit-counter {
+  .orbit {
     animation: none;
   }
 }
-
 
 /* ---------- Loader monogram ---------- */
 @keyframes draw {

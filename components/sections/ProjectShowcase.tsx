@@ -39,7 +39,6 @@ interface ProjectShowcaseProps {
   showFilters?: boolean;
   /** Overrides the section heading copy. */
   heading?: { eyebrow: string; headline: string; intro: string };
-  index?: string;
   /** Rendered under the projects (e.g. a "View all projects" link). */
   footer?: ReactNode;
 }
@@ -52,7 +51,6 @@ export function ProjectShowcase({
   categories,
   showFilters = true,
   heading,
-  index = "02",
   footer,
 }: ProjectShowcaseProps) {
   const [filter, setFilter] = useState<ProjectFilter>("all");
@@ -284,7 +282,6 @@ export function ProjectShowcase({
         <SectionHeading
           id="projects-title"
           className={!showFilters ? "max-w-none w-full" : undefined}
-          index={index}
           eyebrow={heading?.eyebrow ?? c.eyebrow}
           lines={[heading?.headline ?? c.headline]}
           intro={heading?.intro ?? c.intro}

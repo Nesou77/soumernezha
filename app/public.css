@@ -1,6 +1,6 @@
 /* Public portfolio refinements. Imported only by the site layout, never admin. */
 .portfolio-site {
-  --section-y: clamp(4.5rem, 8vw, 8rem);
+  --section-y: clamp(3.5rem, 6.5vw, 6.5rem);
   --surface-radius: 1.5rem;
   --color-muted: #9aa4b3;
 }
@@ -14,7 +14,6 @@
   background: var(--color-bg-3);
 }
 .portfolio-site .section-divider { border-top: 1px solid var(--color-line); }
-
 
 .portfolio-site .expertise-chip {
   border: 1px solid var(--color-line);
@@ -38,11 +37,7 @@
 .portfolio-site .project-card:focus-visible h3 { color: var(--color-accent); }
 .portfolio-site .project-gallery-thumbnail[aria-pressed="true"] { box-shadow: inset 0 0 0 1px var(--color-accent); }
 .portfolio-site .site-footer a { min-height: 2.75rem; align-items: center; }
-
-
 .portfolio-site .public-surface:focus-within { border-color: rgb(45 226 208 / 0.3); }
-.portfolio-site .service-card:hover { border-color: rgb(45 226 208 / 0.3); }
-
 
 /* Shared portrait decorations: no card, no duplicate image. */
 .portfolio-site .hero-portrait { position: relative; isolation: isolate; width: 100%; aspect-ratio: 4 / 5; }

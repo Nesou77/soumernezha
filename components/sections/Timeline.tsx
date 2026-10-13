@@ -7,7 +7,7 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import type { Dictionary } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
-export function Timeline({ t: c, index = "05" }: { t: Dictionary["experience"]; index?: string }) {
+export function Timeline({ t: c }: { t: Dictionary["experience"] }) {
   const { entries: experience, educationEntries: education, certification } = c;
   const listRef = useRef<HTMLOListElement>(null);
   const reduce = useReducedMotion();
@@ -17,9 +17,9 @@ export function Timeline({ t: c, index = "05" }: { t: Dictionary["experience"]; 
   return (
     <section id="experience" aria-labelledby="experience-title" className="section-y relative">
       <div className="container-x">
-        <SectionHeading id="experience-title" index={index} eyebrow={c.eyebrow} lines={[c.headline]} />
+        <SectionHeading id="experience-title" eyebrow={c.eyebrow} lines={[c.headline]} />
 
-        <ol ref={listRef} className="relative mt-16 ml-2 sm:ml-0">
+        <ol ref={listRef} className="relative mt-12 ml-2 sm:ml-0">
           {/* rail + progress */}
           <span aria-hidden className="absolute bottom-0 left-0 top-2 w-px bg-white/10 md:left-[calc(30%-1px)]" />
           <motion.span
@@ -29,7 +29,7 @@ export function Timeline({ t: c, index = "05" }: { t: Dictionary["experience"]; 
           />
 
           {experience.map((e, i) => (
-            <li key={e.company} className="relative grid gap-y-2 pb-14 pl-8 last:pb-0 md:grid-cols-[30%_1fr] md:pl-0">
+            <li key={e.company} className="relative grid gap-y-2 pb-10 pl-8 last:pb-0 md:grid-cols-[30%_1fr] md:pl-0">
               <span
                 aria-hidden
                 className={cn(
@@ -37,11 +37,11 @@ export function Timeline({ t: c, index = "05" }: { t: Dictionary["experience"]; 
                   e.highlight ? "bg-accent" : "bg-[#050505]",
                 )}
               />
-              <Reveal className="md:pr-12 md:text-right">
+              <Reveal className="md:pr-8 md:text-right">
                 <p className="font-mono text-xs uppercase tracking-[0.14em] text-muted">{e.period}</p>
                 {e.location && <p className="mt-1 font-mono text-xs text-muted/70">{e.location}</p>}
               </Reveal>
-              <Reveal delay={0.08} className={cn("md:ml-8", e.highlight ? "public-surface p-6 sm:p-8" : "md:pl-4")}>
+              <Reveal delay={0.08} className={cn("md:ml-8", e.highlight && "public-surface p-6 sm:p-7")}>
                 <h3
                   className={cn(
                     "display-mixed",
@@ -70,12 +70,12 @@ export function Timeline({ t: c, index = "05" }: { t: Dictionary["experience"]; 
         </ol>
 
         {/* Education */}
-        <div className="mt-20 grid gap-10 border-t border-line pt-10 md:grid-cols-[30%_1fr]">
+        <div className="mt-14 grid gap-8 border-t border-line pt-10 md:grid-cols-[30%_1fr]">
           <Reveal>
             <h3 className="display-mixed text-[clamp(1.6rem,1rem+2vw,2.6rem)]">{c.education}</h3>
             <p className="mt-2 font-mono text-xs uppercase tracking-[0.14em] text-muted">{c.educationSub}</p>
           </Reveal>
-          <div className="md:pl-12">
+          <div className="md:pl-8">
             <ul className="border-t border-line">
               {education.map((e, i) => (
                 <Reveal as="li" key={e.title} delay={i * 0.07} className="grid gap-1 border-b border-line py-5 sm:grid-cols-[1fr_auto] sm:gap-8">
@@ -88,7 +88,7 @@ export function Timeline({ t: c, index = "05" }: { t: Dictionary["experience"]; 
               ))}
             </ul>
 
-            <Reveal delay={0.1} className="mt-10">
+            <Reveal delay={0.1} className="mt-8">
               <p className="eyebrow mb-2">{c.certificationLabel}</p>
               <p className="font-display text-lg">{certification.title}</p>
               <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs text-muted">

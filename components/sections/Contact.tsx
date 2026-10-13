@@ -42,7 +42,6 @@ interface ContactProps {
   workMode: string;
   newTab: string;
   as?: "h1" | "h2";
-  index?: string;
   className?: string;
 }
 
@@ -51,7 +50,7 @@ interface ContactProps {
  * errors), then sent by a server action. If server-side sending is not
  * configured, it opens the visitor's email app with the message pre-filled.
  */
-export function Contact({ locale, t: c, workMode, newTab, as = "h2", index = "01", className = "section-y" }: ContactProps) {
+export function Contact({ locale, t: c, workMode, newTab, as = "h2", className = "section-y" }: ContactProps) {
   const { copied, copy } = useCopy();
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<Errors>({});
@@ -118,9 +117,9 @@ export function Contact({ locale, t: c, workMode, newTab, as = "h2", index = "01
   return (
     <section id="contact" aria-labelledby="contact-title" className={cn("relative", className)}>
       <div className="container-x">
-        <SectionHeading id="contact-title" index={index} eyebrow={c.eyebrow} lines={c.headline} intro={c.intro} as={as} />
+        <SectionHeading id="contact-title" eyebrow={c.eyebrow} lines={c.headline} intro={c.intro} as={as} />
 
-        <div className="mt-14 grid gap-16 lg:mt-16 lg:grid-cols-12">
+        <div className="mt-10 grid gap-10 lg:mt-12 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-5 lg:sticky lg:top-28 lg:self-start">
             <Reveal immediate={immediate} delay={immediate ? 0.35 : 0}>
               <h2 className="eyebrow mb-5 text-muted">{c.directTitle}</h2>
@@ -153,7 +152,7 @@ export function Contact({ locale, t: c, workMode, newTab, as = "h2", index = "01
                 {copied ? c.copiedStatus : ""}
               </p>
 
-              <h2 className="eyebrow mb-4 mt-12 text-muted">{c.linksTitle}</h2>
+              <h2 className="eyebrow mb-4 mt-10 text-muted">{c.linksTitle}</h2>
               <ul className="border-t border-line">
                 <li className="border-b border-line">
                   <a
@@ -174,7 +173,7 @@ export function Contact({ locale, t: c, workMode, newTab, as = "h2", index = "01
           </div>
 
           <Reveal immediate={immediate} delay={immediate ? 0.4 : 0.1} className="lg:col-span-7">
-            <div className="public-surface p-6 sm:p-10">
+            <div className="public-surface p-6 sm:p-8">
               {status === "sent" || status === "fallback" ? (
                 <div ref={resultRef} tabIndex={-1} role="status" className="flex min-h-[28rem] flex-col items-start justify-center gap-5 py-6">
                   <CheckCircle2 size={36} aria-hidden className="text-accent" />
@@ -201,7 +200,7 @@ export function Contact({ locale, t: c, workMode, newTab, as = "h2", index = "01
                     </p>
                   )}
 
-                  <div className="grid gap-7 sm:grid-cols-2">
+                  <div className="grid gap-6 sm:grid-cols-2">
                     <div>
                       <label htmlFor="c-name" className="eyebrow text-muted">
                         {c.name} <span aria-hidden>*</span>

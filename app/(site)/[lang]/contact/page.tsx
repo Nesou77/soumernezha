@@ -40,8 +40,7 @@ export default async function ContactPage({ params }: Props) {
         workMode={dict.meta.workMode}
         newTab={dict.a11y.newTab}
         as="h1"
-        index="01"
-        className="pb-[var(--section-y)] pt-32 sm:pt-40"
+        className="pb-[var(--section-y)] pt-28 sm:pt-32"
       />
     </main>
   );

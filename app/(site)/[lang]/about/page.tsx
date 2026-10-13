@@ -42,11 +42,10 @@ export default async function AboutPage({ params }: Props) {
       <About
         t={dict.about}
         as="h1"
-        index="01"
-        className="pb-[var(--section-y)] pt-32 sm:pt-40"
+        className="pb-[var(--section-y)] pt-28 sm:pt-32"
         aside={<CvCard locale={lang} t={dict.cv} newTab={dict.a11y.newTab} />}
       />
-      <Timeline t={dict.experience} index="04" />
+      <Timeline t={dict.experience} />
       <ContactCTA locale={lang} t={dict.cta} cvLabel={dict.cv.download} />
     </main>
   );

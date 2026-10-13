@@ -304,7 +304,7 @@ function ExplorerView({
 
       {/* Projects grid */}
       {visible.length > 0 ? (
-        <ul className="mt-8 grid items-stretch gap-5 sm:grid-cols-2 sm:gap-7 lg:gap-9">
+        <ul className="mt-8 grid items-stretch gap-5 sm:grid-cols-2 sm:gap-6 lg:gap-7">
           <AnimatePresence
             mode="popLayout"
             initial={false}

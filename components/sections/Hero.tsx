@@ -17,8 +17,6 @@ interface HeroProps {
   meta: Dictionary["meta"];
   about: Dictionary["about"];
   introduction: Dictionary["home"]["skills"];
-  newTab: string;
-  nextId: string;
 }
 
 /**

@@ -20,10 +20,10 @@ export function ContactCTA({ locale, t, cvLabel }: ContactCTAProps) {
   return (
     <section aria-labelledby="cta-title" className="relative overflow-hidden border-t border-line">
       <div aria-hidden className="grid-bg absolute inset-0 opacity-25 [mask-image:radial-gradient(70%_80%_at_50%_100%,black,transparent)]" />
-      <div className="container-x relative grid gap-10 py-20 sm:py-24 lg:grid-cols-12 lg:items-end">
+      <div className="container-x relative grid gap-8 py-16 sm:py-20 lg:grid-cols-12 lg:items-end">
         <div className="lg:col-span-8">
           <Reveal>
-            <p className="eyebrow mb-6 flex items-center gap-4">
+            <p className="eyebrow mb-4">
               {t.eyebrow}
             </p>
           </Reveal>

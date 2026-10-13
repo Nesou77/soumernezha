@@ -109,7 +109,7 @@ export default async function ProjectsPage({
       {/* Portfolio section */}
       <section
         aria-labelledby="projects-title"
-        className="container-x pb-[var(--section-y)] pt-32 sm:pt-40"
+        className="container-x pb-[var(--section-y)] pt-28 sm:pt-32"
       >
         <SectionHeading
           id="projects-title"
@@ -120,7 +120,7 @@ export default async function ProjectsPage({
         />
 
         {/* Projects explorer */}
-        <div className="mt-10 sm:mt-14">
+        <div className="mt-8 sm:mt-10">
           <Suspense
             fallback={
               <ProjectsExplorerFallback

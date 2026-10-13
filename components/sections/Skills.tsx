@@ -51,10 +51,8 @@ function flatten(
 
 export function Skills({
   t: c,
-  index = "04",
 }: {
   t: Dictionary["skills"];
-  index?: string;
 }) {
   const skillGroups = c.groups;
 
@@ -97,13 +95,12 @@ export function Skills({
       <div className="container-x">
         <SectionHeading
           id="skills-title"
-          index={index}
           eyebrow={c.eyebrow}
           lines={c.headline}
           intro={c.intro}
         />
 
-        <div className="mt-10 grid gap-8 lg:min-h-[42rem] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:gap-12">
+        <div className="mt-10 grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:gap-10">
           {/* LEFT COLUMN */}
           <Reveal>
             <div className="flex flex-col items-center">
@@ -206,11 +203,11 @@ export function Skills({
                 </div>
               </div>
 
-              {/* Skill detail now under the circle */}
+              {/* Detail for the hovered / focused skill */}
               <div
                 id="skill-detail"
                 aria-live="off"
-                className="mt-6 w-full max-w-[34rem] min-h-[8.5rem] rounded-2xl border border-line bg-bg-3 p-[clamp(0.75rem,1.5vh,1.25rem)]"
+                className="mt-5 w-full max-w-[34rem] min-h-[7.5rem] rounded-2xl border border-line bg-bg-3 p-[clamp(0.75rem,1.5vh,1.25rem)]"
               >
                 {active ? (
                   <>
@@ -239,7 +236,7 @@ export function Skills({
 
           {/* RIGHT COLUMN */}
           <div>
-            <div className="space-y-[clamp(0.8rem,1.8vh,2rem)]">
+            <div className="space-y-3">
               {skillGroups.map(
                 (g, gi) => (
                   <Reveal
