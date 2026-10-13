@@ -283,6 +283,7 @@ export function ProjectShowcase({
       <div className="container-x relative z-10 pt-[var(--section-y)]">
         <SectionHeading
           id="projects-title"
+          className={!showFilters ? "max-w-none w-full" : undefined}
           index={index}
           eyebrow={heading?.eyebrow ?? c.eyebrow}
           lines={[heading?.headline ?? c.headline]}
@@ -295,17 +296,18 @@ export function ProjectShowcase({
 
       {activeProject && (
         <div ref={scrollStageRef} className={reduce ? "hidden" : "relative mt-4 hidden lg:block"} style={{ height: `${scrollHeight}vh` }}>
-          <div className={showFilters ? "sticky top-20 h-[calc(100svh-5rem)] overflow-hidden" : "sticky top-10 h-[calc(100svh-2.5rem)] overflow-hidden"}>
+          <div className={showFilters ? "sticky top-20 h-[calc(100svh-5rem)] overflow-hidden" : "sticky top-0 h-svh overflow-hidden"}>
             <div className={showFilters ? "container-x flex h-full flex-col py-5 xl:py-6" : "container-x flex h-full flex-col py-1"}>
               {showFilters && (
                 <div className="shrink-0 border-b border-line pb-3">
                   <ProjectFilters value={filter} onChange={changeFilter} categories={categories} t={c} />
                 </div>
               )}
-              <div className="grid min-h-0 flex-1 grid-cols-[minmax(230px,0.62fr)_minmax(0,2.15fr)] gap-6 pt-1 xl:gap-8">
+              <div className="grid min-h-0 flex-1 grid-cols-[minmax(180px,0.43fr)_minmax(0,2.4fr)] gap-3 pt-0 xl:gap-5">
                 <ProjectReel projects={visibleProjects} activeIndex={activeIndex} onChange={goToProject} />
                 <ActiveProjectStage
                   project={activeProject}
+                  homepage={!showFilters}
                   activeIndex={activeIndex}
                   total={visibleProjects.length}
                   direction={direction}

@@ -26,6 +26,7 @@ const ease = [
 
 interface ActiveProjectStageProps {
   project: Project;
+  homepage?: boolean;
   activeIndex: number;
   total: number;
   direction: number;
@@ -38,6 +39,7 @@ interface ActiveProjectStageProps {
 
 export function ActiveProjectStage({
   project,
+  homepage = false,
   activeIndex,
   total,
   direction,
@@ -143,6 +145,7 @@ export function ActiveProjectStage({
               >
                 <ProjectVisual
                   project={project}
+                  cover={homepage}
                   alt=""
                   sizes="(min-width: 1024px) 75vw, 100vw"
                   className="
@@ -305,14 +308,7 @@ export function ActiveProjectStage({
          ================================= */}
 
       <div
-        className="
-          relative
-          z-10
-          mt-5 shrink-0
-          grid
-          gap-3
-          xl:grid-cols-[1fr_auto]
-        "
+        className={homepage ? "relative z-10 mt-1 shrink-0 grid w-full grid-cols-1 gap-1" : "relative z-10 mt-5 shrink-0 grid gap-3 xl:grid-cols-[1fr_auto]"}
       >
         <div className="min-w-0">
           <div className="overflow-hidden">
@@ -344,11 +340,7 @@ export function ActiveProjectStage({
                   duration: 0.5,
                   ease,
                 }}
-                className="
-                  display-mixed
-                  text-[clamp(1.9rem,3.3vw,3.8rem)]
-                  leading-[1.1]
-                "
+                className={homepage ? "display-mixed w-full text-[clamp(1.55rem,2.6vw,3rem)] leading-[1.05]" : "display-mixed text-[clamp(1.9rem,3.3vw,3.8rem)] leading-[1.1]"}
               >
                 <Link
                   href={localizePath(locale, `/projects/${project.slug}`)}
@@ -391,29 +383,13 @@ export function ActiveProjectStage({
             >
               <p
                 lang={fallbackLang(project, "summary")}
-                className="
-                  mt-2
-                  max-w-2xl
-                  line-clamp-3 leading-relaxed text-sm
-                  text-muted
-                "
+                className={homepage ? "mt-1 max-w-none line-clamp-1 text-sm leading-snug text-muted" : "mt-2 max-w-2xl line-clamp-3 leading-relaxed text-sm text-muted"}
               >
                 {project.summary}
               </p>
 
               <div
-                className="
-                  mt-2
-                  flex
-                  flex-wrap
-                  gap-x-3
-                  gap-y-1
-                  font-mono
-                  text-[0.58rem]
-                  uppercase
-                  tracking-[0.1em]
-                  text-muted
-                "
+                className={homepage ? "hidden" : "mt-2 flex flex-wrap gap-x-3 gap-y-1 font-mono text-[0.58rem] uppercase tracking-[0.1em] text-muted"}
               >
                 {project.technologies
                   .slice(0, 5)
@@ -446,11 +422,7 @@ export function ActiveProjectStage({
         </div>
 
         <div
-          className="
-            flex
-            items-center
-            xl:items-end
-          "
+          className={homepage ? "hidden" : "flex items-center xl:items-end"}
         >
           <Link
             href={localizePath(locale, `/projects/${project.slug}`)}

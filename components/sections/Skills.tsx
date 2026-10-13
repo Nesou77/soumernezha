@@ -246,23 +246,12 @@ export function Skills({
                     key={g.id}
                     delay={gi * 0.04}
                   >
-                    <div className="public-surface grid gap-x-6 gap-y-3 p-5 sm:grid-cols-[9rem_1fr]">
-                      <div>
-                        <h3 className="font-display text-base">
-                          {g.label}
-                        </h3>
+                    <div className="public-surface grid items-start gap-x-3 gap-y-1 p-3 sm:grid-cols-[10rem_minmax(0,1fr)]">
+                      <h3 className="break-words font-display text-base leading-snug tracking-tight sm:pt-2">
+                        {g.label}
+                      </h3>
 
-                        <p className="mt-2 text-sm leading-relaxed text-muted">{g.blurb}</p>
-                        <p className="mt-2 font-mono text-[0.68rem] uppercase tracking-[0.14em] text-muted">
-                          {
-                            c.phases[
-                              g.phase
-                            ]
-                          }
-                        </p>
-                      </div>
-
-                      <ul className="flex flex-wrap gap-x-1 gap-y-1">
+                      <ul className="-ml-3 flex min-w-0 flex-wrap gap-x-1 gap-y-1 sm:ml-0">
                         {g.skills.map(
                           (s) => {
                             const on =
